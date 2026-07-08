@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Q3 — Handling Flaky Tests</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent2: #34d399;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 40px 16px;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: .5px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 8px;
+      line-height: 1.3;
+    }
+    .vi { color: var(--muted); font-style: italic; margin-bottom: 28px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--accent2);
+    }
+    .card h2 {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .card.answer { border-left-color: var(--accent); }
+    .card.answer h2 { color: var(--accent); }
+    .card.vi-answer { border-left-color: #f87171; }
+    .card.vi-answer h2 { color: #f87171; }
+    .card h2 .speak { text-transform: none; }
+    blockquote {
+      background: rgba(56,189,248,.08);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 17px;
+    }
+    .keyword { color: var(--accent); font-weight: 600; }
+    pre {
+      background: #0b1220;
+      border: 1px solid rgba(148,163,184,.2);
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    pre .c { color: #64748b; }
+    pre .k { color: #c084fc; }
+    pre .s { color: #34d399; }
+    pre .f { color: #38bdf8; }
+    pre .bad { color: #f87171; }
+    ul { padding-left: 20px; margin-top: 8px; }
+    li { margin-bottom: 6px; }
+    .tip { color: var(--muted); font-size: 15px; }
+    footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 30px; }
+
+    /* tables */
+    .table-wrap { overflow-x: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+    table th, table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148,163,184,.18);
+      vertical-align: top;
+    }
+    table th {
+      background: rgba(56,189,248,.12);
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    table tr:last-child td { border-bottom: none; }
+    table tr:hover td { background: rgba(148,163,184,.06); }
+    table.vocab { min-width: 640px; }
+    .term { font-weight: 700; color: var(--text); }
+    .reading { color: var(--accent2); display: block; }
+    .ipa { color: var(--accent); display: block; opacity: .9; }
+    .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    .speak {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 22px;
+      margin-left: 8px;
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      vertical-align: middle;
+      transition: transform .1s, background .15s;
+    }
+    .speak:hover { background: #7dd3fc; transform: scale(1.08); }
+    .speak:active { transform: scale(.92); }
+
+    /* ===== Thanh điều khiển tốc độ / lặp + nút LẶP Anh–Việt ===== */
+    .ratebar {
+      position: fixed; top: 10px; right: 10px; z-index: 50;
+      background: rgba(11,18,32,.93); backdrop-filter: blur(6px);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 10px;
+      padding: 7px 10px; font-size: 12px; display: flex; flex-wrap: wrap;
+      gap: 6px; align-items: center; max-width: calc(100vw - 20px);
+      box-shadow: 0 4px 14px rgba(0,0,0,.5);
+    }
+    .ratebar b { color: var(--muted); font-weight: 600; }
+    .ratebar .sep { border-left: 1px solid rgba(148,163,184,.25); align-self: stretch; margin: 0 2px; }
+    .ratebar button {
+      background: #243449; color: var(--text);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer; font-size: 12px; font-family: inherit;
+    }
+    .ratebar button.on { background: var(--accent); color: #0f172a; font-weight: 700; }
+    .ratebar button[data-loop].on { background: #a78bfa; color: #0f172a; font-weight: 700; }
+    .ratebar button.test { background: var(--accent2); color: #0f172a; font-weight: 700; }
+    .ratebar #spkStatus { color: #fbbf24; max-width: 220px; }
+    .speak.speaking { background: var(--accent2); animation: pulse .8s infinite; }
+    .replabel {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin: 14px 8px 0 0; border: none; border-radius: 8px;
+      background: #a78bfa; color: #0f172a; font-weight: 600;
+      font-size: 13px; padding: 7px 13px; cursor: pointer;
+      font-family: inherit; line-height: 1.2; text-transform: none;
+    }
+    .replabel:hover { background: #c4b5fd; }
+    .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
+    @keyframes pulse { 50% { opacity: .5; } }
+  </style>
+</head>
+<body>
+  <div class="ratebar">
+    <b>🔊 Tốc độ:</b>
+    <button data-rate="0.7">Chậm</button>
+    <button data-rate="0.85" class="on">Vừa</button>
+    <button data-rate="1">Thường</button>
+    <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
+    <span class="sep"></span>
+    <b>🔁 Lặp:</b>
+    <button data-loop="3">×3</button>
+    <button data-loop="5">×5</button>
+    <button data-loop="0" class="on">∞</button>
+    <span id="spkStatus">sẵn sàng</span>
+  </div>
+  <div class="container">
+    <span class="badge">QUESTION 3 · TEST AUTOMATION</span>
+    <h1>How do you handle flaky tests?</h1>
+    <p class="vi">Bạn xử lý các bài test "flaky" (lúc pass lúc fail) như thế nào?</p>
+
+    <div class="card answer">
+      <h2>Sample Answer (English)
+        <button class="speak"
+          data-text="When I run into flaky tests, my first step is to find the root cause instead of just adding retries. The most common cause is timing, so I replace hard-coded waits like sleep with explicit waits or auto-waiting, and I rely on web-first assertions that automatically retry until the condition is met. I also make sure each test is independent and doesn't share state with other tests. I use stable locators, such as data-testid or role-based selectors, instead of fragile XPath that breaks when the layout changes, and I isolate the test data so one test can't affect another. If a test is still unstable after all of that, I might add a controlled retry as a safety net, but only after the real problem is fixed.">🔊</button>
+      </h2>
+      <blockquote>
+        When I <span class="keyword">run into</span> flaky tests, my first step is to find the
+        <span class="keyword">root cause</span> instead of just adding <span class="keyword">retries</span>.
+        The most common cause is <span class="keyword">timing</span>, so I replace
+        <span class="keyword">hard-coded waits</span> like <em>sleep</em> with
+        <span class="keyword">explicit waits</span> or <span class="keyword">auto-waiting</span>, and I rely on
+        <span class="keyword">web-first assertions</span> that automatically retry until the condition is met.
+        I also make sure each test is <span class="keyword">independent</span> and doesn't
+        <span class="keyword">share state</span> with other tests. I use <span class="keyword">stable locators</span>,
+        such as <em>data-testid</em> or <span class="keyword">role-based selectors</span>, instead of
+        <span class="keyword">fragile XPath</span> that breaks when the layout changes, and I
+        <span class="keyword">isolate the test data</span> so one test can't affect another.
+        If a test is still <span class="keyword">unstable</span> after all of that, I might add a controlled
+        retry as a <span class="keyword">safety net</span>, but only after the real problem is fixed.
+      </blockquote>
+    </div>
+
+    <div class="card vi-answer">
+      <h2>🇻🇳 Bản dịch tiếng Việt
+        <button class="speak" data-lang="vi-VN"
+          data-text="Khi gặp các bài test chập chờn, bước đầu tiên của tôi là tìm ra nguyên nhân gốc rễ thay vì chỉ thêm cơ chế chạy lại. Nguyên nhân phổ biến nhất là vấn đề về thời gian, nên tôi thay các lệnh chờ cứng như sleep bằng explicit wait hoặc cơ chế tự động chờ, và dựa vào web-first assertions tự động thử lại cho đến khi điều kiện được thỏa mãn. Tôi cũng đảm bảo mỗi bài test độc lập và không dùng chung trạng thái với các test khác. Tôi dùng các locator ổn định như data-testid hoặc selector theo vai trò, thay vì XPath dễ gãy mỗi khi giao diện thay đổi, và tôi tách riêng dữ liệu test để test này không ảnh hưởng test kia. Nếu sau tất cả những điều đó mà test vẫn không ổn định, tôi có thể thêm một cơ chế chạy lại có kiểm soát như một lưới an toàn, nhưng chỉ sau khi đã sửa được vấn đề thật sự.">🔊</button>
+      </h2>
+      <blockquote>
+        Khi gặp các bài test chập chờn, bước đầu tiên của tôi là tìm ra
+        <span class="keyword">nguyên nhân gốc rễ</span> thay vì chỉ thêm cơ chế
+        <span class="keyword">chạy lại (retry)</span>. Nguyên nhân phổ biến nhất là vấn đề về
+        <span class="keyword">thời gian</span>, nên tôi thay các lệnh chờ cứng như <em>sleep</em> bằng
+        <span class="keyword">explicit wait</span> hoặc <span class="keyword">cơ chế tự động chờ</span>, và dựa
+        vào <span class="keyword">web-first assertions</span> tự động thử lại cho đến khi điều kiện được
+        thỏa mãn. Tôi cũng đảm bảo mỗi bài test <span class="keyword">độc lập</span> và không
+        <span class="keyword">dùng chung trạng thái</span> với các test khác. Tôi dùng các
+        <span class="keyword">locator ổn định</span> như <em>data-testid</em> hoặc selector theo vai trò,
+        thay vì <span class="keyword">XPath dễ gãy</span> mỗi khi giao diện thay đổi, và tôi
+        <span class="keyword">tách riêng dữ liệu test</span> để test này không ảnh hưởng test kia.
+        Nếu sau tất cả những điều đó mà test vẫn <span class="keyword">không ổn định</span>, tôi có thể thêm
+        một cơ chế chạy lại có kiểm soát như một <span class="keyword">lưới an toàn</span>, nhưng chỉ sau khi
+        đã sửa được vấn đề thật sự.
+      </blockquote>
+    </div>
+
+    <div class="card">
+      <h2>🔧 Nguyên nhân thường gặp &amp; cách xử lý</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Nguyên nhân gây flaky</th><th>Cách xử lý</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Chờ cứng bằng <em>sleep</em> (timing)</td><td>Dùng explicit wait / auto-waiting, web-first assertions</td></tr>
+            <tr><td>Test phụ thuộc lẫn nhau, dùng chung state</td><td>Làm mỗi test độc lập, tự dọn dữ liệu (setup/teardown)</td></tr>
+            <tr><td>Locator dễ gãy (XPath tuyệt đối, class tự sinh)</td><td>Dùng data-testid, getByRole, getByText</td></tr>
+            <tr><td>Dữ liệu test trùng/đụng nhau</td><td>Tách dữ liệu riêng cho từng test, tạo data động</td></tr>
+            <tr><td>Mạng/animation/loading chưa xong</td><td>Chờ network idle, chờ element ổn định trước khi thao tác</td></tr>
+            <tr><td>Môi trường không ổn định</td><td>Cô lập môi trường, mock API khi cần</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>💻 Ví dụ code: flaky ❌ vs ổn định ✅</h2>
+      <p style="margin-bottom:10px"><span class="bad" style="color:#f87171">❌ Cách dễ flaky</span> — chờ cứng bằng <em>sleep</em>:</p>
+      <pre><span class="bad">// ❌ sleep cứng: máy chậm thì 3s chưa đủ → fail; máy nhanh thì phí thời gian</span>
+<span class="k">await</span> page.<span class="f">click</span>(<span class="s">'#submit'</span>);
+<span class="k">await</span> page.<span class="f">waitForTimeout</span>(<span class="s">3000</span>);
+<span class="k">const</span> text = <span class="k">await</span> page.<span class="f">locator</span>(<span class="s">'.toast'</span>).<span class="f">textContent</span>();
+<span class="f">expect</span>(text).<span class="f">toBe</span>(<span class="s">'Saved'</span>);</pre>
+      <p style="margin:14px 0 10px"><span style="color:var(--accent2)">✅ Cách ổn định</span> — web-first assertion tự retry:</p>
+      <pre><span class="c">// ✅ Playwright tự chờ đến khi nút sẵn sàng &amp; thông báo hiện ra</span>
+<span class="k">await</span> page.<span class="f">getByRole</span>(<span class="s">'button'</span>, { name: <span class="s">'Submit'</span> }).<span class="f">click</span>();
+<span class="k">await</span> <span class="f">expect</span>(page.<span class="f">getByText</span>(<span class="s">'Saved'</span>)).<span class="f">toBeVisible</span>();</pre>
+      <p class="tip" style="margin-top:10px">👉 Bỏ <em>waitForTimeout</em> (sleep cứng) và dùng
+        <em>expect(...).toBeVisible()</em> — assertion sẽ tự thử lại trong vài giây cho tới khi điều kiện
+        đúng, nên không còn phụ thuộc tốc độ máy/mạng.</p>
+    </div>
+
+    <div class="card">
+      <h2>📘 Từ vựng &amp; cụm từ trong đoạn</h2>
+      <div class="table-wrap">
+        <table class="vocab">
+          <thead>
+            <tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="term">run into</span><button class="speak" data-text="run into">🔊</button></td>
+              <td><span class="reading">(rần in-tu)</span><span class="ipa">/rʌn ˈɪntu/</span></td>
+              <td class="pos">phr.v</td>
+              <td>gặp phải, bắt gặp</td>
+            </tr>
+            <tr>
+              <td><span class="term">flaky test</span><button class="speak" data-text="flaky test">🔊</button></td>
+              <td><span class="reading">(phlây-ki test)</span><span class="ipa">/ˈfleɪki test/</span></td>
+              <td class="pos">n phr.</td>
+              <td>bài test chập chờn (lúc pass lúc fail)</td>
+            </tr>
+            <tr>
+              <td><span class="term">root cause</span><button class="speak" data-text="root cause">🔊</button></td>
+              <td><span class="reading">(rút coz)</span><span class="ipa">/ruːt kɔːz/</span></td>
+              <td class="pos">n phr.</td>
+              <td>nguyên nhân gốc rễ</td>
+            </tr>
+            <tr>
+              <td><span class="term">retry</span><button class="speak" data-text="retry">🔊</button></td>
+              <td><span class="reading">(ri-trai)</span><span class="ipa">/ˌriːˈtraɪ/</span></td>
+              <td class="pos">n / v</td>
+              <td>việc chạy lại / chạy lại</td>
+            </tr>
+            <tr>
+              <td><span class="term">timing</span><button class="speak" data-text="timing">🔊</button></td>
+              <td><span class="reading">(tai-minh)</span><span class="ipa">/ˈtaɪmɪŋ/</span></td>
+              <td class="pos">n</td>
+              <td>vấn đề thời gian/canh thời điểm</td>
+            </tr>
+            <tr>
+              <td><span class="term">hard-coded wait</span><button class="speak" data-text="hard coded wait">🔊</button></td>
+              <td><span class="reading">(hác-câu-địd uây)</span><span class="ipa">/hɑːd ˈkəʊdɪd weɪt/</span></td>
+              <td class="pos">n phr.</td>
+              <td>lệnh chờ cứng (cố định thời gian)</td>
+            </tr>
+            <tr>
+              <td><span class="term">explicit wait</span><button class="speak" data-text="explicit wait">🔊</button></td>
+              <td><span class="reading">(ịk-xpli-xịt uây)</span><span class="ipa">/ɪkˈsplɪsɪt weɪt/</span></td>
+              <td class="pos">n phr.</td>
+              <td>lệnh chờ tường minh (chờ tới điều kiện)</td>
+            </tr>
+            <tr>
+              <td><span class="term">auto-waiting</span><button class="speak" data-text="auto waiting">🔊</button></td>
+              <td><span class="reading">(o-tô uây-tinh)</span><span class="ipa">/ˈɔːtəʊ ˈweɪtɪŋ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>cơ chế tự động chờ</td>
+            </tr>
+            <tr>
+              <td><span class="term">web-first assertion</span><button class="speak" data-text="web first assertion">🔊</button></td>
+              <td><span class="reading">(oép-phơst ợ-sơ-sần)</span><span class="ipa">/web fɜːst əˈsɜːʃn/</span></td>
+              <td class="pos">n phr.</td>
+              <td>khẳng định kiểu web (tự thử lại đến khi đúng)</td>
+            </tr>
+            <tr>
+              <td><span class="term">independent</span><button class="speak" data-text="independent">🔊</button></td>
+              <td><span class="reading">(in-đi-pen-đợnt)</span><span class="ipa">/ˌɪndɪˈpendənt/</span></td>
+              <td class="pos">adj</td>
+              <td>độc lập</td>
+            </tr>
+            <tr>
+              <td><span class="term">share state</span><button class="speak" data-text="share state">🔊</button></td>
+              <td><span class="reading">(she stêt)</span><span class="ipa">/ʃeər steɪt/</span></td>
+              <td class="pos">v phr.</td>
+              <td>dùng chung trạng thái</td>
+            </tr>
+            <tr>
+              <td><span class="term">stable locator</span><button class="speak" data-text="stable locator">🔊</button></td>
+              <td><span class="reading">(stây-bồ lâu-kêi-tơ)</span><span class="ipa">/ˈsteɪbl ləʊˈkeɪtər/</span></td>
+              <td class="pos">n phr.</td>
+              <td>bộ định vị element ổn định</td>
+            </tr>
+            <tr>
+              <td><span class="term">role-based selector</span><button class="speak" data-text="role based selector">🔊</button></td>
+              <td><span class="reading">(rôl-bêst si-léc-tơ)</span><span class="ipa">/rəʊl beɪst sɪˈlektər/</span></td>
+              <td class="pos">n phr.</td>
+              <td>selector theo vai trò (role)</td>
+            </tr>
+            <tr>
+              <td><span class="term">fragile</span><button class="speak" data-text="fragile">🔊</button></td>
+              <td><span class="reading">(phre-jai)</span><span class="ipa">/ˈfrædʒaɪl/</span></td>
+              <td class="pos">adj</td>
+              <td>dễ gãy, dễ hỏng</td>
+            </tr>
+            <tr>
+              <td><span class="term">isolate</span><button class="speak" data-text="isolate">🔊</button></td>
+              <td><span class="reading">(ai-sợ-lêt)</span><span class="ipa">/ˈaɪsəleɪt/</span></td>
+              <td class="pos">v</td>
+              <td>tách riêng, cô lập</td>
+            </tr>
+            <tr>
+              <td><span class="term">unstable</span><button class="speak" data-text="unstable">🔊</button></td>
+              <td><span class="reading">(ăn-stây-bồ)</span><span class="ipa">/ʌnˈsteɪbl/</span></td>
+              <td class="pos">adj</td>
+              <td>không ổn định</td>
+            </tr>
+            <tr>
+              <td><span class="term">safety net</span><button class="speak" data-text="safety net">🔊</button></td>
+              <td><span class="reading">(sêf-ti net)</span><span class="ipa">/ˈseɪfti net/</span></td>
+              <td class="pos">n phr.</td>
+              <td>lưới an toàn (phương án dự phòng)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="tip">💡 Mẹo: nhấn mạnh "fix root cause first, retry last" — nhà tuyển dụng muốn thấy bạn không che giấu lỗi bằng cách chạy lại. Bấm 🔊 để nghe phát âm.</p>
+
+    <footer>Interview Prep · QA Automation (Playwright &amp; Selenium)</footer>
+  </div>
+
+  <script>
+  /* ===== PHÁT ÂM + NGHE LẶP Anh–Việt (Web Speech API) ===== */
+  let RATE = 0.85;          // tốc độ đọc
+  let LOOP_COUNT = 0;       // 0 = lặp vô hạn (∞)
+  let enVoice = null, viVoice = null;
+  let loopActive = false, loopBtn = null, currentBtn = null;
+
+  function pickVoices(){
+    const vs = speechSynthesis.getVoices();
+    const en = vs.filter(v=>/^en/i.test(v.lang));
+    // Ưu tiên giọng OFFLINE (localService) để tránh lỗi "synthesis-failed"
+    enVoice = en.find(v=>v.localService && /en[-_]US/i.test(v.lang))
+           || en.find(v=>v.localService && /en[-_]GB/i.test(v.lang))
+           || en.find(v=>v.localService)
+           || en.find(v=>/en[-_]US/i.test(v.lang))
+           || en[0] || null;
+    const vi = vs.filter(v=>/^vi/i.test(v.lang));
+    viVoice = vi.find(v=>v.localService) || vi[0] || null;
+  }
+  pickVoices();
+  if (typeof speechSynthesis !== 'undefined') speechSynthesis.onvoiceschanged = pickVoices;
+
+  const setStatus = m => { const s=document.getElementById('spkStatus'); if(s) s.textContent=m; };
+  const wait = ms => new Promise(r=>setTimeout(r,ms));
+
+  /* --- Đọc 1 lần (nút 🔊) --- */
+  function speak(text, lang, btn){
+    if(!('speechSynthesis' in window)){ setStatus('⚠ Trình duyệt không hỗ trợ — dùng Chrome/Edge'); return; }
+    if(loopActive) stopLoop();
+    speechSynthesis.cancel();
+    if(currentBtn) currentBtn.classList.remove('speaking');
+    const isVi = /^vi/i.test(lang||'');
+    if(!enVoice || !viVoice) pickVoices();
+    setTimeout(()=>{
+      const u = new SpeechSynthesisUtterance(text);
+      const voice = isVi ? viVoice : enVoice;
+      u.lang = voice ? voice.lang : (isVi ? 'vi-VN' : 'en-US');
+      if(voice) u.voice = voice;
+      u.rate = RATE; u.pitch = 1;
+      u.onstart = ()=>setStatus('🔊 đang đọc…');
+      u.onend   = ()=>{ setStatus('✓'); if(btn) btn.classList.remove('speaking'); };
+      u.onerror = e=>{ setStatus('⚠ lỗi: '+(e.error||'')); if(btn) btn.classList.remove('speaking'); };
+      if(btn){ currentBtn=btn; btn.classList.add('speaking'); }
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    }, 90);
+  }
+
+  /* --- Nghe lặp Anh → Việt --- */
+  function speakOnce(text, voice, fallbackLang){
+    return new Promise(resolve=>{
+      if(!text){ resolve(); return; }
+      const u = new SpeechSynthesisUtterance(text);
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang = fallbackLang || 'en-US';
+      u.rate = RATE; u.pitch = 1;
+      u.onend = resolve; u.onerror = resolve;
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    });
+  }
+  function stopLoop(){
+    loopActive = false; speechSynthesis.cancel();
+    if(loopBtn){ loopBtn.classList.remove('looping'); loopBtn=null; }
+  }
+  async function loopPairs(pairs, btn){
+    if(loopActive && loopBtn===btn){ stopLoop(); setStatus('⏹ đã dừng lặp'); return; }
+    stopLoop();
+    loopActive = true; loopBtn = btn; btn.classList.add('looping');
+    if(!enVoice || !viVoice) pickVoices();
+    let round = 0; await wait(120);
+    while(loopActive){
+      round++;
+      for(let i=0; i<pairs.length; i++){
+        if(!loopActive) break;
+        const pos = pairs.length>1 ? (' ['+(i+1)+'/'+pairs.length+']') : '';
+        const head = '🔁 Lần '+round+(LOOP_COUNT?('/'+LOOP_COUNT):'')+pos;
+        setStatus(head+' — 🇬🇧 English');
+        await speakOnce(pairs[i].en, enVoice, 'en-US');
+        if(!loopActive) break;
+        await wait(350);
+        if(!loopActive) break;
+        setStatus(head+' — 🇻🇳 Tiếng Việt'+(viVoice?'':' (⚠ máy chưa có giọng Việt)'));
+        await speakOnce(pairs[i].vi, viVoice, 'vi-VN');
+        if(!loopActive) break;
+        await wait(pairs.length>1 ? 300 : 600);
+      }
+      if(!loopActive) break;
+      if(LOOP_COUNT && round>=LOOP_COUNT){ stopLoop(); setStatus('✓ Xong '+round+' lần'); break; }
+      await wait(700);
+    }
+  }
+
+  function makeRep(label, title, onClick){
+    const b = document.createElement('button');
+    b.className = 'replabel'; b.type = 'button';
+    b.textContent = label; b.title = title;
+    b.addEventListener('click', e=>{ e.preventDefault(); onClick(); });
+    return b;
+  }
+
+  /* Nút 🔊 sẵn có -> dùng tốc độ + giọng phù hợp */
+  document.querySelectorAll('.speak').forEach(btn=>{
+    btn.addEventListener('click', ()=> speak(btn.getAttribute('data-text'), btn.getAttribute('data-lang')||'en-US', btn));
+  });
+
+  /* 🔁 Lặp CÂU TRẢ LỜI: đọc đoạn tiếng Anh rồi bản dịch tiếng Việt */
+  (function(){
+    const enBq = document.querySelector('.card.answer blockquote');
+    const viBq = document.querySelector('.card.vi-answer blockquote');
+    if(!enBq || !viBq) return;
+    const enText = enBq.textContent.trim();
+    const viText = viBq.textContent.trim();
+    const rep = makeRep('🔁 Lặp câu trả lời (Anh → Việt)',
+      'Nghe lặp: đọc câu trả lời tiếng Anh rồi bản dịch tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs([{en:enText, vi:viText}], rep));
+    enBq.after(rep);
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  (function(){
+    const table = document.querySelector('table.vocab');
+    if(!table) return;
+    const pairs = [];
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      const term = tr.querySelector('.term');
+      const vi = tr.querySelector('td:last-child');
+      if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+    });
+    if(!pairs.length) return;
+    const card = table.closest('.card');
+    const h2 = card ? card.querySelector('h2') : null;
+    const rep = makeRep('🔁 Lặp từ vựng (Anh → Việt)',
+      'Nghe lặp lần lượt: từng từ tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs(pairs, rep));
+    if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp */
+  document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      RATE = parseFloat(b.dataset.rate);
+      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  document.querySelectorAll('.ratebar button[data-loop]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      LOOP_COUNT = parseInt(b.dataset.loop,10);
+      document.querySelectorAll('.ratebar button[data-loop]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  window.addEventListener('load', ()=>{ try{ speechSynthesis.getVoices(); }catch(e){} });
+  </script>
+</body>
+</html>
