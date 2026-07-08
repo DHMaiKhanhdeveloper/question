@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Q20 — Mocking in Tests</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent2: #34d399;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 40px 16px;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: .5px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 8px;
+      line-height: 1.3;
+    }
+    .vi { color: var(--muted); font-style: italic; margin-bottom: 28px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--accent2);
+    }
+    .card h2 {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .card.answer { border-left-color: var(--accent); }
+    .card.answer h2 { color: var(--accent); }
+    .card.vi-answer { border-left-color: #f87171; }
+    .card.vi-answer h2 { color: #f87171; }
+    .card h2 .speak { text-transform: none; }
+    blockquote {
+      background: rgba(56,189,248,.08);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 17px;
+    }
+    .keyword { color: var(--accent); font-weight: 600; }
+    ul { padding-left: 20px; margin-top: 8px; }
+    li { margin-bottom: 6px; }
+    .tip { color: var(--muted); font-size: 15px; }
+    footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 30px; }
+
+    pre {
+      background: #0b1220;
+      border: 1px solid rgba(148,163,184,.2);
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    pre .c { color: #64748b; }
+    pre .k { color: #c084fc; }
+    pre .s { color: #34d399; }
+    pre .f { color: #38bdf8; }
+
+    /* tables */
+    .table-wrap { overflow-x: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+    table th, table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148,163,184,.18);
+      vertical-align: top;
+    }
+    table th {
+      background: rgba(56,189,248,.12);
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    table tr:last-child td { border-bottom: none; }
+    table tr:hover td { background: rgba(148,163,184,.06); }
+    table.vocab { min-width: 640px; }
+    .term { font-weight: 700; color: var(--text); }
+    .reading { color: var(--accent2); display: block; }
+    .ipa { color: var(--accent); display: block; opacity: .9; }
+    .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    .speak {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 22px;
+      margin-left: 8px;
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      vertical-align: middle;
+      transition: transform .1s, background .15s;
+    }
+    .speak:hover { background: #7dd3fc; transform: scale(1.08); }
+    .speak:active { transform: scale(.92); }
+
+    /* ===== Thanh điều khiển tốc độ / lặp + nút LẶP Anh–Việt ===== */
+    .ratebar {
+      position: fixed; top: 10px; right: 10px; z-index: 50;
+      background: rgba(11,18,32,.93); backdrop-filter: blur(6px);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 10px;
+      padding: 7px 10px; font-size: 12px; display: flex; flex-wrap: wrap;
+      gap: 6px; align-items: center; max-width: calc(100vw - 20px);
+      box-shadow: 0 4px 14px rgba(0,0,0,.5);
+    }
+    .ratebar b { color: var(--muted); font-weight: 600; }
+    .ratebar .sep { border-left: 1px solid rgba(148,163,184,.25); align-self: stretch; margin: 0 2px; }
+    .ratebar button {
+      background: #243449; color: var(--text);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer; font-size: 12px; font-family: inherit;
+    }
+    .ratebar button.on { background: var(--accent); color: #0f172a; font-weight: 700; }
+    .ratebar button[data-loop].on { background: #a78bfa; color: #0f172a; font-weight: 700; }
+    .ratebar button.test { background: var(--accent2); color: #0f172a; font-weight: 700; }
+    .ratebar #spkStatus { color: #fbbf24; max-width: 220px; }
+    .speak.speaking { background: var(--accent2); animation: pulse .8s infinite; }
+    .replabel {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin: 14px 8px 0 0; border: none; border-radius: 8px;
+      background: #a78bfa; color: #0f172a; font-weight: 600;
+      font-size: 13px; padding: 7px 13px; cursor: pointer;
+      font-family: inherit; line-height: 1.2; text-transform: none;
+    }
+    .replabel:hover { background: #c4b5fd; }
+    .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
+    @keyframes pulse { 50% { opacity: .5; } }
+  </style>
+</head>
+<body>
+  <div class="ratebar">
+    <b>🔊 Tốc độ:</b>
+    <button data-rate="0.7">Chậm</button>
+    <button data-rate="0.85" class="on">Vừa</button>
+    <button data-rate="1">Thường</button>
+    <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
+    <span class="sep"></span>
+    <b>🔁 Lặp:</b>
+    <button data-loop="3">×3</button>
+    <button data-loop="5">×5</button>
+    <button data-loop="0" class="on">∞</button>
+    <span id="spkStatus">sẵn sàng</span>
+  </div>
+  <div class="container">
+    <span class="badge">QUESTION 20 · TEST AUTOMATION</span>
+    <h1>What is mocking, and when should you mock in tests?</h1>
+    <p class="vi">Mocking là gì, và khi nào bạn nên mock trong test?</p>
+
+    <div class="card answer">
+      <h2>Sample Answer (English)
+        <button class="speak"
+          data-text="Mocking means replacing a real dependency, like a network call, a database, or a third-party service, with a fake implementation that returns controlled, predictable responses. In Playwright, I often use route interception with page.route() to intercept an API request and return a fixed mock response, without ever hitting the real backend. I mock whenever I want to isolate the unit under test, speed up execution, or avoid flaky third-party dependencies such as payment gateways or external APIs that are slow or unreliable. Mocking also lets me simulate edge cases, like server errors or empty states, that are hard to trigger for real. However, I avoid mocking in true end-to-end tests, because those are meant to verify the real integration between systems, and over-mocking there would hide real bugs and give false confidence."
+        >🔊</button>
+      </h2>
+      <blockquote>
+        <span class="keyword">Mocking</span> means replacing a real
+        <span class="keyword">dependency</span>, like a network call, a database, or a
+        <span class="keyword">third-party service</span>, with a
+        <span class="keyword">fake implementation</span> that returns controlled,
+        <span class="keyword">predictable responses</span>. In Playwright, I often use
+        <span class="keyword">route interception</span> with <em>page.route()</em> to
+        <span class="keyword">intercept an API request</span> and return a
+        <span class="keyword">fixed mock response</span>, without ever hitting the real
+        <span class="keyword">backend</span>. I mock whenever I want to
+        <span class="keyword">isolate the unit under test</span>, speed up execution, or
+        avoid <span class="keyword">flaky third-party dependencies</span> such as payment
+        gateways or external APIs that are slow or unreliable. Mocking also lets me
+        <span class="keyword">simulate edge cases</span>, like server errors or empty
+        states, that are hard to trigger for real. However, I avoid mocking in
+        <span class="keyword">true end-to-end tests</span>, because those are meant to
+        verify the real <span class="keyword">integration</span> between systems, and
+        <span class="keyword">over-mocking</span> there would hide real bugs and give
+        <span class="keyword">false confidence</span>.
+      </blockquote>
+    </div>
+
+    <div class="card vi-answer">
+      <h2>🇻🇳 Bản dịch tiếng Việt
+        <button class="speak" data-lang="vi-VN"
+          data-text="Mocking nghĩa là thay thế một dependency thật, chẳng hạn như một network call, một database, hoặc một dịch vụ bên thứ ba, bằng một cài đặt giả trả về các phản hồi có kiểm soát và có thể dự đoán được. Trong Playwright, tôi thường dùng route interception với page.route() để chặn một API request và trả về một mock response cố định, mà không bao giờ chạm vào backend thật. Tôi mock bất cứ khi nào tôi muốn cô lập unit đang được kiểm thử, tăng tốc độ chạy test, hoặc tránh các flaky third-party dependency như cổng thanh toán hoặc các API bên ngoài chậm và không ổn định. Mocking cũng cho phép tôi mô phỏng các edge case, như lỗi server hoặc trạng thái rỗng, những thứ khó tạo ra thật ngoài đời. Tuy nhiên, tôi tránh mocking trong các true end-to-end test, vì những test đó được thiết kế để xác minh sự tích hợp thật giữa các hệ thống, và việc over-mocking ở đó sẽ che giấu các lỗi thật và tạo ra sự tự tin giả tạo."
+        >🔊</button>
+      </h2>
+      <blockquote>
+        <span class="keyword">Mocking</span> nghĩa là thay thế một
+        <span class="keyword">dependency</span> thật, chẳng hạn như một network call, một
+        database, hoặc một <span class="keyword">dịch vụ bên thứ ba</span>, bằng một
+        <span class="keyword">cài đặt giả</span> trả về các
+        <span class="keyword">phản hồi có kiểm soát</span> và có thể dự đoán được. Trong
+        Playwright, tôi thường dùng <span class="keyword">route interception</span> với
+        <em>page.route()</em> để <span class="keyword">chặn một API request</span> và trả
+        về một <span class="keyword">mock response cố định</span>, mà không bao giờ chạm
+        vào <span class="keyword">backend</span> thật. Tôi mock bất cứ khi nào tôi muốn
+        <span class="keyword">cô lập unit đang được kiểm thử</span>, tăng tốc độ chạy
+        test, hoặc tránh các <span class="keyword">flaky third-party dependency</span>
+        như cổng thanh toán hoặc các API bên ngoài chậm và không ổn định. Mocking cũng
+        cho phép tôi <span class="keyword">mô phỏng các edge case</span>, như lỗi server
+        hoặc trạng thái rỗng, những thứ khó tạo ra thật ngoài đời. Tuy nhiên, tôi tránh
+        mocking trong các <span class="keyword">true end-to-end test</span>, vì những test
+        đó được thiết kế để xác minh sự <span class="keyword">tích hợp</span> thật giữa
+        các hệ thống, và việc <span class="keyword">over-mocking</span> ở đó sẽ che giấu
+        các lỗi thật và tạo ra <span class="keyword">sự tự tin giả tạo</span>.
+      </blockquote>
+    </div>
+
+    <div class="card">
+      <h2>💻 Ví dụ minh họa (Playwright)</h2>
+      <pre><span class="c">// Mock API response bằng page.route() — không gọi backend thật</span>
+<span class="k">await</span> page.<span class="f">route</span>(<span class="s">'**/api/users/1'</span>, <span class="k">async</span> route => {
+  <span class="k">await</span> route.<span class="f">fulfill</span>({
+    status: <span class="s">200</span>,
+    contentType: <span class="s">'application/json'</span>,
+    body: <span class="f">JSON</span>.<span class="f">stringify</span>({
+      id: <span class="s">1</span>,
+      name: <span class="s">'Mock User'</span>,
+      role: <span class="s">'admin'</span>
+    }),
+  });
+});
+
+<span class="c">// Điều hướng — UI sẽ hiển thị dữ liệu giả ở trên</span>
+<span class="k">await</span> page.<span class="f">goto</span>(<span class="s">'/profile'</span>);
+<span class="k">await</span> <span class="f">expect</span>(page.<span class="f">getByText</span>(<span class="s">'Mock User'</span>)).<span class="f">toBeVisible</span>();
+
+<span class="c">// Mô phỏng lỗi server để test edge case</span>
+<span class="k">await</span> page.<span class="f">route</span>(<span class="s">'**/api/orders'</span>, route =>
+  route.<span class="f">fulfill</span>({ status: <span class="s">500</span>, body: <span class="s">'Server Error'</span> })
+);</pre>
+    </div>
+
+    <div class="card">
+      <h2>✅ Khi nào nên mock vs. dùng dependency thật</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Tình huống</th><th>Nên mock hay dùng thật?</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Unit test một hàm/component riêng lẻ</td><td>Mock — cô lập unit, không phụ thuộc hệ thống ngoài</td></tr>
+            <tr><td>Third-party API chậm, tốn phí, hoặc không ổn định (payment gateway...)</td><td>Mock — tránh flaky và giảm chi phí gọi thật</td></tr>
+            <tr><td>Cần test edge case: lỗi 500, timeout, response rỗng</td><td>Mock — khó tạo tình huống này với hệ thống thật</td></tr>
+            <tr><td>Chạy test song song, cần nhanh và ổn định (CI)</td><td>Mock — loại bỏ độ trễ mạng và dữ liệu thay đổi</td></tr>
+            <tr><td>True end-to-end test xác minh tích hợp toàn hệ thống</td><td>Dùng thật — mock ở đây sẽ che giấu lỗi tích hợp thật</td></tr>
+            <tr><td>Smoke test trên môi trường staging/production</td><td>Dùng thật — cần xác nhận hệ thống thật hoạt động đúng</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📘 Từ vựng &amp; cụm từ trong đoạn</h2>
+      <div class="table-wrap">
+        <table class="vocab">
+          <thead>
+            <tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="term">mocking</span><button class="speak" data-text="mocking">🔊</button></td>
+              <td><span class="reading">(mọ-king)</span><span class="ipa">/ˈmɒkɪŋ/</span></td>
+              <td class="pos">n</td>
+              <td>kỹ thuật giả lập dependency</td>
+            </tr>
+            <tr>
+              <td><span class="term">dependency</span><button class="speak" data-text="dependency">🔊</button></td>
+              <td><span class="reading">(đi-pen-đần-si)</span><span class="ipa">/dɪˈpendənsi/</span></td>
+              <td class="pos">n</td>
+              <td>thành phần phụ thuộc</td>
+            </tr>
+            <tr>
+              <td><span class="term">third-party service</span><button class="speak" data-text="third party service">🔊</button></td>
+              <td><span class="reading">(thơd pa-ti xơ-vis)</span><span class="ipa">/θɜːd ˈpɑːti ˈsɜːvɪs/</span></td>
+              <td class="pos">n phr.</td>
+              <td>dịch vụ bên thứ ba</td>
+            </tr>
+            <tr>
+              <td><span class="term">fake implementation</span><button class="speak" data-text="fake implementation">🔊</button></td>
+              <td><span class="reading">(phêk im-plợ-men-tây-sần)</span><span class="ipa">/feɪk ˌɪmplɪmenˈteɪʃn/</span></td>
+              <td class="pos">n phr.</td>
+              <td>cài đặt giả</td>
+            </tr>
+            <tr>
+              <td><span class="term">predictable response</span><button class="speak" data-text="predictable response">🔊</button></td>
+              <td><span class="reading">(pri-đíc-tơ-bồ ri-xponx)</span><span class="ipa">/prɪˈdɪktəbl rɪˈspɒns/</span></td>
+              <td class="pos">n phr.</td>
+              <td>phản hồi có thể dự đoán</td>
+            </tr>
+            <tr>
+              <td><span class="term">route interception</span><button class="speak" data-text="route interception">🔊</button></td>
+              <td><span class="reading">(rut in-tơ-xép-sần)</span><span class="ipa">/ruːt ˌɪntəˈsepʃn/</span></td>
+              <td class="pos">n phr.</td>
+              <td>chặn/bắt request mạng</td>
+            </tr>
+            <tr>
+              <td><span class="term">intercept</span><button class="speak" data-text="intercept">🔊</button></td>
+              <td><span class="reading">(in-tơ-xépt)</span><span class="ipa">/ˌɪntəˈsept/</span></td>
+              <td class="pos">v</td>
+              <td>chặn lại (request)</td>
+            </tr>
+            <tr>
+              <td><span class="term">backend</span><button class="speak" data-text="backend">🔊</button></td>
+              <td><span class="reading">(béc-en)</span><span class="ipa">/ˈbækend/</span></td>
+              <td class="pos">n</td>
+              <td>hệ thống phía sau (máy chủ)</td>
+            </tr>
+            <tr>
+              <td><span class="term">isolate the unit under test</span><button class="speak" data-text="isolate the unit under test">🔊</button></td>
+              <td><span class="reading">(ai-xợ-lêit thi diu-nít an-đơ test)</span><span class="ipa">/ˈaɪsəleɪt ðə ˈjuːnɪt ˈʌndər test/</span></td>
+              <td class="pos">v phr.</td>
+              <td>cô lập đơn vị đang kiểm thử</td>
+            </tr>
+            <tr>
+              <td><span class="term">flaky</span><button class="speak" data-text="flaky">🔊</button></td>
+              <td><span class="reading">(phlêi-ki)</span><span class="ipa">/ˈfleɪki/</span></td>
+              <td class="pos">adj</td>
+              <td>không ổn định, lúc pass lúc fail</td>
+            </tr>
+            <tr>
+              <td><span class="term">simulate edge cases</span><button class="speak" data-text="simulate edge cases">🔊</button></td>
+              <td><span class="reading">(xim-diu-lêit ej kêi-xịz)</span><span class="ipa">/ˈsɪmjuleɪt edʒ ˈkeɪsɪz/</span></td>
+              <td class="pos">v phr.</td>
+              <td>mô phỏng trường hợp biên</td>
+            </tr>
+            <tr>
+              <td><span class="term">end-to-end test</span><button class="speak" data-text="end to end test">🔊</button></td>
+              <td><span class="reading">(en tu en test)</span><span class="ipa">/end tuː end test/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kiểm thử toàn trình</td>
+            </tr>
+            <tr>
+              <td><span class="term">integration</span><button class="speak" data-text="integration">🔊</button></td>
+              <td><span class="reading">(in-tơ-grây-sần)</span><span class="ipa">/ˌɪntɪˈɡreɪʃn/</span></td>
+              <td class="pos">n</td>
+              <td>sự tích hợp</td>
+            </tr>
+            <tr>
+              <td><span class="term">over-mocking</span><button class="speak" data-text="over mocking">🔊</button></td>
+              <td><span class="reading">(âu-vơ mọ-king)</span><span class="ipa">/ˈəʊvər ˈmɒkɪŋ/</span></td>
+              <td class="pos">n</td>
+              <td>lạm dụng mock quá mức</td>
+            </tr>
+            <tr>
+              <td><span class="term">false confidence</span><button class="speak" data-text="false confidence">🔊</button></td>
+              <td><span class="reading">(phon con-phi-đần)</span><span class="ipa">/fɔːls ˈkɒnfɪdəns/</span></td>
+              <td class="pos">n phr.</td>
+              <td>sự tự tin giả tạo, sai lệch</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="tip">💡 Mẹo: nêu định nghĩa mocking → cho ví dụ page.route() → nêu khi nào nên mock (unit test, flaky dependency, edge case) và khi nào không nên (true e2e). Bấm 🔊 để nghe phát âm.</p>
+
+    <footer>Interview Prep · QA Automation (Playwright &amp; Selenium)</footer>
+  </div>
+
+  <script>
+  /* ===== PHÁT ÂM + NGHE LẶP Anh–Việt (Web Speech API) ===== */
+  let RATE = 0.85;          // tốc độ đọc
+  let LOOP_COUNT = 0;       // 0 = lặp vô hạn (∞)
+  let enVoice = null, viVoice = null;
+  let loopActive = false, loopBtn = null, currentBtn = null;
+
+  function pickVoices(){
+    const vs = speechSynthesis.getVoices();
+    const en = vs.filter(v=>/^en/i.test(v.lang));
+    // Ưu tiên giọng OFFLINE (localService) để tránh lỗi "synthesis-failed"
+    enVoice = en.find(v=>v.localService && /en[-_]US/i.test(v.lang))
+           || en.find(v=>v.localService && /en[-_]GB/i.test(v.lang))
+           || en.find(v=>v.localService)
+           || en.find(v=>/en[-_]US/i.test(v.lang))
+           || en[0] || null;
+    const vi = vs.filter(v=>/^vi/i.test(v.lang));
+    viVoice = vi.find(v=>v.localService) || vi[0] || null;
+  }
+  pickVoices();
+  if (typeof speechSynthesis !== 'undefined') speechSynthesis.onvoiceschanged = pickVoices;
+
+  const setStatus = m => { const s=document.getElementById('spkStatus'); if(s) s.textContent=m; };
+  const wait = ms => new Promise(r=>setTimeout(r,ms));
+
+  /* --- Đọc 1 lần (nút 🔊) --- */
+  function speak(text, lang, btn){
+    if(!('speechSynthesis' in window)){ setStatus('⚠ Trình duyệt không hỗ trợ — dùng Chrome/Edge'); return; }
+    if(loopActive) stopLoop();
+    speechSynthesis.cancel();
+    if(currentBtn) currentBtn.classList.remove('speaking');
+    const isVi = /^vi/i.test(lang||'');
+    if(!enVoice || !viVoice) pickVoices();
+    setTimeout(()=>{
+      const u = new SpeechSynthesisUtterance(text);
+      const voice = isVi ? viVoice : enVoice;
+      u.lang = voice ? voice.lang : (isVi ? 'vi-VN' : 'en-US');
+      if(voice) u.voice = voice;
+      u.rate = RATE; u.pitch = 1;
+      u.onstart = ()=>setStatus('🔊 đang đọc…');
+      u.onend   = ()=>{ setStatus('✓'); if(btn) btn.classList.remove('speaking'); };
+      u.onerror = e=>{ setStatus('⚠ lỗi: '+(e.error||'')); if(btn) btn.classList.remove('speaking'); };
+      if(btn){ currentBtn=btn; btn.classList.add('speaking'); }
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    }, 90);
+  }
+
+  /* --- Nghe lặp Anh → Việt --- */
+  function speakOnce(text, voice, fallbackLang){
+    return new Promise(resolve=>{
+      if(!text){ resolve(); return; }
+      const u = new SpeechSynthesisUtterance(text);
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang = fallbackLang || 'en-US';
+      u.rate = RATE; u.pitch = 1;
+      u.onend = resolve; u.onerror = resolve;
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    });
+  }
+  function stopLoop(){
+    loopActive = false; speechSynthesis.cancel();
+    if(loopBtn){ loopBtn.classList.remove('looping'); loopBtn=null; }
+  }
+  async function loopPairs(pairs, btn){
+    if(loopActive && loopBtn===btn){ stopLoop(); setStatus('⏹ đã dừng lặp'); return; }
+    stopLoop();
+    loopActive = true; loopBtn = btn; btn.classList.add('looping');
+    if(!enVoice || !viVoice) pickVoices();
+    let round = 0; await wait(120);
+    while(loopActive){
+      round++;
+      for(let i=0; i<pairs.length; i++){
+        if(!loopActive) break;
+        const pos = pairs.length>1 ? (' ['+(i+1)+'/'+pairs.length+']') : '';
+        const head = '🔁 Lần '+round+(LOOP_COUNT?('/'+LOOP_COUNT):'')+pos;
+        setStatus(head+' — 🇬🇧 English');
+        await speakOnce(pairs[i].en, enVoice, 'en-US');
+        if(!loopActive) break;
+        await wait(350);
+        if(!loopActive) break;
+        setStatus(head+' — 🇻🇳 Tiếng Việt'+(viVoice?'':' (⚠ máy chưa có giọng Việt)'));
+        await speakOnce(pairs[i].vi, viVoice, 'vi-VN');
+        if(!loopActive) break;
+        await wait(pairs.length>1 ? 300 : 600);
+      }
+      if(!loopActive) break;
+      if(LOOP_COUNT && round>=LOOP_COUNT){ stopLoop(); setStatus('✓ Xong '+round+' lần'); break; }
+      await wait(700);
+    }
+  }
+
+  function makeRep(label, title, onClick){
+    const b = document.createElement('button');
+    b.className = 'replabel'; b.type = 'button';
+    b.textContent = label; b.title = title;
+    b.addEventListener('click', e=>{ e.preventDefault(); onClick(); });
+    return b;
+  }
+
+  /* Nút 🔊 sẵn có -> dùng tốc độ + giọng phù hợp */
+  document.querySelectorAll('.speak').forEach(btn=>{
+    btn.addEventListener('click', ()=> speak(btn.getAttribute('data-text'), btn.getAttribute('data-lang')||'en-US', btn));
+  });
+
+  /* 🔁 Lặp CÂU TRẢ LỜI: đọc đoạn tiếng Anh rồi bản dịch tiếng Việt */
+  (function(){
+    const enBq = document.querySelector('.card.answer blockquote');
+    const viBq = document.querySelector('.card.vi-answer blockquote');
+    if(!enBq || !viBq) return;
+    const enText = enBq.textContent.trim();
+    const viText = viBq.textContent.trim();
+    const rep = makeRep('🔁 Lặp câu trả lời (Anh → Việt)',
+      'Nghe lặp: đọc câu trả lời tiếng Anh rồi bản dịch tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs([{en:enText, vi:viText}], rep));
+    enBq.after(rep);
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  (function(){
+    const table = document.querySelector('table.vocab');
+    if(!table) return;
+    const pairs = [];
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      const term = tr.querySelector('.term');
+      const vi = tr.querySelector('td:last-child');
+      if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+    });
+    if(!pairs.length) return;
+    const card = table.closest('.card');
+    const h2 = card ? card.querySelector('h2') : null;
+    const rep = makeRep('🔁 Lặp từ vựng (Anh → Việt)',
+      'Nghe lặp lần lượt: từng từ tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs(pairs, rep));
+    if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp */
+  document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      RATE = parseFloat(b.dataset.rate);
+      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  document.querySelectorAll('.ratebar button[data-loop]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      LOOP_COUNT = parseInt(b.dataset.loop,10);
+      document.querySelectorAll('.ratebar button[data-loop]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  window.addEventListener('load', ()=>{ try{ speechSynthesis.getVoices(); }catch(e){} });
+  </script>
+</body>
+</html>

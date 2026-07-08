@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Q29 — Prioritizing Test Cases</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent2: #34d399;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 40px 16px;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: .5px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 8px;
+      line-height: 1.3;
+    }
+    .vi { color: var(--muted); font-style: italic; margin-bottom: 28px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--accent2);
+    }
+    .card h2 {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .card.answer { border-left-color: var(--accent); }
+    .card.answer h2 { color: var(--accent); }
+    .card.vi-answer { border-left-color: #f87171; }
+    .card.vi-answer h2 { color: #f87171; }
+    .card h2 .speak { text-transform: none; }
+    blockquote {
+      background: rgba(56,189,248,.08);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 17px;
+    }
+    .keyword { color: var(--accent); font-weight: 600; }
+    ul { padding-left: 20px; margin-top: 8px; }
+    li { margin-bottom: 6px; }
+    .tip { color: var(--muted); font-size: 15px; }
+    footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 30px; }
+
+    pre {
+      background: #0b1220;
+      border: 1px solid rgba(148,163,184,.2);
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    pre .c { color: #64748b; }
+    pre .k { color: #c084fc; }
+    pre .s { color: #34d399; }
+    pre .f { color: #38bdf8; }
+
+    /* tables */
+    .table-wrap { overflow-x: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+    table th, table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148,163,184,.18);
+      vertical-align: top;
+    }
+    table th {
+      background: rgba(56,189,248,.12);
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    table tr:last-child td { border-bottom: none; }
+    table tr:hover td { background: rgba(148,163,184,.06); }
+    table.vocab { min-width: 640px; }
+    .term { font-weight: 700; color: var(--text); }
+    .reading { color: var(--accent2); display: block; }
+    .ipa { color: var(--accent); display: block; opacity: .9; }
+    .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    .speak {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 22px;
+      margin-left: 8px;
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      vertical-align: middle;
+      transition: transform .1s, background .15s;
+    }
+    .speak:hover { background: #7dd3fc; transform: scale(1.08); }
+    .speak:active { transform: scale(.92); }
+
+    /* ===== Thanh điều khiển tốc độ / lặp + nút LẶP Anh–Việt ===== */
+    .ratebar {
+      position: fixed; top: 10px; right: 10px; z-index: 50;
+      background: rgba(11,18,32,.93); backdrop-filter: blur(6px);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 10px;
+      padding: 7px 10px; font-size: 12px; display: flex; flex-wrap: wrap;
+      gap: 6px; align-items: center; max-width: calc(100vw - 20px);
+      box-shadow: 0 4px 14px rgba(0,0,0,.5);
+    }
+    .ratebar b { color: var(--muted); font-weight: 600; }
+    .ratebar .sep { border-left: 1px solid rgba(148,163,184,.25); align-self: stretch; margin: 0 2px; }
+    .ratebar button {
+      background: #243449; color: var(--text);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer; font-size: 12px; font-family: inherit;
+    }
+    .ratebar button.on { background: var(--accent); color: #0f172a; font-weight: 700; }
+    .ratebar button[data-loop].on { background: #a78bfa; color: #0f172a; font-weight: 700; }
+    .ratebar button.test { background: var(--accent2); color: #0f172a; font-weight: 700; }
+    .ratebar #spkStatus { color: #fbbf24; max-width: 220px; }
+    .speak.speaking { background: var(--accent2); animation: pulse .8s infinite; }
+    .replabel {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin: 14px 8px 0 0; border: none; border-radius: 8px;
+      background: #a78bfa; color: #0f172a; font-weight: 600;
+      font-size: 13px; padding: 7px 13px; cursor: pointer;
+      font-family: inherit; line-height: 1.2; text-transform: none;
+    }
+    .replabel:hover { background: #c4b5fd; }
+    .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
+    @keyframes pulse { 50% { opacity: .5; } }
+  </style>
+</head>
+<body>
+  <div class="ratebar">
+    <b>🔊 Tốc độ:</b>
+    <button data-rate="0.7">Chậm</button>
+    <button data-rate="0.85" class="on">Vừa</button>
+    <button data-rate="1">Thường</button>
+    <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
+    <span class="sep"></span>
+    <b>🔁 Lặp:</b>
+    <button data-loop="3">×3</button>
+    <button data-loop="5">×5</button>
+    <button data-loop="0" class="on">∞</button>
+    <span id="spkStatus">sẵn sàng</span>
+  </div>
+  <div class="container">
+    <span class="badge">QUESTION 29 · TEST AUTOMATION</span>
+    <h1>How do you prioritize test cases when time is limited?</h1>
+    <p class="vi">Bạn ưu tiên test case như thế nào khi thời gian có hạn?</p>
+
+    <div class="card answer">
+      <h2>Sample Answer (English)
+        <button class="speak"
+          data-text="When time is limited, I use risk-based prioritization to decide which test cases matter most. First, I always run smoke tests to confirm the build is stable and the critical user paths, like login, checkout, and payment, actually work. After that, I focus on high-impact and high-probability areas, meaning features that would cause serious damage if they broke and features that are more likely to have bugs. I pay special attention to recently changed code, since new or modified logic is the most fragile. I also consider business priority, talking with the product owner about which features matter most to customers right now. Low-risk, rarely used, or already stable areas get deprioritized or automated for later regression runs instead of manual execution.">🔊</button>
+      </h2>
+      <blockquote>
+        When time is limited, I use <span class="keyword">risk-based prioritization</span> to decide which
+        <span class="keyword">test cases</span> matter most. First, I always run <span class="keyword">smoke tests</span>
+        first to confirm the build is stable and the <span class="keyword">critical user paths</span>, like login,
+        checkout, and payment, actually work. After that, I focus on <span class="keyword">high-impact</span> and
+        <span class="keyword">high-probability areas</span>, meaning features that would cause serious damage if they
+        broke and features that are more likely to have <span class="keyword">bugs</span>. I pay special attention to
+        <span class="keyword">recently changed code</span>, since new or modified logic is the most
+        <span class="keyword">fragile</span>. I also consider <span class="keyword">business priority</span>, talking
+        with the <span class="keyword">product owner</span> about which features matter most to customers right now.
+        <span class="keyword">Low-risk</span>, rarely used, or already <span class="keyword">stable</span> areas get
+        <span class="keyword">deprioritized</span> or <span class="keyword">automated</span> for later
+        <span class="keyword">regression</span> runs instead of manual execution.
+      </blockquote>
+    </div>
+
+    <div class="card vi-answer">
+      <h2>🇻🇳 Bản dịch tiếng Việt
+        <button class="speak" data-lang="vi-VN"
+          data-text="Khi thời gian có hạn, tôi dùng phương pháp ưu tiên dựa trên rủi ro để quyết định test case nào quan trọng nhất. Đầu tiên, tôi luôn chạy smoke test để xác nhận bản build ổn định và các luồng người dùng quan trọng, như đăng nhập, thanh toán, hoạt động bình thường. Sau đó, tôi tập trung vào những khu vực có tác động cao và xác suất lỗi cao, nghĩa là những tính năng nếu hỏng sẽ gây thiệt hại nghiêm trọng và những tính năng dễ có bug hơn. Tôi đặc biệt chú ý đến đoạn code vừa thay đổi gần đây, vì logic mới hoặc vừa sửa thường dễ vỡ nhất. Tôi cũng cân nhắc mức độ ưu tiên kinh doanh, trao đổi với product owner để biết tính năng nào đang quan trọng nhất với khách hàng lúc này. Những khu vực rủi ro thấp, ít dùng, hoặc đã ổn định thì được hạ ưu tiên hoặc chuyển sang tự động hóa để chạy trong các lần hồi quy sau, thay vì test tay ngay lúc đó.">🔊</button>
+      </h2>
+      <blockquote>
+        Khi thời gian có hạn, tôi dùng phương pháp <span class="keyword">ưu tiên dựa trên rủi ro (risk-based prioritization)</span>
+        để quyết định <span class="keyword">test case</span> nào quan trọng nhất. Đầu tiên, tôi luôn chạy
+        <span class="keyword">smoke test</span> để xác nhận bản build ổn định và các
+        <span class="keyword">luồng người dùng quan trọng (critical user paths)</span>, như đăng nhập, thanh toán,
+        hoạt động bình thường. Sau đó, tôi tập trung vào những khu vực có
+        <span class="keyword">tác động cao (high-impact)</span> và
+        <span class="keyword">xác suất lỗi cao (high-probability)</span>, nghĩa là những tính năng nếu hỏng sẽ gây
+        thiệt hại nghiêm trọng và những tính năng dễ có <span class="keyword">bug</span> hơn. Tôi đặc biệt chú ý đến
+        <span class="keyword">đoạn code vừa thay đổi gần đây (recently changed code)</span>, vì logic mới hoặc vừa
+        sửa thường <span class="keyword">dễ vỡ (fragile)</span> nhất. Tôi cũng cân nhắc
+        <span class="keyword">mức độ ưu tiên kinh doanh (business priority)</span>, trao đổi với
+        <span class="keyword">product owner</span> để biết tính năng nào đang quan trọng nhất với khách hàng lúc này.
+        Những khu vực <span class="keyword">rủi ro thấp (low-risk)</span>, ít dùng, hoặc đã
+        <span class="keyword">ổn định (stable)</span> thì được <span class="keyword">hạ ưu tiên (deprioritized)</span>
+        hoặc <span class="keyword">tự động hóa (automated)</span> để chạy trong các lần
+        <span class="keyword">hồi quy (regression)</span> sau, thay vì test tay ngay lúc đó.
+      </blockquote>
+    </div>
+
+    <div class="card">
+      <h2>💻 Ma trận ưu tiên rủi ro</h2>
+      <pre><span class="c">// Risk = Impact x Probability</span>
+<span class="c">//                     Probability THẤP        Probability CAO</span>
+<span class="k">Impact CAO   </span>  |  <span class="f">P2</span> - Ưu tiên cao   |  <span class="f">P1</span> - Ưu tiên #1 (test ngay)
+<span class="k">Impact THẤP  </span>  |  <span class="f">P4</span> - Bỏ qua/sau   |  <span class="f">P3</span> - Ưu tiên trung bình
+
+<span class="c">// Ví dụ áp dụng</span>
+<span class="s">"Thanh toán bị lỗi khi checkout"</span>   -> Impact cao + Probability cao -> <span class="f">P1</span>
+<span class="s">"Sai chính tả ở footer hiếm khi đổi"</span> -> Impact thấp + Probability thấp -> <span class="f">P4</span></pre>
+    </div>
+
+    <div class="card">
+      <h2>✅ Bảng mức độ ưu tiên</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Mức ưu tiên</th><th>Tiêu chí</th><th>Ví dụ</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>P1 — Critical / Smoke</td><td>Luồng chính, impact cao, phải chạy đầu tiên</td><td>Login, checkout, payment</td></tr>
+            <tr><td>P2 — High</td><td>Impact cao nhưng probability thấp hơn</td><td>Xử lý đơn hàng số lượng lớn</td></tr>
+            <tr><td>P3 — Medium</td><td>Probability lỗi cao nhưng impact vừa phải</td><td>Bộ lọc tìm kiếm nâng cao</td></tr>
+            <tr><td>P4 — Low</td><td>Ít dùng, ổn định lâu, impact thấp</td><td>Trang footer, liên kết mạng xã hội</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📘 Từ vựng &amp; cụm từ trong đoạn</h2>
+      <div class="table-wrap">
+        <table class="vocab">
+          <thead>
+            <tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="term">risk-based prioritization</span><button class="speak" data-text="risk based prioritization">🔊</button></td>
+              <td><span class="reading">(rít-bêis prai-o-ri-tai-zây-sần)</span><span class="ipa">/rɪsk beɪst praɪˌɒrɪtaɪˈzeɪʃn/</span></td>
+              <td class="pos">n phr.</td>
+              <td>ưu tiên dựa trên rủi ro</td>
+            </tr>
+            <tr>
+              <td><span class="term">smoke test</span><button class="speak" data-text="smoke test">🔊</button></td>
+              <td><span class="reading">(sờ-mâuk test)</span><span class="ipa">/sməʊk test/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kiểm thử khói (kiểm tra nhanh chức năng chính)</td>
+            </tr>
+            <tr>
+              <td><span class="term">critical user path</span><button class="speak" data-text="critical user path">🔊</button></td>
+              <td><span class="reading">(cri-ti-cồ diu-zơ path)</span><span class="ipa">/ˈkrɪtɪkl ˈjuːzər pɑːθ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>luồng người dùng quan trọng</td>
+            </tr>
+            <tr>
+              <td><span class="term">high-impact</span><button class="speak" data-text="high impact">🔊</button></td>
+              <td><span class="reading">(hai im-pác)</span><span class="ipa">/haɪ ˈɪmpækt/</span></td>
+              <td class="pos">adj</td>
+              <td>tác động cao</td>
+            </tr>
+            <tr>
+              <td><span class="term">high-probability</span><button class="speak" data-text="high probability">🔊</button></td>
+              <td><span class="reading">(hai pro-bợ-bi-lợ-ti)</span><span class="ipa">/haɪ ˌprɒbəˈbɪləti/</span></td>
+              <td class="pos">adj phr.</td>
+              <td>xác suất cao</td>
+            </tr>
+            <tr>
+              <td><span class="term">recently changed code</span><button class="speak" data-text="recently changed code">🔊</button></td>
+              <td><span class="reading">(ri-sần-tli chên-chd côd)</span><span class="ipa">/ˈriːsntli tʃeɪndʒd kəʊd/</span></td>
+              <td class="pos">n phr.</td>
+              <td>đoạn code vừa thay đổi gần đây</td>
+            </tr>
+            <tr>
+              <td><span class="term">fragile</span><button class="speak" data-text="fragile">🔊</button></td>
+              <td><span class="reading">(fre-chồ)</span><span class="ipa">/ˈfrædʒaɪl/</span></td>
+              <td class="pos">adj</td>
+              <td>dễ vỡ, dễ lỗi</td>
+            </tr>
+            <tr>
+              <td><span class="term">business priority</span><button class="speak" data-text="business priority">🔊</button></td>
+              <td><span class="reading">(bít-nợs prai-o-ri-ti)</span><span class="ipa">/ˈbɪznəs praɪˈɒrəti/</span></td>
+              <td class="pos">n phr.</td>
+              <td>mức độ ưu tiên kinh doanh</td>
+            </tr>
+            <tr>
+              <td><span class="term">product owner</span><button class="speak" data-text="product owner">🔊</button></td>
+              <td><span class="reading">(pró-đợct âu-nơ)</span><span class="ipa">/ˈprɒdʌkt ˈəʊnər/</span></td>
+              <td class="pos">n phr.</td>
+              <td>chủ sản phẩm</td>
+            </tr>
+            <tr>
+              <td><span class="term">low-risk</span><button class="speak" data-text="low risk">🔊</button></td>
+              <td><span class="reading">(lâu rít)</span><span class="ipa">/ləʊ rɪsk/</span></td>
+              <td class="pos">adj</td>
+              <td>rủi ro thấp</td>
+            </tr>
+            <tr>
+              <td><span class="term">stable</span><button class="speak" data-text="stable">🔊</button></td>
+              <td><span class="reading">(stê-bồ)</span><span class="ipa">/ˈsteɪbl/</span></td>
+              <td class="pos">adj</td>
+              <td>ổn định</td>
+            </tr>
+            <tr>
+              <td><span class="term">deprioritized</span><button class="speak" data-text="deprioritized">🔊</button></td>
+              <td><span class="reading">(đi-prai-o-ri-taizd)</span><span class="ipa">/diːˈpraɪɒrɪtaɪzd/</span></td>
+              <td class="pos">adj</td>
+              <td>bị hạ mức ưu tiên</td>
+            </tr>
+            <tr>
+              <td><span class="term">automated</span><button class="speak" data-text="automated">🔊</button></td>
+              <td><span class="reading">(o-tợ-mây-tịd)</span><span class="ipa">/ˈɔːtəmeɪtɪd/</span></td>
+              <td class="pos">adj</td>
+              <td>được tự động hóa</td>
+            </tr>
+            <tr>
+              <td><span class="term">regression</span><button class="speak" data-text="regression">🔊</button></td>
+              <td><span class="reading">(ri-gre-sần)</span><span class="ipa">/rɪˈgreʃn/</span></td>
+              <td class="pos">n</td>
+              <td>hồi quy (lỗi phát sinh do thay đổi)</td>
+            </tr>
+            <tr>
+              <td><span class="term">test cases</span><button class="speak" data-text="test cases">🔊</button></td>
+              <td><span class="reading">(test kêi-sịz)</span><span class="ipa">/test ˈkeɪsɪz/</span></td>
+              <td class="pos">n phr.</td>
+              <td>các trường hợp kiểm thử</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="tip">💡 Mẹo: nêu tiêu chí (risk = impact x probability) → smoke test trước → ví dụ cụ thể → nhắc đến trao đổi với product owner. Bấm 🔊 để nghe phát âm.</p>
+
+    <footer>Interview Prep · QA Automation (Playwright &amp; Selenium)</footer>
+  </div>
+
+  <script>
+  /* ===== PHÁT ÂM + NGHE LẶP Anh–Việt (Web Speech API) ===== */
+  let RATE = 0.85;          // tốc độ đọc
+  let LOOP_COUNT = 0;       // 0 = lặp vô hạn (∞)
+  let enVoice = null, viVoice = null;
+  let loopActive = false, loopBtn = null, currentBtn = null;
+
+  function pickVoices(){
+    const vs = speechSynthesis.getVoices();
+    const en = vs.filter(v=>/^en/i.test(v.lang));
+    // Ưu tiên giọng OFFLINE (localService) để tránh lỗi "synthesis-failed"
+    enVoice = en.find(v=>v.localService && /en[-_]US/i.test(v.lang))
+           || en.find(v=>v.localService && /en[-_]GB/i.test(v.lang))
+           || en.find(v=>v.localService)
+           || en.find(v=>/en[-_]US/i.test(v.lang))
+           || en[0] || null;
+    const vi = vs.filter(v=>/^vi/i.test(v.lang));
+    viVoice = vi.find(v=>v.localService) || vi[0] || null;
+  }
+  pickVoices();
+  if (typeof speechSynthesis !== 'undefined') speechSynthesis.onvoiceschanged = pickVoices;
+
+  const setStatus = m => { const s=document.getElementById('spkStatus'); if(s) s.textContent=m; };
+  const wait = ms => new Promise(r=>setTimeout(r,ms));
+
+  /* --- Đọc 1 lần (nút 🔊) --- */
+  function speak(text, lang, btn){
+    if(!('speechSynthesis' in window)){ setStatus('⚠ Trình duyệt không hỗ trợ — dùng Chrome/Edge'); return; }
+    if(loopActive) stopLoop();
+    speechSynthesis.cancel();
+    if(currentBtn) currentBtn.classList.remove('speaking');
+    const isVi = /^vi/i.test(lang||'');
+    if(!enVoice || !viVoice) pickVoices();
+    setTimeout(()=>{
+      const u = new SpeechSynthesisUtterance(text);
+      const voice = isVi ? viVoice : enVoice;
+      u.lang = voice ? voice.lang : (isVi ? 'vi-VN' : 'en-US');
+      if(voice) u.voice = voice;
+      u.rate = RATE; u.pitch = 1;
+      u.onstart = ()=>setStatus('🔊 đang đọc…');
+      u.onend   = ()=>{ setStatus('✓'); if(btn) btn.classList.remove('speaking'); };
+      u.onerror = e=>{ setStatus('⚠ lỗi: '+(e.error||'')); if(btn) btn.classList.remove('speaking'); };
+      if(btn){ currentBtn=btn; btn.classList.add('speaking'); }
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    }, 90);
+  }
+
+  /* --- Nghe lặp Anh → Việt --- */
+  function speakOnce(text, voice, fallbackLang){
+    return new Promise(resolve=>{
+      if(!text){ resolve(); return; }
+      const u = new SpeechSynthesisUtterance(text);
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang = fallbackLang || 'en-US';
+      u.rate = RATE; u.pitch = 1;
+      u.onend = resolve; u.onerror = resolve;
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    });
+  }
+  function stopLoop(){
+    loopActive = false; speechSynthesis.cancel();
+    if(loopBtn){ loopBtn.classList.remove('looping'); loopBtn=null; }
+  }
+  async function loopPairs(pairs, btn){
+    if(loopActive && loopBtn===btn){ stopLoop(); setStatus('⏹ đã dừng lặp'); return; }
+    stopLoop();
+    loopActive = true; loopBtn = btn; btn.classList.add('looping');
+    if(!enVoice || !viVoice) pickVoices();
+    let round = 0; await wait(120);
+    while(loopActive){
+      round++;
+      for(let i=0; i<pairs.length; i++){
+        if(!loopActive) break;
+        const pos = pairs.length>1 ? (' ['+(i+1)+'/'+pairs.length+']') : '';
+        const head = '🔁 Lần '+round+(LOOP_COUNT?('/'+LOOP_COUNT):'')+pos;
+        setStatus(head+' — 🇬🇧 English');
+        await speakOnce(pairs[i].en, enVoice, 'en-US');
+        if(!loopActive) break;
+        await wait(350);
+        if(!loopActive) break;
+        setStatus(head+' — 🇻🇳 Tiếng Việt'+(viVoice?'':' (⚠ máy chưa có giọng Việt)'));
+        await speakOnce(pairs[i].vi, viVoice, 'vi-VN');
+        if(!loopActive) break;
+        await wait(pairs.length>1 ? 300 : 600);
+      }
+      if(!loopActive) break;
+      if(LOOP_COUNT && round>=LOOP_COUNT){ stopLoop(); setStatus('✓ Xong '+round+' lần'); break; }
+      await wait(700);
+    }
+  }
+
+  function makeRep(label, title, onClick){
+    const b = document.createElement('button');
+    b.className = 'replabel'; b.type = 'button';
+    b.textContent = label; b.title = title;
+    b.addEventListener('click', e=>{ e.preventDefault(); onClick(); });
+    return b;
+  }
+
+  /* Nút 🔊 sẵn có -> dùng tốc độ + giọng phù hợp */
+  document.querySelectorAll('.speak').forEach(btn=>{
+    btn.addEventListener('click', ()=> speak(btn.getAttribute('data-text'), btn.getAttribute('data-lang')||'en-US', btn));
+  });
+
+  /* 🔁 Lặp CÂU TRẢ LỜI: đọc đoạn tiếng Anh rồi bản dịch tiếng Việt */
+  (function(){
+    const enBq = document.querySelector('.card.answer blockquote');
+    const viBq = document.querySelector('.card.vi-answer blockquote');
+    if(!enBq || !viBq) return;
+    const enText = enBq.textContent.trim();
+    const viText = viBq.textContent.trim();
+    const rep = makeRep('🔁 Lặp câu trả lời (Anh → Việt)',
+      'Nghe lặp: đọc câu trả lời tiếng Anh rồi bản dịch tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs([{en:enText, vi:viText}], rep));
+    enBq.after(rep);
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  (function(){
+    const table = document.querySelector('table.vocab');
+    if(!table) return;
+    const pairs = [];
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      const term = tr.querySelector('.term');
+      const vi = tr.querySelector('td:last-child');
+      if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+    });
+    if(!pairs.length) return;
+    const card = table.closest('.card');
+    const h2 = card ? card.querySelector('h2') : null;
+    const rep = makeRep('🔁 Lặp từ vựng (Anh → Việt)',
+      'Nghe lặp lần lượt: từng từ tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs(pairs, rep));
+    if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp */
+  document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      RATE = parseFloat(b.dataset.rate);
+      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  document.querySelectorAll('.ratebar button[data-loop]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      LOOP_COUNT = parseInt(b.dataset.loop,10);
+      document.querySelectorAll('.ratebar button[data-loop]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  window.addEventListener('load', ()=>{ try{ speechSynthesis.getVoices(); }catch(e){} });
+  </script>
+</body>
+</html>

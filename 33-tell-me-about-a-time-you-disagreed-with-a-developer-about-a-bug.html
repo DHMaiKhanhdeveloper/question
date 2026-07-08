@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Q33 — Disagreed With a Developer About a Bug</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent2: #34d399;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 40px 16px;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: .5px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 8px;
+      line-height: 1.3;
+    }
+    .vi { color: var(--muted); font-style: italic; margin-bottom: 28px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--accent2);
+    }
+    .card h2 {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .card.answer { border-left-color: var(--accent); }
+    .card.answer h2 { color: var(--accent); }
+    .card.vi-answer { border-left-color: #f87171; }
+    .card.vi-answer h2 { color: #f87171; }
+    .card h2 .speak { text-transform: none; }
+    blockquote {
+      background: rgba(56,189,248,.08);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 17px;
+    }
+    .keyword { color: var(--accent); font-weight: 600; }
+    ul { padding-left: 20px; margin-top: 8px; }
+    li { margin-bottom: 6px; }
+    .tip { color: var(--muted); font-size: 15px; }
+    footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 30px; }
+
+    pre {
+      background: #0b1220;
+      border: 1px solid rgba(148,163,184,.2);
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    pre .c { color: #64748b; }
+    pre .k { color: #c084fc; }
+    pre .s { color: #34d399; }
+    pre .f { color: #38bdf8; }
+
+    /* tables */
+    .table-wrap { overflow-x: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+    table th, table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148,163,184,.18);
+      vertical-align: top;
+    }
+    table th {
+      background: rgba(56,189,248,.12);
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    table tr:last-child td { border-bottom: none; }
+    table tr:hover td { background: rgba(148,163,184,.06); }
+    table.vocab { min-width: 640px; }
+    .term { font-weight: 700; color: var(--text); }
+    .reading { color: var(--accent2); display: block; }
+    .ipa { color: var(--accent); display: block; opacity: .9; }
+    .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    .speak {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 22px;
+      margin-left: 8px;
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      vertical-align: middle;
+      transition: transform .1s, background .15s;
+    }
+    .speak:hover { background: #7dd3fc; transform: scale(1.08); }
+    .speak:active { transform: scale(.92); }
+
+    /* ===== Thanh điều khiển tốc độ / lặp + nút LẶP Anh–Việt ===== */
+    .ratebar {
+      position: fixed; top: 10px; right: 10px; z-index: 50;
+      background: rgba(11,18,32,.93); backdrop-filter: blur(6px);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 10px;
+      padding: 7px 10px; font-size: 12px; display: flex; flex-wrap: wrap;
+      gap: 6px; align-items: center; max-width: calc(100vw - 20px);
+      box-shadow: 0 4px 14px rgba(0,0,0,.5);
+    }
+    .ratebar b { color: var(--muted); font-weight: 600; }
+    .ratebar .sep { border-left: 1px solid rgba(148,163,184,.25); align-self: stretch; margin: 0 2px; }
+    .ratebar button {
+      background: #243449; color: var(--text);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer; font-size: 12px; font-family: inherit;
+    }
+    .ratebar button.on { background: var(--accent); color: #0f172a; font-weight: 700; }
+    .ratebar button[data-loop].on { background: #a78bfa; color: #0f172a; font-weight: 700; }
+    .ratebar button.test { background: var(--accent2); color: #0f172a; font-weight: 700; }
+    .ratebar #spkStatus { color: #fbbf24; max-width: 220px; }
+    .speak.speaking { background: var(--accent2); animation: pulse .8s infinite; }
+    .replabel {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin: 14px 8px 0 0; border: none; border-radius: 8px;
+      background: #a78bfa; color: #0f172a; font-weight: 600;
+      font-size: 13px; padding: 7px 13px; cursor: pointer;
+      font-family: inherit; line-height: 1.2; text-transform: none;
+    }
+    .replabel:hover { background: #c4b5fd; }
+    .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
+    @keyframes pulse { 50% { opacity: .5; } }
+  </style>
+</head>
+<body>
+  <div class="ratebar">
+    <b>🔊 Tốc độ:</b>
+    <button data-rate="0.7">Chậm</button>
+    <button data-rate="0.85" class="on">Vừa</button>
+    <button data-rate="1">Thường</button>
+    <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
+    <span class="sep"></span>
+    <b>🔁 Lặp:</b>
+    <button data-loop="3">×3</button>
+    <button data-loop="5">×5</button>
+    <button data-loop="0" class="on">∞</button>
+    <span id="spkStatus">sẵn sàng</span>
+  </div>
+  <div class="container">
+    <span class="badge">QUESTION 33 · TEST AUTOMATION</span>
+    <h1>Tell me about a time you disagreed with a developer about a bug.</h1>
+    <p class="vi">Hãy kể về một lần bạn bất đồng ý kiến với developer về một bug.</p>
+
+    <div class="card answer">
+      <h2>Sample Answer (English)
+        <button class="speak"
+          data-text="I once reported a bug where the checkout page allowed a coupon code to be applied twice if the user clicked submit rapidly. The developer closed it as not a bug, saying it was working as intended because the backend eventually rejected the second request. My task was to prove there was real user impact before pushing back further. I reproduced the issue reliably, recorded a short video, and pulled data showing several real customers had gotten duplicate discounts in production. I shared the evidence calmly in a quick call instead of arguing in comments, framed it around the business impact rather than being right, and proposed adding a debounce on the button as a simple fix. He agreed once he saw the reproduction steps and the data. We fixed it together, and afterward we agreed that any bug closed as not a bug should include a short justification, which improved our communication going forward."
+        >🔊</button>
+      </h2>
+      <blockquote>
+        I once reported a <span class="keyword">bug</span> where the checkout page allowed a
+        <span class="keyword">coupon code</span> to be applied twice if the user clicked submit
+        rapidly. The developer <span class="keyword">closed it as not a bug</span>, saying it was
+        <span class="keyword">working as intended</span> because the backend eventually rejected the
+        second request. My task was to <span class="keyword">prove</span> there was real
+        <span class="keyword">user impact</span> before pushing back further. I
+        <span class="keyword">reproduced the issue</span> reliably, recorded a short video, and pulled
+        data showing several real customers had gotten duplicate discounts in production. I shared
+        the <span class="keyword">evidence</span> calmly in a quick call instead of arguing in
+        comments, framed it around the <span class="keyword">business impact</span> rather than
+        being right, and proposed adding a <span class="keyword">debounce</span> on the button as a
+        simple fix. He agreed once he saw the <span class="keyword">reproduction steps</span> and the
+        data. We fixed it <span class="keyword">together</span>, and afterward we agreed that any bug
+        closed as not a bug should include a short justification, which improved our
+        <span class="keyword">communication process</span> going forward.
+      </blockquote>
+    </div>
+
+    <div class="card vi-answer">
+      <h2>🇻🇳 Bản dịch tiếng Việt
+        <button class="speak" data-lang="vi-VN"
+          data-text="Có lần tôi báo cáo một bug là trang thanh toán cho phép áp dụng mã giảm giá hai lần nếu người dùng bấm nút gửi rất nhanh. Developer đã đóng bug đó và ghi là không phải bug, vì cho rằng nó hoạt động đúng như thiết kế do backend cuối cùng cũng từ chối request thứ hai. Nhiệm vụ của tôi là chứng minh có tác động thật đến người dùng trước khi tiếp tục tranh luận. Tôi tái hiện lỗi một cách ổn định, quay lại một video ngắn, và lấy dữ liệu cho thấy nhiều khách hàng thật đã nhận được giảm giá trùng lặp trên môi trường production. Tôi chia sẻ bằng chứng một cách bình tĩnh trong một cuộc gọi ngắn thay vì tranh cãi trong phần bình luận, tập trung vào tác động kinh doanh thay vì việc ai đúng ai sai, và đề xuất thêm cơ chế debounce cho nút bấm như một giải pháp đơn giản. Anh ấy đồng ý ngay khi thấy các bước tái hiện lỗi và dữ liệu. Chúng tôi cùng nhau sửa lỗi, và sau đó chúng tôi thống nhất rằng bất kỳ bug nào bị đóng với lý do không phải bug đều nên có giải thích ngắn gọn, điều này đã cải thiện quy trình giao tiếp của chúng tôi về sau."
+        >🔊</button>
+      </h2>
+      <blockquote>
+        Có lần tôi báo cáo một <span class="keyword">bug</span> là trang thanh toán cho phép áp
+        dụng <span class="keyword">mã giảm giá (coupon code)</span> hai lần nếu người dùng bấm nút
+        gửi rất nhanh. Developer đã <span class="keyword">đóng bug với lý do không phải bug</span>,
+        vì cho rằng nó <span class="keyword">hoạt động đúng như thiết kế</span> do backend cuối cùng
+        cũng từ chối request thứ hai. Nhiệm vụ của tôi là <span class="keyword">chứng minh</span> có
+        <span class="keyword">tác động thật đến người dùng</span> trước khi tiếp tục tranh luận. Tôi
+        <span class="keyword">tái hiện lỗi (reproduce)</span> một cách ổn định, quay lại một video
+        ngắn, và lấy dữ liệu cho thấy nhiều khách hàng thật đã nhận được giảm giá trùng lặp trên môi
+        trường production. Tôi chia sẻ <span class="keyword">bằng chứng</span> một cách bình tĩnh
+        trong một cuộc gọi ngắn thay vì tranh cãi trong phần bình luận, tập trung vào
+        <span class="keyword">tác động kinh doanh</span> thay vì việc ai đúng ai sai, và đề xuất
+        thêm cơ chế <span class="keyword">debounce</span> cho nút bấm như một giải pháp đơn giản.
+        Anh ấy đồng ý ngay khi thấy các <span class="keyword">bước tái hiện lỗi</span> và dữ liệu.
+        Chúng tôi cùng nhau sửa lỗi, và sau đó chúng tôi thống nhất rằng bất kỳ bug nào bị đóng với
+        lý do không phải bug đều nên có giải thích ngắn gọn, điều này đã cải thiện
+        <span class="keyword">quy trình giao tiếp</span> của chúng tôi về sau.
+      </blockquote>
+    </div>
+
+    <div class="card">
+      <h2>💻 Cách xử lý bất đồng</h2>
+      <ul>
+        <li><strong>Đưa bằng chứng, không đưa cảm xúc</strong>: video tái hiện lỗi, log, dữ liệu thực tế thay vì "tôi nghĩ nó sai".</li>
+        <li><strong>Viết reproduction steps rõ ràng</strong>: môi trường, bước thực hiện, kết quả mong đợi vs kết quả thực tế.</li>
+        <li><strong>Đo lường user impact</strong>: bao nhiêu người dùng bị ảnh hưởng, mức độ nghiêm trọng, ảnh hưởng kinh doanh.</li>
+        <li><strong>Trao đổi trực tiếp (call/chat) thay vì cãi nhau trên comment</strong> để tránh hiểu lầm giọng điệu.</li>
+        <li><strong>Thể hiện sự đồng cảm (empathy)</strong>: hiểu góc nhìn của developer, không quy chụp cá nhân.</li>
+        <li><strong>Tập trung vào mục tiêu chung</strong>: chất lượng sản phẩm, không phải "ai đúng ai sai".</li>
+        <li><strong>Có đường leo thang (escalation path)</strong> rõ ràng nếu không thống nhất được: nhờ lead/PM phân xử dựa trên dữ liệu.</li>
+        <li><strong>Đề xuất giải pháp cụ thể</strong> thay vì chỉ chỉ ra vấn đề.</li>
+        <li><strong>Rút kinh nghiệm sau đó</strong>: cải thiện quy trình để tránh lặp lại bất đồng tương tự.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>✅ Diễn biến câu chuyện theo STAR</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Thành phần STAR</th><th>Điều đã xảy ra</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Situation (Tình huống)</td><td>Dev đóng bug với lý do "not a bug" / "working as intended"</td></tr>
+            <tr><td>Task (Nhiệm vụ)</td><td>Chứng minh bug có tác động thật đến người dùng trước khi tranh luận tiếp</td></tr>
+            <tr><td>Action (Hành động)</td><td>Thu thập bằng chứng: reproduction steps, video, dữ liệu user impact; trao đổi bình tĩnh qua call, tập trung vào tác động thay vì đúng/sai</td></tr>
+            <tr><td>Result (Kết quả)</td><td>Bug được thừa nhận và sửa cùng nhau; cải thiện quy trình đóng bug (yêu cầu giải thích khi close as not a bug)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📘 Từ vựng &amp; cụm từ trong đoạn</h2>
+      <div class="table-wrap">
+        <table class="vocab">
+          <thead>
+            <tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="term">disagree</span><button class="speak" data-text="disagree">🔊</button></td>
+              <td><span class="reading">(đis-ợ-gri)</span><span class="ipa">/ˌdɪsəˈɡriː/</span></td>
+              <td class="pos">v</td>
+              <td>bất đồng ý kiến</td>
+            </tr>
+            <tr>
+              <td><span class="term">not a bug</span><button class="speak" data-text="not a bug">🔊</button></td>
+              <td><span class="reading">(nót ợ băg)</span><span class="ipa">/nɒt ə bʌɡ/</span></td>
+              <td class="pos">phr.</td>
+              <td>không phải lỗi (trạng thái đóng ticket)</td>
+            </tr>
+            <tr>
+              <td><span class="term">working as intended</span><button class="speak" data-text="working as intended">🔊</button></td>
+              <td><span class="reading">(oơ-kinh ợz in-ten-đợd)</span><span class="ipa">/ˈwɜːkɪŋ æz ɪnˈtendɪd/</span></td>
+              <td class="pos">phr.</td>
+              <td>hoạt động đúng như thiết kế</td>
+            </tr>
+            <tr>
+              <td><span class="term">reproduce (an issue)</span><button class="speak" data-text="reproduce an issue">🔊</button></td>
+              <td><span class="reading">(ri-prợ-điuz)</span><span class="ipa">/ˌriːprəˈdjuːs/</span></td>
+              <td class="pos">v</td>
+              <td>tái hiện lỗi</td>
+            </tr>
+            <tr>
+              <td><span class="term">reproduction steps</span><button class="speak" data-text="reproduction steps">🔊</button></td>
+              <td><span class="reading">(ri-prợ-đấc-sần steps)</span><span class="ipa">/ˌriːprəˈdʌkʃn steps/</span></td>
+              <td class="pos">n phr.</td>
+              <td>các bước tái hiện lỗi</td>
+            </tr>
+            <tr>
+              <td><span class="term">user impact</span><button class="speak" data-text="user impact">🔊</button></td>
+              <td><span class="reading">(diu-dơ im-pắct)</span><span class="ipa">/ˈjuːzər ˈɪmpækt/</span></td>
+              <td class="pos">n phr.</td>
+              <td>tác động đến người dùng</td>
+            </tr>
+            <tr>
+              <td><span class="term">evidence</span><button class="speak" data-text="evidence">🔊</button></td>
+              <td><span class="reading">(ê-vi-đợns)</span><span class="ipa">/ˈevɪdəns/</span></td>
+              <td class="pos">n</td>
+              <td>bằng chứng</td>
+            </tr>
+            <tr>
+              <td><span class="term">escalate</span><button class="speak" data-text="escalate">🔊</button></td>
+              <td><span class="reading">(ec-cợ-lêit)</span><span class="ipa">/ˈeskəleɪt/</span></td>
+              <td class="pos">v</td>
+              <td>leo thang / báo cáo lên cấp cao hơn</td>
+            </tr>
+            <tr>
+              <td><span class="term">business impact</span><button class="speak" data-text="business impact">🔊</button></td>
+              <td><span class="reading">(bíz-nợs im-pắct)</span><span class="ipa">/ˈbɪznəs ˈɪmpækt/</span></td>
+              <td class="pos">n phr.</td>
+              <td>tác động kinh doanh</td>
+            </tr>
+            <tr>
+              <td><span class="term">debounce</span><button class="speak" data-text="debounce">🔊</button></td>
+              <td><span class="reading">(đi-bao-ns)</span><span class="ipa">/diːˈbaʊns/</span></td>
+              <td class="pos">n/v</td>
+              <td>kỹ thuật chống bấm/gọi lặp liên tục</td>
+            </tr>
+            <tr>
+              <td><span class="term">collaboratively</span><button class="speak" data-text="collaboratively">🔊</button></td>
+              <td><span class="reading">(cợ-láp-rợ-tiv-li)</span><span class="ipa">/kəˈlæbərətɪvli/</span></td>
+              <td class="pos">adv</td>
+              <td>một cách hợp tác</td>
+            </tr>
+            <tr>
+              <td><span class="term">justification</span><button class="speak" data-text="justification">🔊</button></td>
+              <td><span class="reading">(chấs-ti-phi-kây-sần)</span><span class="ipa">/ˌdʒʌstɪfɪˈkeɪʃn/</span></td>
+              <td class="pos">n</td>
+              <td>sự giải thích/biện minh hợp lý</td>
+            </tr>
+            <tr>
+              <td><span class="term">communication process</span><button class="speak" data-text="communication process">🔊</button></td>
+              <td><span class="reading">(cợ-miu-ni-kây-sần prá-ses)</span><span class="ipa">/kəˌmjuːnɪˈkeɪʃn ˈprəʊses/</span></td>
+              <td class="pos">n phr.</td>
+              <td>quy trình giao tiếp</td>
+            </tr>
+            <tr>
+              <td><span class="term">empathy</span><button class="speak" data-text="empathy">🔊</button></td>
+              <td><span class="reading">(em-pợ-thi)</span><span class="ipa">/ˈempəθi/</span></td>
+              <td class="pos">n</td>
+              <td>sự đồng cảm</td>
+            </tr>
+            <tr>
+              <td><span class="term">calmly</span><button class="speak" data-text="calmly">🔊</button></td>
+              <td><span class="reading">(cam-li)</span><span class="ipa">/ˈkɑːmli/</span></td>
+              <td class="pos">adv</td>
+              <td>một cách bình tĩnh</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="tip">💡 Mẹo: kể theo STAR, nhấn mạnh bạn dùng dữ liệu/bằng chứng để thuyết phục chứ không tranh cãi cảm tính, và kết thúc bằng kết quả hợp tác + cải thiện quy trình. Bấm 🔊 để nghe phát âm.</p>
+
+    <footer>Interview Prep · QA Automation (Playwright &amp; Selenium)</footer>
+  </div>
+
+  <script>
+  /* ===== PHÁT ÂM + NGHE LẶP Anh–Việt (Web Speech API) ===== */
+  let RATE = 0.85;          // tốc độ đọc
+  let LOOP_COUNT = 0;       // 0 = lặp vô hạn (∞)
+  let enVoice = null, viVoice = null;
+  let loopActive = false, loopBtn = null, currentBtn = null;
+
+  function pickVoices(){
+    const vs = speechSynthesis.getVoices();
+    const en = vs.filter(v=>/^en/i.test(v.lang));
+    // Ưu tiên giọng OFFLINE (localService) để tránh lỗi "synthesis-failed"
+    enVoice = en.find(v=>v.localService && /en[-_]US/i.test(v.lang))
+           || en.find(v=>v.localService && /en[-_]GB/i.test(v.lang))
+           || en.find(v=>v.localService)
+           || en.find(v=>/en[-_]US/i.test(v.lang))
+           || en[0] || null;
+    const vi = vs.filter(v=>/^vi/i.test(v.lang));
+    viVoice = vi.find(v=>v.localService) || vi[0] || null;
+  }
+  pickVoices();
+  if (typeof speechSynthesis !== 'undefined') speechSynthesis.onvoiceschanged = pickVoices;
+
+  const setStatus = m => { const s=document.getElementById('spkStatus'); if(s) s.textContent=m; };
+  const wait = ms => new Promise(r=>setTimeout(r,ms));
+
+  /* --- Đọc 1 lần (nút 🔊) --- */
+  function speak(text, lang, btn){
+    if(!('speechSynthesis' in window)){ setStatus('⚠ Trình duyệt không hỗ trợ — dùng Chrome/Edge'); return; }
+    if(loopActive) stopLoop();
+    speechSynthesis.cancel();
+    if(currentBtn) currentBtn.classList.remove('speaking');
+    const isVi = /^vi/i.test(lang||'');
+    if(!enVoice || !viVoice) pickVoices();
+    setTimeout(()=>{
+      const u = new SpeechSynthesisUtterance(text);
+      const voice = isVi ? viVoice : enVoice;
+      u.lang = voice ? voice.lang : (isVi ? 'vi-VN' : 'en-US');
+      if(voice) u.voice = voice;
+      u.rate = RATE; u.pitch = 1;
+      u.onstart = ()=>setStatus('🔊 đang đọc…');
+      u.onend   = ()=>{ setStatus('✓'); if(btn) btn.classList.remove('speaking'); };
+      u.onerror = e=>{ setStatus('⚠ lỗi: '+(e.error||'')); if(btn) btn.classList.remove('speaking'); };
+      if(btn){ currentBtn=btn; btn.classList.add('speaking'); }
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    }, 90);
+  }
+
+  /* --- Nghe lặp Anh → Việt --- */
+  function speakOnce(text, voice, fallbackLang){
+    return new Promise(resolve=>{
+      if(!text){ resolve(); return; }
+      const u = new SpeechSynthesisUtterance(text);
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang = fallbackLang || 'en-US';
+      u.rate = RATE; u.pitch = 1;
+      u.onend = resolve; u.onerror = resolve;
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    });
+  }
+  function stopLoop(){
+    loopActive = false; speechSynthesis.cancel();
+    if(loopBtn){ loopBtn.classList.remove('looping'); loopBtn=null; }
+  }
+  async function loopPairs(pairs, btn){
+    if(loopActive && loopBtn===btn){ stopLoop(); setStatus('⏹ đã dừng lặp'); return; }
+    stopLoop();
+    loopActive = true; loopBtn = btn; btn.classList.add('looping');
+    if(!enVoice || !viVoice) pickVoices();
+    let round = 0; await wait(120);
+    while(loopActive){
+      round++;
+      for(let i=0; i<pairs.length; i++){
+        if(!loopActive) break;
+        const pos = pairs.length>1 ? (' ['+(i+1)+'/'+pairs.length+']') : '';
+        const head = '🔁 Lần '+round+(LOOP_COUNT?('/'+LOOP_COUNT):'')+pos;
+        setStatus(head+' — 🇬🇧 English');
+        await speakOnce(pairs[i].en, enVoice, 'en-US');
+        if(!loopActive) break;
+        await wait(350);
+        if(!loopActive) break;
+        setStatus(head+' — 🇻🇳 Tiếng Việt'+(viVoice?'':' (⚠ máy chưa có giọng Việt)'));
+        await speakOnce(pairs[i].vi, viVoice, 'vi-VN');
+        if(!loopActive) break;
+        await wait(pairs.length>1 ? 300 : 600);
+      }
+      if(!loopActive) break;
+      if(LOOP_COUNT && round>=LOOP_COUNT){ stopLoop(); setStatus('✓ Xong '+round+' lần'); break; }
+      await wait(700);
+    }
+  }
+
+  function makeRep(label, title, onClick){
+    const b = document.createElement('button');
+    b.className = 'replabel'; b.type = 'button';
+    b.textContent = label; b.title = title;
+    b.addEventListener('click', e=>{ e.preventDefault(); onClick(); });
+    return b;
+  }
+
+  /* Nút 🔊 sẵn có -> dùng tốc độ + giọng phù hợp */
+  document.querySelectorAll('.speak').forEach(btn=>{
+    btn.addEventListener('click', ()=> speak(btn.getAttribute('data-text'), btn.getAttribute('data-lang')||'en-US', btn));
+  });
+
+  /* 🔁 Lặp CÂU TRẢ LỜI: đọc đoạn tiếng Anh rồi bản dịch tiếng Việt */
+  (function(){
+    const enBq = document.querySelector('.card.answer blockquote');
+    const viBq = document.querySelector('.card.vi-answer blockquote');
+    if(!enBq || !viBq) return;
+    const enText = enBq.textContent.trim();
+    const viText = viBq.textContent.trim();
+    const rep = makeRep('🔁 Lặp câu trả lời (Anh → Việt)',
+      'Nghe lặp: đọc câu trả lời tiếng Anh rồi bản dịch tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs([{en:enText, vi:viText}], rep));
+    enBq.after(rep);
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  (function(){
+    const table = document.querySelector('table.vocab');
+    if(!table) return;
+    const pairs = [];
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      const term = tr.querySelector('.term');
+      const vi = tr.querySelector('td:last-child');
+      if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+    });
+    if(!pairs.length) return;
+    const card = table.closest('.card');
+    const h2 = card ? card.querySelector('h2') : null;
+    const rep = makeRep('🔁 Lặp từ vựng (Anh → Việt)',
+      'Nghe lặp lần lượt: từng từ tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs(pairs, rep));
+    if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp */
+  document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      RATE = parseFloat(b.dataset.rate);
+      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  document.querySelectorAll('.ratebar button[data-loop]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      LOOP_COUNT = parseInt(b.dataset.loop,10);
+      document.querySelectorAll('.ratebar button[data-loop]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  window.addEventListener('load', ()=>{ try{ speechSynthesis.getVoices(); }catch(e){} });
+  </script>
+</body>
+</html>

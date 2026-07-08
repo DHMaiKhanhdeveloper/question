@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Q27 — Testing Mobile & Responsive Web Apps</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent2: #34d399;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 40px 16px;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: .5px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 8px;
+      line-height: 1.3;
+    }
+    .vi { color: var(--muted); font-style: italic; margin-bottom: 28px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--accent2);
+    }
+    .card h2 {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .card.answer { border-left-color: var(--accent); }
+    .card.answer h2 { color: var(--accent); }
+    .card.vi-answer { border-left-color: #f87171; }
+    .card.vi-answer h2 { color: #f87171; }
+    .card h2 .speak { text-transform: none; }
+    blockquote {
+      background: rgba(56,189,248,.08);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 17px;
+    }
+    .keyword { color: var(--accent); font-weight: 600; }
+    ul { padding-left: 20px; margin-top: 8px; }
+    li { margin-bottom: 6px; }
+    .tip { color: var(--muted); font-size: 15px; }
+    footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 30px; }
+
+    pre {
+      background: #0b1220;
+      border: 1px solid rgba(148,163,184,.2);
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    pre .c { color: #64748b; }
+    pre .k { color: #c084fc; }
+    pre .s { color: #34d399; }
+    pre .f { color: #38bdf8; }
+
+    /* tables */
+    .table-wrap { overflow-x: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+    table th, table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148,163,184,.18);
+      vertical-align: top;
+    }
+    table th {
+      background: rgba(56,189,248,.12);
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    table tr:last-child td { border-bottom: none; }
+    table tr:hover td { background: rgba(148,163,184,.06); }
+    table.vocab { min-width: 640px; }
+    .term { font-weight: 700; color: var(--text); }
+    .reading { color: var(--accent2); display: block; }
+    .ipa { color: var(--accent); display: block; opacity: .9; }
+    .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    .speak {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 22px;
+      margin-left: 8px;
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      vertical-align: middle;
+      transition: transform .1s, background .15s;
+    }
+    .speak:hover { background: #7dd3fc; transform: scale(1.08); }
+    .speak:active { transform: scale(.92); }
+
+    /* ===== Thanh điều khiển tốc độ / lặp + nút LẶP Anh–Việt ===== */
+    .ratebar {
+      position: fixed; top: 10px; right: 10px; z-index: 50;
+      background: rgba(11,18,32,.93); backdrop-filter: blur(6px);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 10px;
+      padding: 7px 10px; font-size: 12px; display: flex; flex-wrap: wrap;
+      gap: 6px; align-items: center; max-width: calc(100vw - 20px);
+      box-shadow: 0 4px 14px rgba(0,0,0,.5);
+    }
+    .ratebar b { color: var(--muted); font-weight: 600; }
+    .ratebar .sep { border-left: 1px solid rgba(148,163,184,.25); align-self: stretch; margin: 0 2px; }
+    .ratebar button {
+      background: #243449; color: var(--text);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer; font-size: 12px; font-family: inherit;
+    }
+    .ratebar button.on { background: var(--accent); color: #0f172a; font-weight: 700; }
+    .ratebar button[data-loop].on { background: #a78bfa; color: #0f172a; font-weight: 700; }
+    .ratebar button.test { background: var(--accent2); color: #0f172a; font-weight: 700; }
+    .ratebar #spkStatus { color: #fbbf24; max-width: 220px; }
+    .speak.speaking { background: var(--accent2); animation: pulse .8s infinite; }
+    .replabel {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin: 14px 8px 0 0; border: none; border-radius: 8px;
+      background: #a78bfa; color: #0f172a; font-weight: 600;
+      font-size: 13px; padding: 7px 13px; cursor: pointer;
+      font-family: inherit; line-height: 1.2; text-transform: none;
+    }
+    .replabel:hover { background: #c4b5fd; }
+    .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
+    @keyframes pulse { 50% { opacity: .5; } }
+  </style>
+</head>
+<body>
+  <div class="ratebar">
+    <b>🔊 Tốc độ:</b>
+    <button data-rate="0.7">Chậm</button>
+    <button data-rate="0.85" class="on">Vừa</button>
+    <button data-rate="1">Thường</button>
+    <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
+    <span class="sep"></span>
+    <b>🔁 Lặp:</b>
+    <button data-loop="3">×3</button>
+    <button data-loop="5">×5</button>
+    <button data-loop="0" class="on">∞</button>
+    <span id="spkStatus">sẵn sàng</span>
+  </div>
+  <div class="container">
+    <span class="badge">QUESTION 27 · TEST AUTOMATION</span>
+    <h1>How do you test mobile applications or responsive web apps?</h1>
+    <p class="vi">Bạn test ứng dụng mobile hoặc web responsive như thế nào?</p>
+
+    <div class="card answer">
+      <h2>Sample Answer (English)
+        <button class="speak"
+          data-text="I split this into two areas. For a responsive web app, I use Playwright's viewport emulation and device descriptors, like devices['iPhone 13'], to simulate different screen sizes, pixel ratios, and touch input without needing a real phone. I check that layout adapts correctly across the common responsive breakpoints, that touch gestures such as tap, swipe, and pinch-zoom work, and that content isn't cut off or overlapping. For a native or hybrid mobile app, viewport emulation isn't enough because I need to interact with real OS-level components, so I use Appium, which drives the app through the actual accessibility tree on a real device or emulator, covering things like permission dialogs, push notifications, and orientation changes. To scale coverage across many device and OS combinations, I run these suites on cloud device farms like BrowserStack or Sauce Labs instead of maintaining physical devices myself.">🔊</button>
+      </h2>
+      <blockquote>
+        I split this into two areas. For a <span class="keyword">responsive web app</span>, I use
+        Playwright's <span class="keyword">viewport emulation</span> and
+        <span class="keyword">device descriptors</span>, like <em>devices['iPhone 13']</em>, to simulate
+        different screen sizes, pixel ratios, and touch input without needing a real phone. I check that
+        layout adapts correctly across the common <span class="keyword">responsive breakpoints</span>, that
+        <span class="keyword">touch gestures</span> such as tap, swipe, and pinch-zoom work, and that content
+        isn't cut off or overlapping. For a <span class="keyword">native</span> or
+        <span class="keyword">hybrid</span> mobile app, viewport emulation isn't enough because I need to
+        interact with real OS-level components, so I use <span class="keyword">Appium</span>, which drives the
+        app through the actual <span class="keyword">accessibility tree</span> on a
+        <span class="keyword">real device</span> or <span class="keyword">emulator</span>, covering things
+        like permission dialogs, push notifications, and orientation changes. To scale coverage across many
+        device and OS combinations, I run these suites on <span class="keyword">cloud device farms</span>
+        like BrowserStack or Sauce Labs instead of maintaining physical devices myself.
+      </blockquote>
+    </div>
+
+    <div class="card vi-answer">
+      <h2>🇻🇳 Bản dịch tiếng Việt
+        <button class="speak" data-lang="vi-VN"
+          data-text="Tôi chia việc này thành hai hướng. Với web responsive, tôi dùng tính năng viewport emulation và device descriptors của Playwright, ví dụ devices['iPhone 13'], để mô phỏng các kích thước màn hình, tỉ lệ pixel và thao tác chạm khác nhau mà không cần điện thoại thật. Tôi kiểm tra bố cục có thích ứng đúng qua các breakpoint responsive phổ biến không, các cử chỉ chạm như tap, swipe, pinch-zoom có hoạt động không, và nội dung có bị cắt hoặc chồng lấp không. Với ứng dụng mobile native hoặc hybrid, viewport emulation là chưa đủ vì tôi cần tương tác với các thành phần cấp hệ điều hành thật, nên tôi dùng Appium, công cụ điều khiển ứng dụng thông qua accessibility tree thật trên thiết bị thật hoặc emulator, bao gồm cả hộp thoại xin quyền, thông báo đẩy và thay đổi hướng màn hình. Để mở rộng độ phủ qua nhiều tổ hợp thiết bị và hệ điều hành, tôi chạy các bộ test này trên các cloud device farm như BrowserStack hoặc Sauce Labs thay vì tự duy trì thiết bị vật lý.">🔊</button>
+      </h2>
+      <blockquote>
+        Tôi chia việc này thành hai hướng. Với <span class="keyword">web responsive</span>, tôi dùng tính năng
+        <span class="keyword">viewport emulation</span> và <span class="keyword">device descriptors</span>
+        của Playwright, ví dụ <em>devices['iPhone 13']</em>, để mô phỏng các kích thước màn hình, tỉ lệ pixel
+        và thao tác chạm khác nhau mà không cần điện thoại thật. Tôi kiểm tra bố cục có thích ứng đúng qua các
+        <span class="keyword">breakpoint responsive</span> phổ biến không, các
+        <span class="keyword">cử chỉ chạm (touch gestures)</span> như tap, swipe, pinch-zoom có hoạt động
+        không, và nội dung có bị cắt hoặc chồng lấp không. Với ứng dụng mobile
+        <span class="keyword">native</span> hoặc <span class="keyword">hybrid</span>, viewport emulation là
+        chưa đủ vì tôi cần tương tác với các thành phần cấp hệ điều hành thật, nên tôi dùng
+        <span class="keyword">Appium</span>, công cụ điều khiển ứng dụng thông qua
+        <span class="keyword">accessibility tree</span> thật trên <span class="keyword">thiết bị thật</span>
+        hoặc <span class="keyword">emulator</span>, bao gồm cả hộp thoại xin quyền, thông báo đẩy và thay đổi
+        hướng màn hình. Để mở rộng độ phủ qua nhiều tổ hợp thiết bị và hệ điều hành, tôi chạy các bộ test này
+        trên các <span class="keyword">cloud device farm</span> như BrowserStack hoặc Sauce Labs thay vì tự
+        duy trì thiết bị vật lý.
+      </blockquote>
+    </div>
+
+    <div class="card">
+      <h2>💻 Ví dụ minh họa (Playwright device emulation)</h2>
+      <pre><span class="c">// playwright.config.js — emulate a real device profile</span>
+<span class="k">import</span> { devices } <span class="k">from</span> <span class="s">'@playwright/test'</span>;
+
+<span class="k">export default</span> {
+  projects: [
+    {
+      name: <span class="s">'Mobile Chrome'</span>,
+      use: { ...devices[<span class="s">'Pixel 7'</span>] },
+    },
+    {
+      name: <span class="s">'Mobile Safari'</span>,
+      use: { ...devices[<span class="s">'iPhone 13'</span>] },
+    },
+  ],
+};
+
+<span class="c">// test file — assert layout + touch gesture at a breakpoint</span>
+<span class="k">test</span>(<span class="s">'nav collapses into hamburger on small viewport'</span>, <span class="k">async</span> ({ page }) => {
+  <span class="k">await</span> page.<span class="f">setViewportSize</span>({ width: <span class="s">375</span>, height: <span class="s">812</span> });
+  <span class="k">await</span> page.<span class="f">goto</span>(<span class="s">'/'</span>);
+  <span class="k">await</span> <span class="f">expect</span>(page.<span class="f">getByRole</span>(<span class="s">'button'</span>, { name: <span class="s">'Menu'</span> })).<span class="f">toBeVisible</span>();
+  <span class="k">await</span> page.<span class="f">getByTestId</span>(<span class="s">'carousel'</span>).<span class="f">tap</span>();
+});</pre>
+    </div>
+
+    <div class="card">
+      <h2>✅ Cách tiếp cận theo loại ứng dụng</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Loại ứng dụng</th><th>Công cụ / cách tiếp cận</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Responsive web</td><td>Playwright viewport emulation + device descriptors, kiểm tra breakpoint</td></tr>
+            <tr><td>Native mobile (iOS/Android)</td><td>Appium điều khiển qua accessibility tree trên real device/emulator</td></tr>
+            <tr><td>Hybrid app (WebView)</td><td>Kết hợp Appium (shell native) + kiểm tra nội dung web bên trong WebView</td></tr>
+            <tr><td>Phủ nhiều thiết bị/OS</td><td>Cloud device farm (BrowserStack, Sauce Labs) để scale mà không cần thiết bị vật lý</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📘 Từ vựng &amp; cụm từ trong đoạn</h2>
+      <div class="table-wrap">
+        <table class="vocab">
+          <thead>
+            <tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="term">responsive web app</span><button class="speak" data-text="responsive web app">🔊</button></td>
+              <td><span class="reading">(ri-spón-siv oép áp)</span><span class="ipa">/rɪˈspɒnsɪv web æp/</span></td>
+              <td class="pos">n phr.</td>
+              <td>ứng dụng web tự thích ứng</td>
+            </tr>
+            <tr>
+              <td><span class="term">viewport emulation</span><button class="speak" data-text="viewport emulation">🔊</button></td>
+              <td><span class="reading">(viu-pọt e-miu-lây-sần)</span><span class="ipa">/ˈvjuːpɔːt ˌemjuˈleɪʃn/</span></td>
+              <td class="pos">n phr.</td>
+              <td>mô phỏng khung nhìn màn hình</td>
+            </tr>
+            <tr>
+              <td><span class="term">device descriptor</span><button class="speak" data-text="device descriptor">🔊</button></td>
+              <td><span class="reading">(đi-vais đi-scríp-tơ)</span><span class="ipa">/dɪˈvaɪs dɪˈskrɪptər/</span></td>
+              <td class="pos">n phr.</td>
+              <td>hồ sơ mô tả thiết bị</td>
+            </tr>
+            <tr>
+              <td><span class="term">pixel ratio</span><button class="speak" data-text="pixel ratio">🔊</button></td>
+              <td><span class="reading">(pích-xồ rây-si-ô)</span><span class="ipa">/ˈpɪksl ˈreɪʃiəʊ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>tỉ lệ điểm ảnh</td>
+            </tr>
+            <tr>
+              <td><span class="term">responsive breakpoint</span><button class="speak" data-text="responsive breakpoint">🔊</button></td>
+              <td><span class="reading">(ri-spón-siv brếch-point)</span><span class="ipa">/rɪˈspɒnsɪv ˈbreɪkpɔɪnt/</span></td>
+              <td class="pos">n phr.</td>
+              <td>điểm ngắt bố cục responsive</td>
+            </tr>
+            <tr>
+              <td><span class="term">touch gesture</span><button class="speak" data-text="touch gesture">🔊</button></td>
+              <td><span class="reading">(tấch giét-chơ)</span><span class="ipa">/tʌtʃ ˈdʒestʃər/</span></td>
+              <td class="pos">n phr.</td>
+              <td>cử chỉ chạm (tap, swipe, pinch)</td>
+            </tr>
+            <tr>
+              <td><span class="term">native app</span><button class="speak" data-text="native app">🔊</button></td>
+              <td><span class="reading">(nây-tiv áp)</span><span class="ipa">/ˈneɪtɪv æp/</span></td>
+              <td class="pos">n phr.</td>
+              <td>ứng dụng gốc (viết riêng cho iOS/Android)</td>
+            </tr>
+            <tr>
+              <td><span class="term">hybrid app</span><button class="speak" data-text="hybrid app">🔊</button></td>
+              <td><span class="reading">(hai-brít áp)</span><span class="ipa">/ˈhaɪbrɪd æp/</span></td>
+              <td class="pos">n phr.</td>
+              <td>ứng dụng lai (native + WebView)</td>
+            </tr>
+            <tr>
+              <td><span class="term">Appium</span><button class="speak" data-text="Appium">🔊</button></td>
+              <td><span class="reading">(áp-pi-ầm)</span><span class="ipa">/ˈæpiəm/</span></td>
+              <td class="pos">n</td>
+              <td>framework tự động test ứng dụng mobile</td>
+            </tr>
+            <tr>
+              <td><span class="term">accessibility tree</span><button class="speak" data-text="accessibility tree">🔊</button></td>
+              <td><span class="reading">(ắc-xe-sờ-bi-li-ti tri)</span><span class="ipa">/əkˌsesəˈbɪləti triː/</span></td>
+              <td class="pos">n phr.</td>
+              <td>cây thuộc tính truy cập (OS dùng để xác định phần tử UI)</td>
+            </tr>
+            <tr>
+              <td><span class="term">real device</span><button class="speak" data-text="real device">🔊</button></td>
+              <td><span class="reading">(ri-ồ đi-vais)</span><span class="ipa">/rɪəl dɪˈvaɪs/</span></td>
+              <td class="pos">n phr.</td>
+              <td>thiết bị vật lý thật</td>
+            </tr>
+            <tr>
+              <td><span class="term">emulator</span><button class="speak" data-text="emulator">🔊</button></td>
+              <td><span class="reading">(e-miu-lây-tơ)</span><span class="ipa">/ˈemjuleɪtər/</span></td>
+              <td class="pos">n</td>
+              <td>trình giả lập thiết bị</td>
+            </tr>
+            <tr>
+              <td><span class="term">orientation change</span><button class="speak" data-text="orientation change">🔊</button></td>
+              <td><span class="reading">(o-ri-en-tây-sần chên-giơ)</span><span class="ipa">/ˌɔːriənˈteɪʃn tʃeɪndʒ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>thay đổi hướng màn hình (dọc/ngang)</td>
+            </tr>
+            <tr>
+              <td><span class="term">cloud device farm</span><button class="speak" data-text="cloud device farm">🔊</button></td>
+              <td><span class="reading">(cláo đi-vais fam)</span><span class="ipa">/klaʊd dɪˈvaɪs fɑːm/</span></td>
+              <td class="pos">n phr.</td>
+              <td>trang trại thiết bị đám mây (BrowserStack, Sauce Labs)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="tip">💡 Mẹo: tách câu trả lời làm 2 nhánh rõ ràng — web responsive (viewport emulation) và native/hybrid (Appium) — rồi chốt bằng cloud device farm để nói về khả năng mở rộng. Bấm 🔊 để nghe phát âm.</p>
+
+    <footer>Interview Prep · QA Automation (Playwright &amp; Selenium)</footer>
+  </div>
+
+  <script>
+  /* ===== PHÁT ÂM + NGHE LẶP Anh–Việt (Web Speech API) ===== */
+  let RATE = 0.85;          // tốc độ đọc
+  let LOOP_COUNT = 0;       // 0 = lặp vô hạn (∞)
+  let enVoice = null, viVoice = null;
+  let loopActive = false, loopBtn = null, currentBtn = null;
+
+  function pickVoices(){
+    const vs = speechSynthesis.getVoices();
+    const en = vs.filter(v=>/^en/i.test(v.lang));
+    // Ưu tiên giọng OFFLINE (localService) để tránh lỗi "synthesis-failed"
+    enVoice = en.find(v=>v.localService && /en[-_]US/i.test(v.lang))
+           || en.find(v=>v.localService && /en[-_]GB/i.test(v.lang))
+           || en.find(v=>v.localService)
+           || en.find(v=>/en[-_]US/i.test(v.lang))
+           || en[0] || null;
+    const vi = vs.filter(v=>/^vi/i.test(v.lang));
+    viVoice = vi.find(v=>v.localService) || vi[0] || null;
+  }
+  pickVoices();
+  if (typeof speechSynthesis !== 'undefined') speechSynthesis.onvoiceschanged = pickVoices;
+
+  const setStatus = m => { const s=document.getElementById('spkStatus'); if(s) s.textContent=m; };
+  const wait = ms => new Promise(r=>setTimeout(r,ms));
+
+  /* --- Đọc 1 lần (nút 🔊) --- */
+  function speak(text, lang, btn){
+    if(!('speechSynthesis' in window)){ setStatus('⚠ Trình duyệt không hỗ trợ — dùng Chrome/Edge'); return; }
+    if(loopActive) stopLoop();
+    speechSynthesis.cancel();
+    if(currentBtn) currentBtn.classList.remove('speaking');
+    const isVi = /^vi/i.test(lang||'');
+    if(!enVoice || !viVoice) pickVoices();
+    setTimeout(()=>{
+      const u = new SpeechSynthesisUtterance(text);
+      const voice = isVi ? viVoice : enVoice;
+      u.lang = voice ? voice.lang : (isVi ? 'vi-VN' : 'en-US');
+      if(voice) u.voice = voice;
+      u.rate = RATE; u.pitch = 1;
+      u.onstart = ()=>setStatus('🔊 đang đọc…');
+      u.onend   = ()=>{ setStatus('✓'); if(btn) btn.classList.remove('speaking'); };
+      u.onerror = e=>{ setStatus('⚠ lỗi: '+(e.error||'')); if(btn) btn.classList.remove('speaking'); };
+      if(btn){ currentBtn=btn; btn.classList.add('speaking'); }
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    }, 90);
+  }
+
+  /* --- Nghe lặp Anh → Việt --- */
+  function speakOnce(text, voice, fallbackLang){
+    return new Promise(resolve=>{
+      if(!text){ resolve(); return; }
+      const u = new SpeechSynthesisUtterance(text);
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang = fallbackLang || 'en-US';
+      u.rate = RATE; u.pitch = 1;
+      u.onend = resolve; u.onerror = resolve;
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    });
+  }
+  function stopLoop(){
+    loopActive = false; speechSynthesis.cancel();
+    if(loopBtn){ loopBtn.classList.remove('looping'); loopBtn=null; }
+  }
+  async function loopPairs(pairs, btn){
+    if(loopActive && loopBtn===btn){ stopLoop(); setStatus('⏹ đã dừng lặp'); return; }
+    stopLoop();
+    loopActive = true; loopBtn = btn; btn.classList.add('looping');
+    if(!enVoice || !viVoice) pickVoices();
+    let round = 0; await wait(120);
+    while(loopActive){
+      round++;
+      for(let i=0; i<pairs.length; i++){
+        if(!loopActive) break;
+        const pos = pairs.length>1 ? (' ['+(i+1)+'/'+pairs.length+']') : '';
+        const head = '🔁 Lần '+round+(LOOP_COUNT?('/'+LOOP_COUNT):'')+pos;
+        setStatus(head+' — 🇬🇧 English');
+        await speakOnce(pairs[i].en, enVoice, 'en-US');
+        if(!loopActive) break;
+        await wait(350);
+        if(!loopActive) break;
+        setStatus(head+' — 🇻🇳 Tiếng Việt'+(viVoice?'':' (⚠ máy chưa có giọng Việt)'));
+        await speakOnce(pairs[i].vi, viVoice, 'vi-VN');
+        if(!loopActive) break;
+        await wait(pairs.length>1 ? 300 : 600);
+      }
+      if(!loopActive) break;
+      if(LOOP_COUNT && round>=LOOP_COUNT){ stopLoop(); setStatus('✓ Xong '+round+' lần'); break; }
+      await wait(700);
+    }
+  }
+
+  function makeRep(label, title, onClick){
+    const b = document.createElement('button');
+    b.className = 'replabel'; b.type = 'button';
+    b.textContent = label; b.title = title;
+    b.addEventListener('click', e=>{ e.preventDefault(); onClick(); });
+    return b;
+  }
+
+  /* Nút 🔊 sẵn có -> dùng tốc độ + giọng phù hợp */
+  document.querySelectorAll('.speak').forEach(btn=>{
+    btn.addEventListener('click', ()=> speak(btn.getAttribute('data-text'), btn.getAttribute('data-lang')||'en-US', btn));
+  });
+
+  /* 🔁 Lặp CÂU TRẢ LỜI: đọc đoạn tiếng Anh rồi bản dịch tiếng Việt */
+  (function(){
+    const enBq = document.querySelector('.card.answer blockquote');
+    const viBq = document.querySelector('.card.vi-answer blockquote');
+    if(!enBq || !viBq) return;
+    const enText = enBq.textContent.trim();
+    const viText = viBq.textContent.trim();
+    const rep = makeRep('🔁 Lặp câu trả lời (Anh → Việt)',
+      'Nghe lặp: đọc câu trả lời tiếng Anh rồi bản dịch tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs([{en:enText, vi:viText}], rep));
+    enBq.after(rep);
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  (function(){
+    const table = document.querySelector('table.vocab');
+    if(!table) return;
+    const pairs = [];
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      const term = tr.querySelector('.term');
+      const vi = tr.querySelector('td:last-child');
+      if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+    });
+    if(!pairs.length) return;
+    const card = table.closest('.card');
+    const h2 = card ? card.querySelector('h2') : null;
+    const rep = makeRep('🔁 Lặp từ vựng (Anh → Việt)',
+      'Nghe lặp lần lượt: từng từ tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs(pairs, rep));
+    if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp */
+  document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      RATE = parseFloat(b.dataset.rate);
+      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  document.querySelectorAll('.ratebar button[data-loop]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      LOOP_COUNT = parseInt(b.dataset.loop,10);
+      document.querySelectorAll('.ratebar button[data-loop]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  window.addEventListener('load', ()=>{ try{ speechSynthesis.getVoices(); }catch(e){} });
+  </script>
+</body>
+</html>

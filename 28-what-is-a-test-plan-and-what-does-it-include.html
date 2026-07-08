@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Q28 — Test Plan</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent2: #34d399;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 40px 16px;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: .5px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 8px;
+      line-height: 1.3;
+    }
+    .vi { color: var(--muted); font-style: italic; margin-bottom: 28px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--accent2);
+    }
+    .card h2 {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .card.answer { border-left-color: var(--accent); }
+    .card.answer h2 { color: var(--accent); }
+    .card.vi-answer { border-left-color: #f87171; }
+    .card.vi-answer h2 { color: #f87171; }
+    .card h2 .speak { text-transform: none; }
+    blockquote {
+      background: rgba(56,189,248,.08);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 17px;
+    }
+    .keyword { color: var(--accent); font-weight: 600; }
+    ul { padding-left: 20px; margin-top: 8px; }
+    li { margin-bottom: 6px; }
+    .tip { color: var(--muted); font-size: 15px; }
+    footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 30px; }
+
+    pre {
+      background: #0b1220;
+      border: 1px solid rgba(148,163,184,.2);
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    pre .c { color: #64748b; }
+    pre .k { color: #c084fc; }
+    pre .s { color: #34d399; }
+    pre .f { color: #38bdf8; }
+
+    /* tables */
+    .table-wrap { overflow-x: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+    table th, table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148,163,184,.18);
+      vertical-align: top;
+    }
+    table th {
+      background: rgba(56,189,248,.12);
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    table tr:last-child td { border-bottom: none; }
+    table tr:hover td { background: rgba(148,163,184,.06); }
+    table.vocab { min-width: 640px; }
+    .term { font-weight: 700; color: var(--text); }
+    .reading { color: var(--accent2); display: block; }
+    .ipa { color: var(--accent); display: block; opacity: .9; }
+    .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    .speak {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 22px;
+      margin-left: 8px;
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      vertical-align: middle;
+      transition: transform .1s, background .15s;
+    }
+    .speak:hover { background: #7dd3fc; transform: scale(1.08); }
+    .speak:active { transform: scale(.92); }
+
+    /* ===== Thanh điều khiển tốc độ / lặp + nút LẶP Anh–Việt ===== */
+    .ratebar {
+      position: fixed; top: 10px; right: 10px; z-index: 50;
+      background: rgba(11,18,32,.93); backdrop-filter: blur(6px);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 10px;
+      padding: 7px 10px; font-size: 12px; display: flex; flex-wrap: wrap;
+      gap: 6px; align-items: center; max-width: calc(100vw - 20px);
+      box-shadow: 0 4px 14px rgba(0,0,0,.5);
+    }
+    .ratebar b { color: var(--muted); font-weight: 600; }
+    .ratebar .sep { border-left: 1px solid rgba(148,163,184,.25); align-self: stretch; margin: 0 2px; }
+    .ratebar button {
+      background: #243449; color: var(--text);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer; font-size: 12px; font-family: inherit;
+    }
+    .ratebar button.on { background: var(--accent); color: #0f172a; font-weight: 700; }
+    .ratebar button[data-loop].on { background: #a78bfa; color: #0f172a; font-weight: 700; }
+    .ratebar button.test { background: var(--accent2); color: #0f172a; font-weight: 700; }
+    .ratebar #spkStatus { color: #fbbf24; max-width: 220px; }
+    .speak.speaking { background: var(--accent2); animation: pulse .8s infinite; }
+    .replabel {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin: 14px 8px 0 0; border: none; border-radius: 8px;
+      background: #a78bfa; color: #0f172a; font-weight: 600;
+      font-size: 13px; padding: 7px 13px; cursor: pointer;
+      font-family: inherit; line-height: 1.2; text-transform: none;
+    }
+    .replabel:hover { background: #c4b5fd; }
+    .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
+    @keyframes pulse { 50% { opacity: .5; } }
+  </style>
+</head>
+<body>
+  <div class="ratebar">
+    <b>🔊 Tốc độ:</b>
+    <button data-rate="0.7">Chậm</button>
+    <button data-rate="0.85" class="on">Vừa</button>
+    <button data-rate="1">Thường</button>
+    <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
+    <span class="sep"></span>
+    <b>🔁 Lặp:</b>
+    <button data-loop="3">×3</button>
+    <button data-loop="5">×5</button>
+    <button data-loop="0" class="on">∞</button>
+    <span id="spkStatus">sẵn sàng</span>
+  </div>
+  <div class="container">
+    <span class="badge">QUESTION 28 · TEST AUTOMATION</span>
+    <h1>What is a test plan, and what does it include?</h1>
+    <p class="vi">Test plan là gì, và nó bao gồm những gì?</p>
+
+    <div class="card answer">
+      <h2>Sample Answer (English)
+        <button class="speak"
+          data-text="A test plan is a formal document that describes the strategy and approach for testing a software product. It typically starts by defining the scope, meaning which features or modules are in scope and which are out of scope, along with the objectives we want to achieve. It also outlines the test strategy, describing the types of testing we'll perform, like functional, regression, and performance testing, and the tools or environments we'll use. A good test plan defines entry and exit criteria, so everyone knows when testing can start and when it's considered complete. It lists the resources and timeline, including team roles and the schedule. Finally, it includes a risk assessment, identifying potential risks and mitigation plans. Overall, the test plan aligns the whole team on what, how, and when we're testing.">🔊</button>
+      </h2>
+      <blockquote>
+        A <span class="keyword">test plan</span> is a formal document that describes the
+        <span class="keyword">test strategy</span> and approach for testing a software product.
+        It typically starts by defining the <span class="keyword">scope</span>, meaning which
+        features or modules are in scope and which are out of scope, along with the
+        <span class="keyword">objectives</span> we want to achieve. It also outlines the test strategy,
+        describing the <span class="keyword">types of testing</span> we'll perform, like functional,
+        regression, and performance testing, and the tools or environments we'll use. A good test plan
+        defines <span class="keyword">entry criteria</span> and <span class="keyword">exit criteria</span>,
+        so everyone knows when testing can start and when it's considered complete. It lists the
+        <span class="keyword">resources</span> and <span class="keyword">timeline</span>, including
+        <span class="keyword">team roles</span> and the schedule. Finally, it includes a
+        <span class="keyword">risk assessment</span>, identifying potential
+        <span class="keyword">risks</span> and <span class="keyword">mitigation plans</span>.
+        Overall, the test plan <span class="keyword">aligns</span> the whole team on what, how, and
+        when we're testing.
+      </blockquote>
+    </div>
+
+    <div class="card vi-answer">
+      <h2>🇻🇳 Bản dịch tiếng Việt
+        <button class="speak" data-lang="vi-VN"
+          data-text="Test plan là một tài liệu chính thức mô tả chiến lược và cách tiếp cận để kiểm thử một sản phẩm phần mềm. Nó thường bắt đầu bằng việc xác định phạm vi, nghĩa là những tính năng hoặc module nào nằm trong phạm vi và những cái nào không, cùng với các mục tiêu mà chúng ta muốn đạt được. Nó cũng phác thảo chiến lược kiểm thử, mô tả các loại kiểm thử sẽ thực hiện, như kiểm thử chức năng, kiểm thử hồi quy và kiểm thử hiệu năng, cùng các công cụ hoặc môi trường sẽ sử dụng. Một test plan tốt xác định tiêu chí bắt đầu và tiêu chí kết thúc, để mọi người biết khi nào có thể bắt đầu kiểm thử và khi nào được coi là hoàn thành. Nó liệt kê nguồn lực và thời gian biểu, bao gồm vai trò của từng thành viên và lịch trình. Cuối cùng, nó bao gồm phần đánh giá rủi ro, xác định các rủi ro tiềm ẩn và kế hoạch giảm thiểu. Nhìn chung, test plan giúp cả nhóm thống nhất về việc kiểm thử cái gì, như thế nào, và khi nào.">🔊</button>
+      </h2>
+      <blockquote>
+        <span class="keyword">Test plan</span> là một tài liệu chính thức mô tả
+        <span class="keyword">chiến lược kiểm thử (test strategy)</span> và cách tiếp cận để kiểm thử
+        một sản phẩm phần mềm. Nó thường bắt đầu bằng việc xác định
+        <span class="keyword">phạm vi (scope)</span>, nghĩa là những tính năng hoặc module nào nằm
+        trong phạm vi và những cái nào không, cùng với các <span class="keyword">mục tiêu (objectives)</span>
+        mà chúng ta muốn đạt được. Nó cũng phác thảo chiến lược kiểm thử, mô tả các
+        <span class="keyword">loại kiểm thử</span> sẽ thực hiện, như kiểm thử chức năng, kiểm thử hồi quy
+        và kiểm thử hiệu năng, cùng các công cụ hoặc môi trường sẽ sử dụng. Một test plan tốt xác định
+        <span class="keyword">tiêu chí bắt đầu (entry criteria)</span> và
+        <span class="keyword">tiêu chí kết thúc (exit criteria)</span>, để mọi người biết khi nào có thể
+        bắt đầu kiểm thử và khi nào được coi là hoàn thành. Nó liệt kê
+        <span class="keyword">nguồn lực (resources)</span> và <span class="keyword">thời gian biểu (timeline)</span>,
+        bao gồm <span class="keyword">vai trò của từng thành viên</span> và lịch trình. Cuối cùng, nó bao gồm
+        phần <span class="keyword">đánh giá rủi ro (risk assessment)</span>, xác định các
+        <span class="keyword">rủi ro (risks)</span> tiềm ẩn và <span class="keyword">kế hoạch giảm thiểu (mitigation plans)</span>.
+        Nhìn chung, test plan giúp cả nhóm <span class="keyword">thống nhất (align)</span> về việc kiểm thử
+        cái gì, như thế nào, và khi nào.
+      </blockquote>
+    </div>
+
+    <div class="card">
+      <h2>💻 Cấu trúc Test Plan mẫu</h2>
+      <pre><span class="c">// Cấu trúc điển hình của một Test Plan (theo chuẩn IEEE 829)</span>
+<span class="k">1.</span> <span class="f">Test Plan ID</span>          <span class="c">// mã định danh tài liệu</span>
+<span class="k">2.</span> <span class="f">Introduction / Objectives</span>  <span class="c">// mục tiêu kiểm thử</span>
+<span class="k">3.</span> <span class="f">Scope</span>                 <span class="c">// in-scope / out-of-scope</span>
+<span class="k">4.</span> <span class="f">Test Strategy / Approach</span>   <span class="c">// loại test, kỹ thuật</span>
+<span class="k">5.</span> <span class="f">Test Items &amp; Features</span>     <span class="c">// module/tính năng cần test</span>
+<span class="k">6.</span> <span class="f">Entry Criteria</span>        <span class="c">// điều kiện bắt đầu test</span>
+<span class="k">7.</span> <span class="f">Exit Criteria</span>         <span class="c">// điều kiện kết thúc test</span>
+<span class="k">8.</span> <span class="f">Test Environment</span>      <span class="c">// môi trường, thiết bị, data</span>
+<span class="k">9.</span> <span class="f">Resources &amp; Roles</span>     <span class="c">// nhân sự, trách nhiệm</span>
+<span class="k">10.</span> <span class="f">Schedule / Timeline</span>  <span class="c">// lịch trình các giai đoạn test</span>
+<span class="k">11.</span> <span class="f">Deliverables</span>         <span class="c">// test case, báo cáo, bug log</span>
+<span class="k">12.</span> <span class="f">Risk Assessment</span>      <span class="c">// rủi ro &amp; kế hoạch giảm thiểu</span>
+<span class="k">13.</span> <span class="f">Approval</span>             <span class="c">// người phê duyệt tài liệu</span></pre>
+    </div>
+
+    <div class="card">
+      <h2>✅ Các phần trong Test Plan</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Phần (Section)</th><th>Mục đích</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Scope</td><td>Xác định tính năng/module nào được test và không được test</td></tr>
+            <tr><td>Objectives</td><td>Nêu rõ mục tiêu chất lượng cần đạt được sau khi test</td></tr>
+            <tr><td>Test Strategy</td><td>Mô tả cách tiếp cận, loại test và công cụ sử dụng</td></tr>
+            <tr><td>Entry/Exit Criteria</td><td>Xác định khi nào bắt đầu và khi nào kết thúc giai đoạn test</td></tr>
+            <tr><td>Resources & Timeline</td><td>Phân bổ nhân sự, vai trò và lịch trình thực hiện</td></tr>
+            <tr><td>Risk Assessment</td><td>Nhận diện rủi ro có thể xảy ra và kế hoạch giảm thiểu</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📘 Từ vựng &amp; cụm từ trong đoạn</h2>
+      <div class="table-wrap">
+        <table class="vocab">
+          <thead>
+            <tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="term">test plan</span><button class="speak" data-text="test plan">🔊</button></td>
+              <td><span class="reading">(test plan)</span><span class="ipa">/test plæn/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kế hoạch kiểm thử</td>
+            </tr>
+            <tr>
+              <td><span class="term">test strategy</span><button class="speak" data-text="test strategy">🔊</button></td>
+              <td><span class="reading">(test stra-tơ-ji)</span><span class="ipa">/test ˈstrætədʒi/</span></td>
+              <td class="pos">n phr.</td>
+              <td>chiến lược kiểm thử</td>
+            </tr>
+            <tr>
+              <td><span class="term">scope</span><button class="speak" data-text="scope">🔊</button></td>
+              <td><span class="reading">(scâu-p)</span><span class="ipa">/skəʊp/</span></td>
+              <td class="pos">n</td>
+              <td>phạm vi</td>
+            </tr>
+            <tr>
+              <td><span class="term">objectives</span><button class="speak" data-text="objectives">🔊</button></td>
+              <td><span class="reading">(ợp-jéc-tivs)</span><span class="ipa">/əbˈdʒektɪvz/</span></td>
+              <td class="pos">n</td>
+              <td>mục tiêu</td>
+            </tr>
+            <tr>
+              <td><span class="term">entry criteria</span><button class="speak" data-text="entry criteria">🔊</button></td>
+              <td><span class="reading">(en-tri crai-ti-ri-ợ)</span><span class="ipa">/ˈentri kraɪˈtɪəriə/</span></td>
+              <td class="pos">n phr.</td>
+              <td>tiêu chí bắt đầu</td>
+            </tr>
+            <tr>
+              <td><span class="term">exit criteria</span><button class="speak" data-text="exit criteria">🔊</button></td>
+              <td><span class="reading">(éc-xịt crai-ti-ri-ợ)</span><span class="ipa">/ˈeksɪt kraɪˈtɪəriə/</span></td>
+              <td class="pos">n phr.</td>
+              <td>tiêu chí kết thúc</td>
+            </tr>
+            <tr>
+              <td><span class="term">resources</span><button class="speak" data-text="resources">🔊</button></td>
+              <td><span class="reading">(ri-sọ-xịs)</span><span class="ipa">/rɪˈsɔːsɪz/</span></td>
+              <td class="pos">n</td>
+              <td>nguồn lực</td>
+            </tr>
+            <tr>
+              <td><span class="term">timeline</span><button class="speak" data-text="timeline">🔊</button></td>
+              <td><span class="reading">(tai-mlain)</span><span class="ipa">/ˈtaɪmlaɪn/</span></td>
+              <td class="pos">n</td>
+              <td>thời gian biểu</td>
+            </tr>
+            <tr>
+              <td><span class="term">risk assessment</span><button class="speak" data-text="risk assessment">🔊</button></td>
+              <td><span class="reading">(rít xợ-xét-mợnt)</span><span class="ipa">/rɪsk əˈsesmənt/</span></td>
+              <td class="pos">n phr.</td>
+              <td>đánh giá rủi ro</td>
+            </tr>
+            <tr>
+              <td><span class="term">mitigation plan</span><button class="speak" data-text="mitigation plan">🔊</button></td>
+              <td><span class="reading">(mi-ti-gây-sần plan)</span><span class="ipa">/ˌmɪtɪˈɡeɪʃn plæn/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kế hoạch giảm thiểu rủi ro</td>
+            </tr>
+            <tr>
+              <td><span class="term">deliverables</span><button class="speak" data-text="deliverables">🔊</button></td>
+              <td><span class="reading">(đi-li-vợ-rợ-bồs)</span><span class="ipa">/dɪˈlɪvərəblz/</span></td>
+              <td class="pos">n</td>
+              <td>các sản phẩm bàn giao</td>
+            </tr>
+            <tr>
+              <td><span class="term">test environment</span><button class="speak" data-text="test environment">🔊</button></td>
+              <td><span class="reading">(test en-vai-rợn-mợnt)</span><span class="ipa">/test ɪnˈvaɪrənmənt/</span></td>
+              <td class="pos">n phr.</td>
+              <td>môi trường kiểm thử</td>
+            </tr>
+            <tr>
+              <td><span class="term">team roles</span><button class="speak" data-text="team roles">🔊</button></td>
+              <td><span class="reading">(tim rôls)</span><span class="ipa">/tiːm rəʊlz/</span></td>
+              <td class="pos">n phr.</td>
+              <td>vai trò của các thành viên</td>
+            </tr>
+            <tr>
+              <td><span class="term">align</span><button class="speak" data-text="align">🔊</button></td>
+              <td><span class="reading">(ợ-lain)</span><span class="ipa">/əˈlaɪn/</span></td>
+              <td class="pos">v</td>
+              <td>thống nhất, đồng bộ</td>
+            </tr>
+            <tr>
+              <td><span class="term">approval</span><button class="speak" data-text="approval">🔊</button></td>
+              <td><span class="reading">(ợ-pru-vồ)</span><span class="ipa">/əˈpruːvl/</span></td>
+              <td class="pos">n</td>
+              <td>sự phê duyệt</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="tip">💡 Mẹo: nêu định nghĩa → liệt kê các thành phần chính (scope, strategy, entry/exit criteria, resources, risk) → kết bằng lợi ích (giúp cả nhóm thống nhất). Bấm 🔊 để nghe phát âm.</p>
+
+    <footer>Interview Prep · QA Automation (Playwright &amp; Selenium)</footer>
+  </div>
+
+  <script>
+  /* ===== PHÁT ÂM + NGHE LẶP Anh–Việt (Web Speech API) ===== */
+  let RATE = 0.85;          // tốc độ đọc
+  let LOOP_COUNT = 0;       // 0 = lặp vô hạn (∞)
+  let enVoice = null, viVoice = null;
+  let loopActive = false, loopBtn = null, currentBtn = null;
+
+  function pickVoices(){
+    const vs = speechSynthesis.getVoices();
+    const en = vs.filter(v=>/^en/i.test(v.lang));
+    // Ưu tiên giọng OFFLINE (localService) để tránh lỗi "synthesis-failed"
+    enVoice = en.find(v=>v.localService && /en[-_]US/i.test(v.lang))
+           || en.find(v=>v.localService && /en[-_]GB/i.test(v.lang))
+           || en.find(v=>v.localService)
+           || en.find(v=>/en[-_]US/i.test(v.lang))
+           || en[0] || null;
+    const vi = vs.filter(v=>/^vi/i.test(v.lang));
+    viVoice = vi.find(v=>v.localService) || vi[0] || null;
+  }
+  pickVoices();
+  if (typeof speechSynthesis !== 'undefined') speechSynthesis.onvoiceschanged = pickVoices;
+
+  const setStatus = m => { const s=document.getElementById('spkStatus'); if(s) s.textContent=m; };
+  const wait = ms => new Promise(r=>setTimeout(r,ms));
+
+  /* --- Đọc 1 lần (nút 🔊) --- */
+  function speak(text, lang, btn){
+    if(!('speechSynthesis' in window)){ setStatus('⚠ Trình duyệt không hỗ trợ — dùng Chrome/Edge'); return; }
+    if(loopActive) stopLoop();
+    speechSynthesis.cancel();
+    if(currentBtn) currentBtn.classList.remove('speaking');
+    const isVi = /^vi/i.test(lang||'');
+    if(!enVoice || !viVoice) pickVoices();
+    setTimeout(()=>{
+      const u = new SpeechSynthesisUtterance(text);
+      const voice = isVi ? viVoice : enVoice;
+      u.lang = voice ? voice.lang : (isVi ? 'vi-VN' : 'en-US');
+      if(voice) u.voice = voice;
+      u.rate = RATE; u.pitch = 1;
+      u.onstart = ()=>setStatus('🔊 đang đọc…');
+      u.onend   = ()=>{ setStatus('✓'); if(btn) btn.classList.remove('speaking'); };
+      u.onerror = e=>{ setStatus('⚠ lỗi: '+(e.error||'')); if(btn) btn.classList.remove('speaking'); };
+      if(btn){ currentBtn=btn; btn.classList.add('speaking'); }
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    }, 90);
+  }
+
+  /* --- Nghe lặp Anh → Việt --- */
+  function speakOnce(text, voice, fallbackLang){
+    return new Promise(resolve=>{
+      if(!text){ resolve(); return; }
+      const u = new SpeechSynthesisUtterance(text);
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang = fallbackLang || 'en-US';
+      u.rate = RATE; u.pitch = 1;
+      u.onend = resolve; u.onerror = resolve;
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    });
+  }
+  function stopLoop(){
+    loopActive = false; speechSynthesis.cancel();
+    if(loopBtn){ loopBtn.classList.remove('looping'); loopBtn=null; }
+  }
+  async function loopPairs(pairs, btn){
+    if(loopActive && loopBtn===btn){ stopLoop(); setStatus('⏹ đã dừng lặp'); return; }
+    stopLoop();
+    loopActive = true; loopBtn = btn; btn.classList.add('looping');
+    if(!enVoice || !viVoice) pickVoices();
+    let round = 0; await wait(120);
+    while(loopActive){
+      round++;
+      for(let i=0; i<pairs.length; i++){
+        if(!loopActive) break;
+        const pos = pairs.length>1 ? (' ['+(i+1)+'/'+pairs.length+']') : '';
+        const head = '🔁 Lần '+round+(LOOP_COUNT?('/'+LOOP_COUNT):'')+pos;
+        setStatus(head+' — 🇬🇧 English');
+        await speakOnce(pairs[i].en, enVoice, 'en-US');
+        if(!loopActive) break;
+        await wait(350);
+        if(!loopActive) break;
+        setStatus(head+' — 🇻🇳 Tiếng Việt'+(viVoice?'':' (⚠ máy chưa có giọng Việt)'));
+        await speakOnce(pairs[i].vi, viVoice, 'vi-VN');
+        if(!loopActive) break;
+        await wait(pairs.length>1 ? 300 : 600);
+      }
+      if(!loopActive) break;
+      if(LOOP_COUNT && round>=LOOP_COUNT){ stopLoop(); setStatus('✓ Xong '+round+' lần'); break; }
+      await wait(700);
+    }
+  }
+
+  function makeRep(label, title, onClick){
+    const b = document.createElement('button');
+    b.className = 'replabel'; b.type = 'button';
+    b.textContent = label; b.title = title;
+    b.addEventListener('click', e=>{ e.preventDefault(); onClick(); });
+    return b;
+  }
+
+  /* Nút 🔊 sẵn có -> dùng tốc độ + giọng phù hợp */
+  document.querySelectorAll('.speak').forEach(btn=>{
+    btn.addEventListener('click', ()=> speak(btn.getAttribute('data-text'), btn.getAttribute('data-lang')||'en-US', btn));
+  });
+
+  /* 🔁 Lặp CÂU TRẢ LỜI: đọc đoạn tiếng Anh rồi bản dịch tiếng Việt */
+  (function(){
+    const enBq = document.querySelector('.card.answer blockquote');
+    const viBq = document.querySelector('.card.vi-answer blockquote');
+    if(!enBq || !viBq) return;
+    const enText = enBq.textContent.trim();
+    const viText = viBq.textContent.trim();
+    const rep = makeRep('🔁 Lặp câu trả lời (Anh → Việt)',
+      'Nghe lặp: đọc câu trả lời tiếng Anh rồi bản dịch tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs([{en:enText, vi:viText}], rep));
+    enBq.after(rep);
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  (function(){
+    const table = document.querySelector('table.vocab');
+    if(!table) return;
+    const pairs = [];
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      const term = tr.querySelector('.term');
+      const vi = tr.querySelector('td:last-child');
+      if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+    });
+    if(!pairs.length) return;
+    const card = table.closest('.card');
+    const h2 = card ? card.querySelector('h2') : null;
+    const rep = makeRep('🔁 Lặp từ vựng (Anh → Việt)',
+      'Nghe lặp lần lượt: từng từ tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs(pairs, rep));
+    if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp */
+  document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      RATE = parseFloat(b.dataset.rate);
+      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  document.querySelectorAll('.ratebar button[data-loop]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      LOOP_COUNT = parseInt(b.dataset.loop,10);
+      document.querySelectorAll('.ratebar button[data-loop]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  window.addEventListener('load', ()=>{ try{ speechSynthesis.getVoices(); }catch(e){} });
+  </script>
+</body>
+</html>

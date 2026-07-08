@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Q22 — Shift-Left Testing</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent2: #34d399;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 40px 16px;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: .5px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 8px;
+      line-height: 1.3;
+    }
+    .vi { color: var(--muted); font-style: italic; margin-bottom: 28px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--accent2);
+    }
+    .card h2 {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .card.answer { border-left-color: var(--accent); }
+    .card.answer h2 { color: var(--accent); }
+    .card.vi-answer { border-left-color: #f87171; }
+    .card.vi-answer h2 { color: #f87171; }
+    .card h2 .speak { text-transform: none; }
+    blockquote {
+      background: rgba(56,189,248,.08);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 17px;
+    }
+    .keyword { color: var(--accent); font-weight: 600; }
+    ul { padding-left: 20px; margin-top: 8px; }
+    li { margin-bottom: 6px; }
+    .tip { color: var(--muted); font-size: 15px; }
+    footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 30px; }
+
+    pre {
+      background: #0b1220;
+      border: 1px solid rgba(148,163,184,.2);
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    pre .c { color: #64748b; }
+    pre .k { color: #c084fc; }
+    pre .s { color: #34d399; }
+    pre .f { color: #38bdf8; }
+
+    /* tables */
+    .table-wrap { overflow-x: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+    table th, table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148,163,184,.18);
+      vertical-align: top;
+    }
+    table th {
+      background: rgba(56,189,248,.12);
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    table tr:last-child td { border-bottom: none; }
+    table tr:hover td { background: rgba(148,163,184,.06); }
+    table.vocab { min-width: 640px; }
+    .term { font-weight: 700; color: var(--text); }
+    .reading { color: var(--accent2); display: block; }
+    .ipa { color: var(--accent); display: block; opacity: .9; }
+    .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    .speak {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 22px;
+      margin-left: 8px;
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      vertical-align: middle;
+      transition: transform .1s, background .15s;
+    }
+    .speak:hover { background: #7dd3fc; transform: scale(1.08); }
+    .speak:active { transform: scale(.92); }
+
+    /* ===== Thanh điều khiển tốc độ / lặp + nút LẶP Anh–Việt ===== */
+    .ratebar {
+      position: fixed; top: 10px; right: 10px; z-index: 50;
+      background: rgba(11,18,32,.93); backdrop-filter: blur(6px);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 10px;
+      padding: 7px 10px; font-size: 12px; display: flex; flex-wrap: wrap;
+      gap: 6px; align-items: center; max-width: calc(100vw - 20px);
+      box-shadow: 0 4px 14px rgba(0,0,0,.5);
+    }
+    .ratebar b { color: var(--muted); font-weight: 600; }
+    .ratebar .sep { border-left: 1px solid rgba(148,163,184,.25); align-self: stretch; margin: 0 2px; }
+    .ratebar button {
+      background: #243449; color: var(--text);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer; font-size: 12px; font-family: inherit;
+    }
+    .ratebar button.on { background: var(--accent); color: #0f172a; font-weight: 700; }
+    .ratebar button[data-loop].on { background: #a78bfa; color: #0f172a; font-weight: 700; }
+    .ratebar button.test { background: var(--accent2); color: #0f172a; font-weight: 700; }
+    .ratebar #spkStatus { color: #fbbf24; max-width: 220px; }
+    .speak.speaking { background: var(--accent2); animation: pulse .8s infinite; }
+    .replabel {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin: 14px 8px 0 0; border: none; border-radius: 8px;
+      background: #a78bfa; color: #0f172a; font-weight: 600;
+      font-size: 13px; padding: 7px 13px; cursor: pointer;
+      font-family: inherit; line-height: 1.2; text-transform: none;
+    }
+    .replabel:hover { background: #c4b5fd; }
+    .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
+    @keyframes pulse { 50% { opacity: .5; } }
+  </style>
+</head>
+<body>
+  <div class="ratebar">
+    <b>🔊 Tốc độ:</b>
+    <button data-rate="0.7">Chậm</button>
+    <button data-rate="0.85" class="on">Vừa</button>
+    <button data-rate="1">Thường</button>
+    <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
+    <span class="sep"></span>
+    <b>🔁 Lặp:</b>
+    <button data-loop="3">×3</button>
+    <button data-loop="5">×5</button>
+    <button data-loop="0" class="on">∞</button>
+    <span id="spkStatus">sẵn sàng</span>
+  </div>
+  <div class="container">
+    <span class="badge">QUESTION 22 · TEST AUTOMATION</span>
+    <h1>What is shift-left testing, and how have you applied it?</h1>
+    <p class="vi">Shift-left testing là gì, và bạn đã áp dụng nó như thế nào?</p>
+
+    <div class="card answer">
+      <h2>Sample Answer (English)
+        <button class="speak"
+          data-text="Shift-left testing means moving testing activities earlier in the SDLC instead of leaving them until the end, right before release. In practice, I get QA involved during the requirements and design review, so we can catch ambiguous or untestable requirements before any code is written. I also write automated tests alongside development, often using a test-driven or behavior-driven approach, so unit and integration tests run on every commit through the CI pipeline. This tight collaboration with developers means bugs are caught and fixed while the code is still fresh in everyone's mind, which is far cheaper than finding them in a full regression cycle later. Overall, shifting left reduces the cost of fixing defects, shortens the feedback loop, and builds quality into the product from the start rather than inspecting it in afterward.">🔊</button>
+      </h2>
+      <blockquote>
+        <span class="keyword">Shift-left testing</span> means moving testing activities
+        <span class="keyword">earlier in the SDLC</span> instead of leaving them until the end,
+        right before release. In practice, I get <span class="keyword">QA involved</span> during the
+        <span class="keyword">requirements and design review</span>, so we can catch ambiguous or
+        untestable requirements before any code is written. I also
+        <span class="keyword">write automated tests alongside development</span>, often using a
+        <span class="keyword">test-driven</span> or <span class="keyword">behavior-driven approach</span>,
+        so <span class="keyword">unit</span> and <span class="keyword">integration tests</span> run on every
+        commit through the <span class="keyword">CI pipeline</span>. This tight
+        <span class="keyword">collaboration with developers</span> means bugs are
+        <span class="keyword">caught earlier</span> and fixed while the code is still fresh in everyone's
+        mind, which is far <span class="keyword">cheaper</span> than finding them in a full
+        <span class="keyword">regression cycle</span> later. Overall, shifting left reduces the
+        <span class="keyword">cost of fixing defects</span>, shortens the
+        <span class="keyword">feedback loop</span>, and builds <span class="keyword">quality</span> into the
+        product from the start rather than inspecting it in afterward.
+      </blockquote>
+    </div>
+
+    <div class="card vi-answer">
+      <h2>🇻🇳 Bản dịch tiếng Việt
+        <button class="speak" data-lang="vi-VN"
+          data-text="Shift-left testing nghĩa là đưa các hoạt động kiểm thử lên sớm hơn trong vòng đời phát triển phần mềm, thay vì để đến cuối, ngay trước khi release. Trong thực tế, tôi để QA tham gia ngay từ giai đoạn review yêu cầu và thiết kế, để có thể phát hiện những yêu cầu mơ hồ hoặc không thể kiểm thử trước khi bất kỳ dòng code nào được viết. Tôi cũng viết các test tự động song song với quá trình phát triển, thường theo hướng test-driven hoặc behavior-driven, để các unit test và integration test chạy trên mỗi commit thông qua pipeline CI. Sự hợp tác chặt chẽ với các lập trình viên này giúp lỗi được phát hiện và sửa sớm hơn khi code vẫn còn mới trong đầu mọi người, điều này rẻ hơn rất nhiều so với việc tìm ra lỗi trong một chu kỳ regression đầy đủ sau này. Nhìn chung, việc dịch chuyển sang trái giúp giảm chi phí sửa lỗi, rút ngắn vòng phản hồi, và xây dựng chất lượng vào sản phẩm ngay từ đầu thay vì kiểm tra nó sau đó.">🔊</button>
+      </h2>
+      <blockquote>
+        <span class="keyword">Shift-left testing</span> nghĩa là đưa các hoạt động kiểm thử
+        <span class="keyword">lên sớm hơn trong vòng đời phát triển phần mềm (SDLC)</span>, thay vì để
+        đến cuối, ngay trước khi release. Trong thực tế, tôi để
+        <span class="keyword">QA tham gia</span> ngay từ giai đoạn
+        <span class="keyword">review yêu cầu và thiết kế</span>, để có thể phát hiện những yêu cầu mơ hồ
+        hoặc không thể kiểm thử trước khi bất kỳ dòng code nào được viết. Tôi cũng
+        <span class="keyword">viết test tự động song song với quá trình phát triển</span>, thường theo
+        hướng <span class="keyword">test-driven</span> hoặc
+        <span class="keyword">behavior-driven</span>, để các <span class="keyword">unit test</span> và
+        <span class="keyword">integration test</span> chạy trên mỗi commit thông qua
+        <span class="keyword">pipeline CI</span>. Sự <span class="keyword">hợp tác với các lập trình viên</span>
+        chặt chẽ này giúp lỗi được <span class="keyword">phát hiện sớm hơn</span> và sửa khi code vẫn còn
+        mới trong đầu mọi người, điều này <span class="keyword">rẻ hơn</span> rất nhiều so với việc tìm ra
+        lỗi trong một <span class="keyword">chu kỳ regression</span> đầy đủ sau này. Nhìn chung, việc dịch
+        chuyển sang trái giúp giảm <span class="keyword">chi phí sửa lỗi</span>, rút ngắn
+        <span class="keyword">vòng phản hồi</span>, và xây dựng <span class="keyword">chất lượng</span> vào
+        sản phẩm ngay từ đầu thay vì kiểm tra nó sau đó.
+      </blockquote>
+    </div>
+
+    <div class="card">
+      <h2>💻 Minh họa Shift-Left</h2>
+      <pre><span class="c">// TRADITIONAL (test-last) — kiểm thử dồn về cuối SDLC</span>
+Requirements → Design → Development → <span class="k">[ TESTING ]</span> → Release
+                                          ^
+                          <span class="c">// bug tìm ra ở đây rất TỐN KÉM để sửa</span>
+
+<span class="c">// SHIFT-LEFT — kiểm thử trải đều xuyên suốt SDLC</span>
+<span class="k">[ Review ]</span>Requirements → <span class="k">[ Review ]</span>Design
+      ↓                        ↓
+  <span class="f">QA</span> góp ý sớm         <span class="f">QA</span> góp ý sớm
+
+Development  <span class="c">// viết test song song với code</span>
+  ├─ <span class="f">Unit tests</span>        <span class="k">[ TESTING ]</span>
+  ├─ <span class="f">Integration tests</span> <span class="k">[ TESTING ]</span>  → chạy trên <span class="s">mỗi commit</span> (CI)
+  └─ <span class="f">Static analysis</span>   <span class="k">[ TESTING ]</span>
+                                          ↓
+                                      Release
+                          <span class="c">// bug bị chặn SỚM, chi phí sửa thấp hơn nhiều</span></pre>
+    </div>
+
+    <div class="card">
+      <h2>📊 So sánh theo giai đoạn SDLC</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Giai đoạn SDLC</th><th>Cách tiếp cận truyền thống</th><th>Cách tiếp cận shift-left</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Requirements</td><td>QA không tham gia, chỉ nhận tài liệu để test sau</td><td>QA review yêu cầu, phát hiện điểm mơ hồ/không thể test</td></tr>
+            <tr><td>Design</td><td>Test case viết sau khi thiết kế xong</td><td>QA tham gia design review, viết test case song song</td></tr>
+            <tr><td>Development</td><td>Dev viết code, chưa có test tự động</td><td>Dev + QA viết unit/integration test cùng lúc (TDD/BDD)</td></tr>
+            <tr><td>CI/Build</td><td>Không chạy test tự động, chỉ build</td><td>Test chạy tự động trên mỗi commit/PR qua CI pipeline</td></tr>
+            <tr><td>QA/Test phase</td><td>Test tập trung dồn vào giai đoạn cuối, phát hiện lỗi trễ</td><td>Test regression + exploratory bổ sung, phần lớn lỗi đã bị chặn sớm</td></tr>
+            <tr><td>Release</td><td>Rủi ro cao, sửa lỗi gấp gáp, dễ trễ deadline</td><td>Rủi ro thấp, ít lỗi tồn đọng, release tự tin hơn</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📘 Từ vựng &amp; cụm từ trong đoạn</h2>
+      <div class="table-wrap">
+        <table class="vocab">
+          <thead>
+            <tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="term">shift-left testing</span><button class="speak" data-text="shift-left testing">🔊</button></td>
+              <td><span class="reading">(síp-lép tés-tinh)</span><span class="ipa">/ʃɪft left ˈtestɪŋ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kiểm thử dịch chuyển sang trái (sớm hơn trong SDLC)</td>
+            </tr>
+            <tr>
+              <td><span class="term">SDLC (Software Development Life Cycle)</span><button class="speak" data-text="Software Development Life Cycle">🔊</button></td>
+              <td><span class="reading">(sốp-goe đi-vé-lợp-mợnt lai xai-cồ)</span><span class="ipa">/ˈsɒftweər dɪˈveləpmənt laɪf ˈsaɪkl/</span></td>
+              <td class="pos">n phr.</td>
+              <td>vòng đời phát triển phần mềm</td>
+            </tr>
+            <tr>
+              <td><span class="term">requirements review</span><button class="speak" data-text="requirements review">🔊</button></td>
+              <td><span class="reading">(ri-quai-mợnts ri-viu)</span><span class="ipa">/rɪˈkwaɪəmənts rɪˈvjuː/</span></td>
+              <td class="pos">n phr.</td>
+              <td>xem xét/duyệt yêu cầu</td>
+            </tr>
+            <tr>
+              <td><span class="term">design review</span><button class="speak" data-text="design review">🔊</button></td>
+              <td><span class="reading">(đi-zain ri-viu)</span><span class="ipa">/dɪˈzaɪn rɪˈvjuː/</span></td>
+              <td class="pos">n phr.</td>
+              <td>xem xét/duyệt thiết kế</td>
+            </tr>
+            <tr>
+              <td><span class="term">test-driven approach</span><button class="speak" data-text="test driven approach">🔊</button></td>
+              <td><span class="reading">(test đri-vần ợ-prâuch)</span><span class="ipa">/test ˈdrɪvn əˈprəʊtʃ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>cách tiếp cận dựa trên test (TDD)</td>
+            </tr>
+            <tr>
+              <td><span class="term">behavior-driven</span><button class="speak" data-text="behavior driven">🔊</button></td>
+              <td><span class="reading">(bi-hây-vi-ơ đri-vần)</span><span class="ipa">/bɪˈheɪvjər ˈdrɪvn/</span></td>
+              <td class="pos">adj</td>
+              <td>hướng theo hành vi (BDD)</td>
+            </tr>
+            <tr>
+              <td><span class="term">unit test</span><button class="speak" data-text="unit test">🔊</button></td>
+              <td><span class="reading">(diu-nợt test)</span><span class="ipa">/ˈjuːnɪt test/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kiểm thử đơn vị</td>
+            </tr>
+            <tr>
+              <td><span class="term">integration test</span><button class="speak" data-text="integration test">🔊</button></td>
+              <td><span class="reading">(in-ti-grây-sần test)</span><span class="ipa">/ˌɪntɪˈɡreɪʃn test/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kiểm thử tích hợp</td>
+            </tr>
+            <tr>
+              <td><span class="term">CI pipeline</span><button class="speak" data-text="C I pipeline">🔊</button></td>
+              <td><span class="reading">(xi-ai pai-plain)</span><span class="ipa">/ˌsiːˈaɪ ˈpaɪplaɪn/</span></td>
+              <td class="pos">n phr.</td>
+              <td>quy trình tích hợp liên tục</td>
+            </tr>
+            <tr>
+              <td><span class="term">collaboration</span><button class="speak" data-text="collaboration">🔊</button></td>
+              <td><span class="reading">(cợ-le-bợ-rây-sần)</span><span class="ipa">/kəˌlæbəˈreɪʃn/</span></td>
+              <td class="pos">n</td>
+              <td>sự hợp tác</td>
+            </tr>
+            <tr>
+              <td><span class="term">caught earlier</span><button class="speak" data-text="caught earlier">🔊</button></td>
+              <td><span class="reading">(cot ơ-li-ơ)</span><span class="ipa">/kɔːt ˈɜːliər/</span></td>
+              <td class="pos">v phr.</td>
+              <td>được phát hiện sớm hơn</td>
+            </tr>
+            <tr>
+              <td><span class="term">regression cycle</span><button class="speak" data-text="regression cycle">🔊</button></td>
+              <td><span class="reading">(ri-gre-sần xai-cồ)</span><span class="ipa">/rɪˈɡreʃn ˈsaɪkl/</span></td>
+              <td class="pos">n phr.</td>
+              <td>chu kỳ kiểm thử hồi quy</td>
+            </tr>
+            <tr>
+              <td><span class="term">cost of fixing defects</span><button class="speak" data-text="cost of fixing defects">🔊</button></td>
+              <td><span class="reading">(cost ợv phích-xinh đi-phéc-ts)</span><span class="ipa">/kɒst əv ˈfɪksɪŋ ˈdiːfekts/</span></td>
+              <td class="pos">n phr.</td>
+              <td>chi phí sửa lỗi</td>
+            </tr>
+            <tr>
+              <td><span class="term">feedback loop</span><button class="speak" data-text="feedback loop">🔊</button></td>
+              <td><span class="reading">(phít-béc lup)</span><span class="ipa">/ˈfiːdbæk luːp/</span></td>
+              <td class="pos">n phr.</td>
+              <td>vòng phản hồi</td>
+            </tr>
+            <tr>
+              <td><span class="term">build quality in</span><button class="speak" data-text="build quality in">🔊</button></td>
+              <td><span class="reading">(bild qua-lợ-ti in)</span><span class="ipa">/bɪld ˈkwɒləti ɪn/</span></td>
+              <td class="pos">v phr.</td>
+              <td>xây dựng chất lượng ngay từ đầu</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="tip">💡 Mẹo: nêu định nghĩa (chuyển test sớm hơn trong SDLC) → cho ví dụ áp dụng (review yêu cầu, viết test song song, CI) → kết bằng lợi ích (bug rẻ hơn, feedback loop ngắn hơn). Bấm 🔊 để nghe phát âm.</p>
+
+    <footer>Interview Prep · QA Automation (Playwright &amp; Selenium)</footer>
+  </div>
+
+  <script>
+  /* ===== PHÁT ÂM + NGHE LẶP Anh–Việt (Web Speech API) ===== */
+  let RATE = 0.85;          // tốc độ đọc
+  let LOOP_COUNT = 0;       // 0 = lặp vô hạn (∞)
+  let enVoice = null, viVoice = null;
+  let loopActive = false, loopBtn = null, currentBtn = null;
+
+  function pickVoices(){
+    const vs = speechSynthesis.getVoices();
+    const en = vs.filter(v=>/^en/i.test(v.lang));
+    // Ưu tiên giọng OFFLINE (localService) để tránh lỗi "synthesis-failed"
+    enVoice = en.find(v=>v.localService && /en[-_]US/i.test(v.lang))
+           || en.find(v=>v.localService && /en[-_]GB/i.test(v.lang))
+           || en.find(v=>v.localService)
+           || en.find(v=>/en[-_]US/i.test(v.lang))
+           || en[0] || null;
+    const vi = vs.filter(v=>/^vi/i.test(v.lang));
+    viVoice = vi.find(v=>v.localService) || vi[0] || null;
+  }
+  pickVoices();
+  if (typeof speechSynthesis !== 'undefined') speechSynthesis.onvoiceschanged = pickVoices;
+
+  const setStatus = m => { const s=document.getElementById('spkStatus'); if(s) s.textContent=m; };
+  const wait = ms => new Promise(r=>setTimeout(r,ms));
+
+  /* --- Đọc 1 lần (nút 🔊) --- */
+  function speak(text, lang, btn){
+    if(!('speechSynthesis' in window)){ setStatus('⚠ Trình duyệt không hỗ trợ — dùng Chrome/Edge'); return; }
+    if(loopActive) stopLoop();
+    speechSynthesis.cancel();
+    if(currentBtn) currentBtn.classList.remove('speaking');
+    const isVi = /^vi/i.test(lang||'');
+    if(!enVoice || !viVoice) pickVoices();
+    setTimeout(()=>{
+      const u = new SpeechSynthesisUtterance(text);
+      const voice = isVi ? viVoice : enVoice;
+      u.lang = voice ? voice.lang : (isVi ? 'vi-VN' : 'en-US');
+      if(voice) u.voice = voice;
+      u.rate = RATE; u.pitch = 1;
+      u.onstart = ()=>setStatus('🔊 đang đọc…');
+      u.onend   = ()=>{ setStatus('✓'); if(btn) btn.classList.remove('speaking'); };
+      u.onerror = e=>{ setStatus('⚠ lỗi: '+(e.error||'')); if(btn) btn.classList.remove('speaking'); };
+      if(btn){ currentBtn=btn; btn.classList.add('speaking'); }
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    }, 90);
+  }
+
+  /* --- Nghe lặp Anh → Việt --- */
+  function speakOnce(text, voice, fallbackLang){
+    return new Promise(resolve=>{
+      if(!text){ resolve(); return; }
+      const u = new SpeechSynthesisUtterance(text);
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang = fallbackLang || 'en-US';
+      u.rate = RATE; u.pitch = 1;
+      u.onend = resolve; u.onerror = resolve;
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    });
+  }
+  function stopLoop(){
+    loopActive = false; speechSynthesis.cancel();
+    if(loopBtn){ loopBtn.classList.remove('looping'); loopBtn=null; }
+  }
+  async function loopPairs(pairs, btn){
+    if(loopActive && loopBtn===btn){ stopLoop(); setStatus('⏹ đã dừng lặp'); return; }
+    stopLoop();
+    loopActive = true; loopBtn = btn; btn.classList.add('looping');
+    if(!enVoice || !viVoice) pickVoices();
+    let round = 0; await wait(120);
+    while(loopActive){
+      round++;
+      for(let i=0; i<pairs.length; i++){
+        if(!loopActive) break;
+        const pos = pairs.length>1 ? (' ['+(i+1)+'/'+pairs.length+']') : '';
+        const head = '🔁 Lần '+round+(LOOP_COUNT?('/'+LOOP_COUNT):'')+pos;
+        setStatus(head+' — 🇬🇧 English');
+        await speakOnce(pairs[i].en, enVoice, 'en-US');
+        if(!loopActive) break;
+        await wait(350);
+        if(!loopActive) break;
+        setStatus(head+' — 🇻🇳 Tiếng Việt'+(viVoice?'':' (⚠ máy chưa có giọng Việt)'));
+        await speakOnce(pairs[i].vi, viVoice, 'vi-VN');
+        if(!loopActive) break;
+        await wait(pairs.length>1 ? 300 : 600);
+      }
+      if(!loopActive) break;
+      if(LOOP_COUNT && round>=LOOP_COUNT){ stopLoop(); setStatus('✓ Xong '+round+' lần'); break; }
+      await wait(700);
+    }
+  }
+
+  function makeRep(label, title, onClick){
+    const b = document.createElement('button');
+    b.className = 'replabel'; b.type = 'button';
+    b.textContent = label; b.title = title;
+    b.addEventListener('click', e=>{ e.preventDefault(); onClick(); });
+    return b;
+  }
+
+  /* Nút 🔊 sẵn có -> dùng tốc độ + giọng phù hợp */
+  document.querySelectorAll('.speak').forEach(btn=>{
+    btn.addEventListener('click', ()=> speak(btn.getAttribute('data-text'), btn.getAttribute('data-lang')||'en-US', btn));
+  });
+
+  /* 🔁 Lặp CÂU TRẢ LỜI: đọc đoạn tiếng Anh rồi bản dịch tiếng Việt */
+  (function(){
+    const enBq = document.querySelector('.card.answer blockquote');
+    const viBq = document.querySelector('.card.vi-answer blockquote');
+    if(!enBq || !viBq) return;
+    const enText = enBq.textContent.trim();
+    const viText = viBq.textContent.trim();
+    const rep = makeRep('🔁 Lặp câu trả lời (Anh → Việt)',
+      'Nghe lặp: đọc câu trả lời tiếng Anh rồi bản dịch tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs([{en:enText, vi:viText}], rep));
+    enBq.after(rep);
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  (function(){
+    const table = document.querySelector('table.vocab');
+    if(!table) return;
+    const pairs = [];
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      const term = tr.querySelector('.term');
+      const vi = tr.querySelector('td:last-child');
+      if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+    });
+    if(!pairs.length) return;
+    const card = table.closest('.card');
+    const h2 = card ? card.querySelector('h2') : null;
+    const rep = makeRep('🔁 Lặp từ vựng (Anh → Việt)',
+      'Nghe lặp lần lượt: từng từ tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs(pairs, rep));
+    if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp */
+  document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      RATE = parseFloat(b.dataset.rate);
+      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  document.querySelectorAll('.ratebar button[data-loop]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      LOOP_COUNT = parseInt(b.dataset.loop,10);
+      document.querySelectorAll('.ratebar button[data-loop]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  window.addEventListener('load', ()=>{ try{ speechSynthesis.getVoices(); }catch(e){} });
+  </script>
+</body>
+</html>

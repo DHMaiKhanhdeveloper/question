@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Q18 — Visual Regression Testing</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent2: #34d399;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 40px 16px;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: .5px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 8px;
+      line-height: 1.3;
+    }
+    .vi { color: var(--muted); font-style: italic; margin-bottom: 28px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--accent2);
+    }
+    .card h2 {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .card.answer { border-left-color: var(--accent); }
+    .card.answer h2 { color: var(--accent); }
+    .card.vi-answer { border-left-color: #f87171; }
+    .card.vi-answer h2 { color: #f87171; }
+    .card h2 .speak { text-transform: none; }
+    blockquote {
+      background: rgba(56,189,248,.08);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 17px;
+    }
+    .keyword { color: var(--accent); font-weight: 600; }
+    ul { padding-left: 20px; margin-top: 8px; }
+    li { margin-bottom: 6px; }
+    .tip { color: var(--muted); font-size: 15px; }
+    footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 30px; }
+
+    pre {
+      background: #0b1220;
+      border: 1px solid rgba(148,163,184,.2);
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    pre .c { color: #64748b; }
+    pre .k { color: #c084fc; }
+    pre .s { color: #34d399; }
+    pre .f { color: #38bdf8; }
+
+    /* tables */
+    .table-wrap { overflow-x: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+    table th, table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148,163,184,.18);
+      vertical-align: top;
+    }
+    table th {
+      background: rgba(56,189,248,.12);
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    table tr:last-child td { border-bottom: none; }
+    table tr:hover td { background: rgba(148,163,184,.06); }
+    table.vocab { min-width: 640px; }
+    .term { font-weight: 700; color: var(--text); }
+    .reading { color: var(--accent2); display: block; }
+    .ipa { color: var(--accent); display: block; opacity: .9; }
+    .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    .speak {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 22px;
+      margin-left: 8px;
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      vertical-align: middle;
+      transition: transform .1s, background .15s;
+    }
+    .speak:hover { background: #7dd3fc; transform: scale(1.08); }
+    .speak:active { transform: scale(.92); }
+
+    /* ===== Thanh điều khiển tốc độ / lặp + nút LẶP Anh–Việt ===== */
+    .ratebar {
+      position: fixed; top: 10px; right: 10px; z-index: 50;
+      background: rgba(11,18,32,.93); backdrop-filter: blur(6px);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 10px;
+      padding: 7px 10px; font-size: 12px; display: flex; flex-wrap: wrap;
+      gap: 6px; align-items: center; max-width: calc(100vw - 20px);
+      box-shadow: 0 4px 14px rgba(0,0,0,.5);
+    }
+    .ratebar b { color: var(--muted); font-weight: 600; }
+    .ratebar .sep { border-left: 1px solid rgba(148,163,184,.25); align-self: stretch; margin: 0 2px; }
+    .ratebar button {
+      background: #243449; color: var(--text);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer; font-size: 12px; font-family: inherit;
+    }
+    .ratebar button.on { background: var(--accent); color: #0f172a; font-weight: 700; }
+    .ratebar button[data-loop].on { background: #a78bfa; color: #0f172a; font-weight: 700; }
+    .ratebar button.test { background: var(--accent2); color: #0f172a; font-weight: 700; }
+    .ratebar #spkStatus { color: #fbbf24; max-width: 220px; }
+    .speak.speaking { background: var(--accent2); animation: pulse .8s infinite; }
+    .replabel {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin: 14px 8px 0 0; border: none; border-radius: 8px;
+      background: #a78bfa; color: #0f172a; font-weight: 600;
+      font-size: 13px; padding: 7px 13px; cursor: pointer;
+      font-family: inherit; line-height: 1.2; text-transform: none;
+    }
+    .replabel:hover { background: #c4b5fd; }
+    .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
+    @keyframes pulse { 50% { opacity: .5; } }
+  </style>
+</head>
+<body>
+  <div class="ratebar">
+    <b>🔊 Tốc độ:</b>
+    <button data-rate="0.7">Chậm</button>
+    <button data-rate="0.85" class="on">Vừa</button>
+    <button data-rate="1">Thường</button>
+    <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
+    <span class="sep"></span>
+    <b>🔁 Lặp:</b>
+    <button data-loop="3">×3</button>
+    <button data-loop="5">×5</button>
+    <button data-loop="0" class="on">∞</button>
+    <span id="spkStatus">sẵn sàng</span>
+  </div>
+  <div class="container">
+    <span class="badge">QUESTION 18 · TEST AUTOMATION</span>
+    <h1>What is visual regression testing, and when do you use it?</h1>
+    <p class="vi">Visual regression testing là gì, và khi nào bạn dùng nó?</p>
+
+    <div class="card answer">
+      <h2>Sample Answer (English)
+        <button class="speak"
+          data-text="Visual regression testing is a technique where I capture a screenshot of a page or component, save it as a baseline image, and then compare future screenshots against that baseline using a pixel diff algorithm. If the difference goes above a configured threshold, the test fails and highlights exactly which pixels changed. In Playwright, I use the toHaveScreenshot() assertion, which handles capturing, comparing, and even updating baselines when the UI intentionally changes. I mainly rely on this for catching unintended CSS or layout changes, things like broken spacing, overlapping elements, or a component silently losing its styling, that functional assertions like checking text or attributes would never catch. I usually run it on key pages, shared components, and after any CSS refactor or design system update.">🔊</button>
+      </h2>
+      <blockquote>
+        <span class="keyword">Visual regression testing</span> is a technique where I capture a
+        <span class="keyword">screenshot</span> of a page or component, save it as a
+        <span class="keyword">baseline image</span>, and then compare future screenshots against that
+        baseline using a <span class="keyword">pixel diff</span> algorithm. If the difference goes above a
+        configured <span class="keyword">threshold</span>, the test fails and highlights exactly which
+        pixels changed. In Playwright, I use the <span class="keyword">toHaveScreenshot()</span> assertion,
+        which handles capturing, comparing, and even updating baselines when the UI
+        <span class="keyword">intentionally</span> changes. I mainly rely on this for catching
+        <span class="keyword">unintended CSS</span> or <span class="keyword">layout changes</span>,
+        things like broken spacing, overlapping elements, or a component silently losing its
+        <span class="keyword">styling</span>, that <span class="keyword">functional assertions</span>
+        like checking text or attributes would never catch. I usually run it on key pages,
+        <span class="keyword">shared components</span>, and after any CSS refactor or
+        <span class="keyword">design system</span> update.
+      </blockquote>
+    </div>
+
+    <div class="card vi-answer">
+      <h2>🇻🇳 Bản dịch tiếng Việt
+        <button class="speak" data-lang="vi-VN"
+          data-text="Visual regression testing là kỹ thuật mà tôi chụp ảnh màn hình của một trang hoặc một component, lưu nó làm ảnh baseline, sau đó so sánh các ảnh chụp sau này với baseline đó bằng thuật toán so sánh pixel. Nếu độ khác biệt vượt quá một ngưỡng đã cấu hình, test sẽ thất bại và làm nổi bật chính xác những pixel nào đã thay đổi. Trong Playwright, tôi dùng assertion toHaveScreenshot(), nó xử lý việc chụp ảnh, so sánh, và thậm chí cập nhật baseline khi giao diện thay đổi có chủ đích. Tôi chủ yếu dùng kỹ thuật này để phát hiện những thay đổi CSS hoặc layout ngoài ý muốn, ví dụ như khoảng cách bị vỡ, các phần tử chồng lên nhau, hoặc một component bị mất style một cách âm thầm, những điều mà các assertion chức năng như kiểm tra text hay thuộc tính sẽ không bao giờ phát hiện được. Tôi thường chạy nó trên các trang quan trọng, các component dùng chung, và sau mỗi lần refactor CSS hoặc cập nhật design system.">🔊</button>
+      </h2>
+      <blockquote>
+        <span class="keyword">Visual regression testing</span> là kỹ thuật mà tôi chụp
+        <span class="keyword">ảnh màn hình (screenshot)</span> của một trang hoặc một component, lưu nó
+        làm <span class="keyword">ảnh baseline</span>, sau đó so sánh các ảnh chụp sau này với baseline
+        đó bằng thuật toán <span class="keyword">so sánh pixel (pixel diff)</span>. Nếu độ khác biệt vượt
+        quá một <span class="keyword">ngưỡng (threshold)</span> đã cấu hình, test sẽ thất bại và làm nổi
+        bật chính xác những pixel nào đã thay đổi. Trong Playwright, tôi dùng assertion
+        <span class="keyword">toHaveScreenshot()</span>, nó xử lý việc chụp ảnh, so sánh, và thậm chí
+        cập nhật baseline khi giao diện thay đổi <span class="keyword">có chủ đích</span>. Tôi chủ yếu
+        dùng kỹ thuật này để phát hiện những thay đổi <span class="keyword">CSS ngoài ý muốn</span> hoặc
+        <span class="keyword">thay đổi layout</span>, ví dụ như khoảng cách bị vỡ, các phần tử chồng lên
+        nhau, hoặc một component bị mất <span class="keyword">style</span> một cách âm thầm, những điều mà
+        các <span class="keyword">assertion chức năng</span> như kiểm tra text hay thuộc tính sẽ không bao
+        giờ phát hiện được. Tôi thường chạy nó trên các trang quan trọng,
+        <span class="keyword">component dùng chung</span>, và sau mỗi lần refactor CSS hoặc cập nhật
+        <span class="keyword">design system</span>.
+      </blockquote>
+    </div>
+
+    <div class="card">
+      <h2>💻 Ví dụ minh họa (Playwright)</h2>
+      <pre><span class="c">// visual.spec.js — so sánh ảnh chụp với baseline</span>
+<span class="k">import</span> { test, expect } <span class="k">from</span> <span class="s">'@playwright/test'</span>;
+
+test(<span class="s">'homepage matches baseline'</span>, <span class="k">async</span> ({ page }) => {
+  <span class="k">await</span> page.<span class="f">goto</span>(<span class="s">'https://example.com'</span>);
+
+  <span class="c">// Chụp toàn trang, so với ảnh baseline đã lưu</span>
+  <span class="k">await</span> <span class="f">expect</span>(page).<span class="f">toHaveScreenshot</span>(<span class="s">'homepage.png'</span>, {
+    maxDiffPixelRatio: <span class="s">0.02</span>, <span class="c">// ngưỡng chấp nhận khác biệt 2%</span>
+  });
+});
+
+test(<span class="s">'login card matches baseline'</span>, <span class="k">async</span> ({ page }) => {
+  <span class="k">await</span> page.<span class="f">goto</span>(<span class="s">'https://example.com/login'</span>);
+  <span class="k">const</span> card = page.<span class="f">getByTestId</span>(<span class="s">'login-card'</span>);
+  <span class="k">await</span> <span class="f">expect</span>(card).<span class="f">toHaveScreenshot</span>(<span class="s">'login-card.png'</span>);
+});
+
+<span class="c">// Cập nhật lại baseline khi UI đổi có chủ đích:</span>
+<span class="c">// npx playwright test --update-snapshots</span></pre>
+    </div>
+
+    <div class="card">
+      <h2>⚖️ Khi nào nên dùng / không nên dùng</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Trường hợp</th><th>Ghi chú</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>✅ Nên dùng — trang/component quan trọng</td><td>Trang chủ, checkout, dashboard — nơi lỗi layout ảnh hưởng UX nghiêm trọng</td></tr>
+            <tr><td>✅ Nên dùng — sau refactor CSS/design system</td><td>Phát hiện side-effect ngoài ý muốn khi đổi style dùng chung</td></tr>
+            <tr><td>✅ Nên dùng — component thư viện UI</td><td>Đảm bảo button, form, card... không bị vỡ giao diện qua thời gian</td></tr>
+            <tr><td>❌ Không nên dùng — nội dung động cao</td><td>Vùng có dữ liệu random, timestamp, ảnh quảng cáo gây false positive liên tục</td></tr>
+            <tr><td>❌ Không nên dùng — thay cho functional test</td><td>Không kiểm tra được logic nghiệp vụ, chỉ kiểm tra hình ảnh</td></tr>
+            <tr><td>⚠️ Cân nhắc</td><td>Chi phí bảo trì baseline khi UI thay đổi thường xuyên, cần review ảnh diff thủ công</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📘 Từ vựng &amp; cụm từ trong đoạn</h2>
+      <div class="table-wrap">
+        <table class="vocab">
+          <thead>
+            <tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="term">visual regression testing</span><button class="speak" data-text="visual regression testing">🔊</button></td>
+              <td><span class="reading">(vi-diu-ồ ri-gre-sần tes-tinh)</span><span class="ipa">/ˈvɪʒuəl rɪˈɡreʃn ˈtestɪŋ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kiểm thử hồi quy giao diện</td>
+            </tr>
+            <tr>
+              <td><span class="term">screenshot</span><button class="speak" data-text="screenshot">🔊</button></td>
+              <td><span class="reading">(scrin-shot)</span><span class="ipa">/ˈskriːnʃɒt/</span></td>
+              <td class="pos">n</td>
+              <td>ảnh chụp màn hình</td>
+            </tr>
+            <tr>
+              <td><span class="term">baseline image</span><button class="speak" data-text="baseline image">🔊</button></td>
+              <td><span class="reading">(bêi-slain i-mịch)</span><span class="ipa">/ˈbeɪslaɪn ˈɪmɪdʒ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>ảnh chuẩn/gốc để so sánh</td>
+            </tr>
+            <tr>
+              <td><span class="term">pixel diff</span><button class="speak" data-text="pixel diff">🔊</button></td>
+              <td><span class="reading">(pic-sồ đíp)</span><span class="ipa">/ˈpɪksl dɪf/</span></td>
+              <td class="pos">n phr.</td>
+              <td>so sánh khác biệt theo điểm ảnh</td>
+            </tr>
+            <tr>
+              <td><span class="term">threshold</span><button class="speak" data-text="threshold">🔊</button></td>
+              <td><span class="reading">(thrét-hôuld)</span><span class="ipa">/ˈθreʃhəʊld/</span></td>
+              <td class="pos">n</td>
+              <td>ngưỡng (chấp nhận sai lệch)</td>
+            </tr>
+            <tr>
+              <td><span class="term">toHaveScreenshot()</span><button class="speak" data-text="to have screenshot">🔊</button></td>
+              <td><span class="reading">(tu hép scrin-shot)</span><span class="ipa">/tuː hæv ˈskriːnʃɒt/</span></td>
+              <td class="pos">method</td>
+              <td>assertion so sánh ảnh trong Playwright</td>
+            </tr>
+            <tr>
+              <td><span class="term">intentionally</span><button class="speak" data-text="intentionally">🔊</button></td>
+              <td><span class="reading">(in-ten-sần-nồ-li)</span><span class="ipa">/ɪnˈtenʃənəli/</span></td>
+              <td class="pos">adv</td>
+              <td>có chủ đích</td>
+            </tr>
+            <tr>
+              <td><span class="term">unintended</span><button class="speak" data-text="unintended">🔊</button></td>
+              <td><span class="reading">(ân-in-ten-đợd)</span><span class="ipa">/ˌʌnɪnˈtendɪd/</span></td>
+              <td class="pos">adj</td>
+              <td>ngoài ý muốn</td>
+            </tr>
+            <tr>
+              <td><span class="term">layout change</span><button class="speak" data-text="layout change">🔊</button></td>
+              <td><span class="reading">(lây-aut chênh)</span><span class="ipa">/ˈleɪaʊt tʃeɪndʒ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>thay đổi bố cục</td>
+            </tr>
+            <tr>
+              <td><span class="term">styling</span><button class="speak" data-text="styling">🔊</button></td>
+              <td><span class="reading">(stai-linh)</span><span class="ipa">/ˈstaɪlɪŋ/</span></td>
+              <td class="pos">n</td>
+              <td>tạo kiểu, định dạng giao diện</td>
+            </tr>
+            <tr>
+              <td><span class="term">functional assertion</span><button class="speak" data-text="functional assertion">🔊</button></td>
+              <td><span class="reading">(phâng-sần-nồ ợ-sơ-sần)</span><span class="ipa">/ˈfʌŋkʃənl əˈsɜːʃn/</span></td>
+              <td class="pos">n phr.</td>
+              <td>khẳng định kiểm tra chức năng</td>
+            </tr>
+            <tr>
+              <td><span class="term">shared component</span><button class="speak" data-text="shared component">🔊</button></td>
+              <td><span class="reading">(shéerd cợm-pâu-nợnt)</span><span class="ipa">/ʃeəd kəmˈpəʊnənt/</span></td>
+              <td class="pos">n phr.</td>
+              <td>thành phần dùng chung</td>
+            </tr>
+            <tr>
+              <td><span class="term">design system</span><button class="speak" data-text="design system">🔊</button></td>
+              <td><span class="reading">(đi-zain xít-tợm)</span><span class="ipa">/dɪˈzaɪn ˈsɪstəm/</span></td>
+              <td class="pos">n phr.</td>
+              <td>hệ thống thiết kế</td>
+            </tr>
+            <tr>
+              <td><span class="term">false positive</span><button class="speak" data-text="false positive">🔊</button></td>
+              <td><span class="reading">(phôls pá-zợ-tiv)</span><span class="ipa">/fɔːls ˈpɒzətɪv/</span></td>
+              <td class="pos">n phr.</td>
+              <td>báo lỗi giả (sai)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="tip">💡 Mẹo: nêu định nghĩa (screenshot vs baseline) → giải thích ngưỡng pixel diff → cho ví dụ toHaveScreenshot() → kết bằng khi nào dùng/không dùng. Bấm 🔊 để nghe phát âm.</p>
+
+    <footer>Interview Prep · QA Automation (Playwright &amp; Selenium)</footer>
+  </div>
+
+  <script>
+  /* ===== PHÁT ÂM + NGHE LẶP Anh–Việt (Web Speech API) ===== */
+  let RATE = 0.85;          // tốc độ đọc
+  let LOOP_COUNT = 0;       // 0 = lặp vô hạn (∞)
+  let enVoice = null, viVoice = null;
+  let loopActive = false, loopBtn = null, currentBtn = null;
+
+  function pickVoices(){
+    const vs = speechSynthesis.getVoices();
+    const en = vs.filter(v=>/^en/i.test(v.lang));
+    // Ưu tiên giọng OFFLINE (localService) để tránh lỗi "synthesis-failed"
+    enVoice = en.find(v=>v.localService && /en[-_]US/i.test(v.lang))
+           || en.find(v=>v.localService && /en[-_]GB/i.test(v.lang))
+           || en.find(v=>v.localService)
+           || en.find(v=>/en[-_]US/i.test(v.lang))
+           || en[0] || null;
+    const vi = vs.filter(v=>/^vi/i.test(v.lang));
+    viVoice = vi.find(v=>v.localService) || vi[0] || null;
+  }
+  pickVoices();
+  if (typeof speechSynthesis !== 'undefined') speechSynthesis.onvoiceschanged = pickVoices;
+
+  const setStatus = m => { const s=document.getElementById('spkStatus'); if(s) s.textContent=m; };
+  const wait = ms => new Promise(r=>setTimeout(r,ms));
+
+  /* --- Đọc 1 lần (nút 🔊) --- */
+  function speak(text, lang, btn){
+    if(!('speechSynthesis' in window)){ setStatus('⚠ Trình duyệt không hỗ trợ — dùng Chrome/Edge'); return; }
+    if(loopActive) stopLoop();
+    speechSynthesis.cancel();
+    if(currentBtn) currentBtn.classList.remove('speaking');
+    const isVi = /^vi/i.test(lang||'');
+    if(!enVoice || !viVoice) pickVoices();
+    setTimeout(()=>{
+      const u = new SpeechSynthesisUtterance(text);
+      const voice = isVi ? viVoice : enVoice;
+      u.lang = voice ? voice.lang : (isVi ? 'vi-VN' : 'en-US');
+      if(voice) u.voice = voice;
+      u.rate = RATE; u.pitch = 1;
+      u.onstart = ()=>setStatus('🔊 đang đọc…');
+      u.onend   = ()=>{ setStatus('✓'); if(btn) btn.classList.remove('speaking'); };
+      u.onerror = e=>{ setStatus('⚠ lỗi: '+(e.error||'')); if(btn) btn.classList.remove('speaking'); };
+      if(btn){ currentBtn=btn; btn.classList.add('speaking'); }
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    }, 90);
+  }
+
+  /* --- Nghe lặp Anh → Việt --- */
+  function speakOnce(text, voice, fallbackLang){
+    return new Promise(resolve=>{
+      if(!text){ resolve(); return; }
+      const u = new SpeechSynthesisUtterance(text);
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang = fallbackLang || 'en-US';
+      u.rate = RATE; u.pitch = 1;
+      u.onend = resolve; u.onerror = resolve;
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    });
+  }
+  function stopLoop(){
+    loopActive = false; speechSynthesis.cancel();
+    if(loopBtn){ loopBtn.classList.remove('looping'); loopBtn=null; }
+  }
+  async function loopPairs(pairs, btn){
+    if(loopActive && loopBtn===btn){ stopLoop(); setStatus('⏹ đã dừng lặp'); return; }
+    stopLoop();
+    loopActive = true; loopBtn = btn; btn.classList.add('looping');
+    if(!enVoice || !viVoice) pickVoices();
+    let round = 0; await wait(120);
+    while(loopActive){
+      round++;
+      for(let i=0; i<pairs.length; i++){
+        if(!loopActive) break;
+        const pos = pairs.length>1 ? (' ['+(i+1)+'/'+pairs.length+']') : '';
+        const head = '🔁 Lần '+round+(LOOP_COUNT?('/'+LOOP_COUNT):'')+pos;
+        setStatus(head+' — 🇬🇧 English');
+        await speakOnce(pairs[i].en, enVoice, 'en-US');
+        if(!loopActive) break;
+        await wait(350);
+        if(!loopActive) break;
+        setStatus(head+' — 🇻🇳 Tiếng Việt'+(viVoice?'':' (⚠ máy chưa có giọng Việt)'));
+        await speakOnce(pairs[i].vi, viVoice, 'vi-VN');
+        if(!loopActive) break;
+        await wait(pairs.length>1 ? 300 : 600);
+      }
+      if(!loopActive) break;
+      if(LOOP_COUNT && round>=LOOP_COUNT){ stopLoop(); setStatus('✓ Xong '+round+' lần'); break; }
+      await wait(700);
+    }
+  }
+
+  function makeRep(label, title, onClick){
+    const b = document.createElement('button');
+    b.className = 'replabel'; b.type = 'button';
+    b.textContent = label; b.title = title;
+    b.addEventListener('click', e=>{ e.preventDefault(); onClick(); });
+    return b;
+  }
+
+  /* Nút 🔊 sẵn có -> dùng tốc độ + giọng phù hợp */
+  document.querySelectorAll('.speak').forEach(btn=>{
+    btn.addEventListener('click', ()=> speak(btn.getAttribute('data-text'), btn.getAttribute('data-lang')||'en-US', btn));
+  });
+
+  /* 🔁 Lặp CÂU TRẢ LỜI: đọc đoạn tiếng Anh rồi bản dịch tiếng Việt */
+  (function(){
+    const enBq = document.querySelector('.card.answer blockquote');
+    const viBq = document.querySelector('.card.vi-answer blockquote');
+    if(!enBq || !viBq) return;
+    const enText = enBq.textContent.trim();
+    const viText = viBq.textContent.trim();
+    const rep = makeRep('🔁 Lặp câu trả lời (Anh → Việt)',
+      'Nghe lặp: đọc câu trả lời tiếng Anh rồi bản dịch tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs([{en:enText, vi:viText}], rep));
+    enBq.after(rep);
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  (function(){
+    const table = document.querySelector('table.vocab');
+    if(!table) return;
+    const pairs = [];
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      const term = tr.querySelector('.term');
+      const vi = tr.querySelector('td:last-child');
+      if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+    });
+    if(!pairs.length) return;
+    const card = table.closest('.card');
+    const h2 = card ? card.querySelector('h2') : null;
+    const rep = makeRep('🔁 Lặp từ vựng (Anh → Việt)',
+      'Nghe lặp lần lượt: từng từ tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs(pairs, rep));
+    if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp */
+  document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      RATE = parseFloat(b.dataset.rate);
+      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  document.querySelectorAll('.ratebar button[data-loop]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      LOOP_COUNT = parseInt(b.dataset.loop,10);
+      document.querySelectorAll('.ratebar button[data-loop]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  window.addEventListener('load', ()=>{ try{ speechSynthesis.getVoices(); }catch(e){} });
+  </script>
+</body>
+</html>

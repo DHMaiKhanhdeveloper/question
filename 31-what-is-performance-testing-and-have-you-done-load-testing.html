@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Q31 — Performance Testing & Load Testing</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --accent2: #34d399;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 40px 16px;
+    }
+    .container { max-width: 820px; margin: 0 auto; }
+    .badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: .5px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 8px;
+      line-height: 1.3;
+    }
+    .vi { color: var(--muted); font-style: italic; margin-bottom: 28px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--accent2);
+    }
+    .card h2 {
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .card.answer { border-left-color: var(--accent); }
+    .card.answer h2 { color: var(--accent); }
+    .card.vi-answer { border-left-color: #f87171; }
+    .card.vi-answer h2 { color: #f87171; }
+    .card h2 .speak { text-transform: none; }
+    blockquote {
+      background: rgba(56,189,248,.08);
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 17px;
+    }
+    .keyword { color: var(--accent); font-weight: 600; }
+    ul { padding-left: 20px; margin-top: 8px; }
+    li { margin-bottom: 6px; }
+    .tip { color: var(--muted); font-size: 15px; }
+    footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 30px; }
+
+    pre {
+      background: #0b1220;
+      border: 1px solid rgba(148,163,184,.2);
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    pre .c { color: #64748b; }
+    pre .k { color: #c084fc; }
+    pre .s { color: #34d399; }
+    pre .f { color: #38bdf8; }
+
+    /* tables */
+    .table-wrap { overflow-x: auto; border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 560px; }
+    table th, table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(148,163,184,.18);
+      vertical-align: top;
+    }
+    table th {
+      background: rgba(56,189,248,.12);
+      color: var(--accent);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    table tr:last-child td { border-bottom: none; }
+    table tr:hover td { background: rgba(148,163,184,.06); }
+    table.vocab { min-width: 640px; }
+    .term { font-weight: 700; color: var(--text); }
+    .reading { color: var(--accent2); display: block; }
+    .ipa { color: var(--accent); display: block; opacity: .9; }
+    .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    .speak {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 22px;
+      margin-left: 8px;
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      vertical-align: middle;
+      transition: transform .1s, background .15s;
+    }
+    .speak:hover { background: #7dd3fc; transform: scale(1.08); }
+    .speak:active { transform: scale(.92); }
+
+    /* ===== Thanh điều khiển tốc độ / lặp + nút LẶP Anh–Việt ===== */
+    .ratebar {
+      position: fixed; top: 10px; right: 10px; z-index: 50;
+      background: rgba(11,18,32,.93); backdrop-filter: blur(6px);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 10px;
+      padding: 7px 10px; font-size: 12px; display: flex; flex-wrap: wrap;
+      gap: 6px; align-items: center; max-width: calc(100vw - 20px);
+      box-shadow: 0 4px 14px rgba(0,0,0,.5);
+    }
+    .ratebar b { color: var(--muted); font-weight: 600; }
+    .ratebar .sep { border-left: 1px solid rgba(148,163,184,.25); align-self: stretch; margin: 0 2px; }
+    .ratebar button {
+      background: #243449; color: var(--text);
+      border: 1px solid rgba(148,163,184,.25); border-radius: 6px;
+      padding: 4px 9px; cursor: pointer; font-size: 12px; font-family: inherit;
+    }
+    .ratebar button.on { background: var(--accent); color: #0f172a; font-weight: 700; }
+    .ratebar button[data-loop].on { background: #a78bfa; color: #0f172a; font-weight: 700; }
+    .ratebar button.test { background: var(--accent2); color: #0f172a; font-weight: 700; }
+    .ratebar #spkStatus { color: #fbbf24; max-width: 220px; }
+    .speak.speaking { background: var(--accent2); animation: pulse .8s infinite; }
+    .replabel {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin: 14px 8px 0 0; border: none; border-radius: 8px;
+      background: #a78bfa; color: #0f172a; font-weight: 600;
+      font-size: 13px; padding: 7px 13px; cursor: pointer;
+      font-family: inherit; line-height: 1.2; text-transform: none;
+    }
+    .replabel:hover { background: #c4b5fd; }
+    .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
+    @keyframes pulse { 50% { opacity: .5; } }
+  </style>
+</head>
+<body>
+  <div class="ratebar">
+    <b>🔊 Tốc độ:</b>
+    <button data-rate="0.7">Chậm</button>
+    <button data-rate="0.85" class="on">Vừa</button>
+    <button data-rate="1">Thường</button>
+    <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
+    <span class="sep"></span>
+    <b>🔁 Lặp:</b>
+    <button data-loop="3">×3</button>
+    <button data-loop="5">×5</button>
+    <button data-loop="0" class="on">∞</button>
+    <span id="spkStatus">sẵn sàng</span>
+  </div>
+  <div class="container">
+    <span class="badge">QUESTION 31 · TEST AUTOMATION</span>
+    <h1>What is performance testing, and have you done load testing?</h1>
+    <p class="vi">Performance testing là gì, và bạn đã làm load testing chưa?</p>
+
+    <div class="card answer">
+      <h2>Sample Answer (English)
+        <button class="speak"
+          data-text="Performance testing is the process of checking how a system behaves under a given workload, focusing on metrics like response time, throughput, and resource usage instead of functional correctness. Load testing is one type of performance testing where I simulate expected or peak numbers of concurrent users to see if the system meets its performance requirements. I have also done stress testing, pushing traffic beyond normal limits to find the breaking point, and spike testing, to see how the system reacts to a sudden surge. In my projects, I used k6 and JMeter to write load test scripts, ramp virtual users gradually, and collect metrics such as response time percentiles, error rate, and requests per second. Then I analyze the results together with server monitoring dashboards to identify bottlenecks, like slow database queries or CPU saturation, and report them to the development team.">🔊</button>
+      </h2>
+      <blockquote>
+        <span class="keyword">Performance testing</span> is the process of checking how a system behaves
+        under a given <span class="keyword">workload</span>, focusing on metrics like
+        <span class="keyword">response time</span>, <span class="keyword">throughput</span>, and
+        <span class="keyword">resource usage</span> instead of functional correctness.
+        <span class="keyword">Load testing</span> is one type of performance testing where I simulate
+        expected or peak numbers of <span class="keyword">concurrent users</span> to see if the system meets
+        its performance requirements. I have also done <span class="keyword">stress testing</span>, pushing
+        traffic beyond normal limits to find the <span class="keyword">breaking point</span>, and
+        <span class="keyword">spike testing</span>, to see how the system reacts to a sudden surge.
+        In my projects, I used <span class="keyword">k6</span> and <span class="keyword">JMeter</span> to
+        write load test scripts, ramp <span class="keyword">virtual users</span> gradually, and collect
+        metrics such as <span class="keyword">response time percentiles</span>, <span class="keyword">error rate</span>,
+        and <span class="keyword">requests per second</span>. Then I analyze the results together with server
+        monitoring dashboards to identify <span class="keyword">bottlenecks</span>, like slow database
+        queries or CPU saturation, and report them to the development team.
+      </blockquote>
+    </div>
+
+    <div class="card vi-answer">
+      <h2>🇻🇳 Bản dịch tiếng Việt
+        <button class="speak" data-lang="vi-VN"
+          data-text="Performance testing là quá trình kiểm tra xem hệ thống hoạt động ra sao dưới một mức tải nhất định, tập trung vào các chỉ số như thời gian phản hồi, thông lượng và mức sử dụng tài nguyên thay vì tính đúng đắn về chức năng. Load testing là một loại performance testing, trong đó tôi mô phỏng số lượng người dùng đồng thời dự kiến hoặc cao điểm để xem hệ thống có đáp ứng được yêu cầu hiệu năng hay không. Tôi cũng đã làm stress testing, đẩy lưu lượng vượt quá giới hạn bình thường để tìm điểm gãy của hệ thống, và spike testing, để xem hệ thống phản ứng thế nào khi lưu lượng tăng đột biến. Trong các dự án của mình, tôi dùng k6 và JMeter để viết script load test, tăng dần số lượng virtual user, và thu thập các chỉ số như phân vị thời gian phản hồi, tỷ lệ lỗi và số request mỗi giây. Sau đó tôi phân tích kết quả cùng với các dashboard giám sát server để xác định các điểm nghẽn, ví dụ truy vấn database chậm hoặc CPU bị bão hòa, rồi báo cáo cho đội phát triển.">🔊</button>
+      </h2>
+      <blockquote>
+        <span class="keyword">Performance testing</span> là quá trình kiểm tra xem hệ thống hoạt động ra sao
+        dưới một mức <span class="keyword">tải (workload)</span> nhất định, tập trung vào các chỉ số như
+        <span class="keyword">thời gian phản hồi</span>, <span class="keyword">thông lượng</span> và
+        <span class="keyword">mức sử dụng tài nguyên</span> thay vì tính đúng đắn về chức năng.
+        <span class="keyword">Load testing</span> là một loại performance testing, trong đó tôi mô phỏng số
+        lượng <span class="keyword">người dùng đồng thời</span> dự kiến hoặc cao điểm để xem hệ thống có đáp
+        ứng được yêu cầu hiệu năng hay không. Tôi cũng đã làm <span class="keyword">stress testing</span>, đẩy
+        lưu lượng vượt quá giới hạn bình thường để tìm <span class="keyword">điểm gãy</span> của hệ thống, và
+        <span class="keyword">spike testing</span>, để xem hệ thống phản ứng thế nào khi lưu lượng tăng đột
+        biến. Trong các dự án của mình, tôi dùng <span class="keyword">k6</span> và
+        <span class="keyword">JMeter</span> để viết script load test, tăng dần số lượng
+        <span class="keyword">virtual user</span>, và thu thập các chỉ số như
+        <span class="keyword">phân vị thời gian phản hồi</span>, <span class="keyword">tỷ lệ lỗi</span> và
+        <span class="keyword">số request mỗi giây</span>. Sau đó tôi phân tích kết quả cùng với các dashboard
+        giám sát server để xác định các <span class="keyword">điểm nghẽn</span>, ví dụ truy vấn database
+        chậm hoặc CPU bị bão hòa, rồi báo cáo cho đội phát triển.
+      </blockquote>
+    </div>
+
+    <div class="card">
+      <h2>💻 Ví dụ minh họa (k6 load test script)</h2>
+      <pre><span class="c">// load-test.js — mô phỏng 50 virtual users trong 1 phút</span>
+<span class="k">import</span> http <span class="k">from</span> <span class="s">'k6/http'</span>;
+<span class="k">import</span> { check, sleep } <span class="k">from</span> <span class="s">'k6'</span>;
+
+<span class="k">export const</span> options = {
+  stages: [
+    { duration: <span class="s">'30s'</span>, target: <span class="f">50</span> },  <span class="c">// ramp-up lên 50 VUs</span>
+    { duration: <span class="s">'1m'</span>,  target: <span class="f">50</span> },  <span class="c">// giữ tải ổn định</span>
+    { duration: <span class="s">'15s'</span>, target: <span class="f">0</span> },   <span class="c">// ramp-down</span>
+  ],
+  thresholds: {
+    http_req_duration: [<span class="s">'p(95)&lt;500'</span>], <span class="c">// 95% request &lt; 500ms</span>
+    http_req_failed: [<span class="s">'rate&lt;0.01'</span>],   <span class="c">// error rate &lt; 1%</span>
+  },
+};
+
+<span class="k">export default function</span> () {
+  <span class="k">const</span> res = http.<span class="f">get</span>(<span class="s">'https://api.example.com/products'</span>);
+  <span class="f">check</span>(res, { <span class="s">'status is 200'</span>: (r) => r.status === <span class="f">200</span> });
+  <span class="f">sleep</span>(<span class="f">1</span>);
+}</pre>
+    </div>
+
+    <div class="card">
+      <h2>✅ Các loại performance testing</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Loại test</th><th>Mục tiêu</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Load testing</td><td>Kiểm tra hệ thống với tải kỳ vọng/cao điểm bình thường</td></tr>
+            <tr><td>Stress testing</td><td>Đẩy tải vượt giới hạn để tìm breaking point</td></tr>
+            <tr><td>Spike testing</td><td>Kiểm tra phản ứng khi lưu lượng tăng đột biến, đột ngột</td></tr>
+            <tr><td>Soak / Endurance testing</td><td>Chạy tải ổn định trong thời gian dài để phát hiện rò rỉ bộ nhớ, suy giảm hiệu năng</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📘 Từ vựng &amp; cụm từ trong đoạn</h2>
+      <div class="table-wrap">
+        <table class="vocab">
+          <thead>
+            <tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="term">performance testing</span><button class="speak" data-text="performance testing">🔊</button></td>
+              <td><span class="reading">(pơ-fóm-mợns tés-ting)</span><span class="ipa">/pərˈfɔːrməns ˈtestɪŋ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kiểm thử hiệu năng</td>
+            </tr>
+            <tr>
+              <td><span class="term">workload</span><button class="speak" data-text="workload">🔊</button></td>
+              <td><span class="reading">(guốc-lâuđ)</span><span class="ipa">/ˈwɜːrkloʊd/</span></td>
+              <td class="pos">n</td>
+              <td>khối lượng công việc/tải</td>
+            </tr>
+            <tr>
+              <td><span class="term">response time</span><button class="speak" data-text="response time">🔊</button></td>
+              <td><span class="reading">(ri-spons tai-m)</span><span class="ipa">/rɪˈspɒns taɪm/</span></td>
+              <td class="pos">n phr.</td>
+              <td>thời gian phản hồi</td>
+            </tr>
+            <tr>
+              <td><span class="term">throughput</span><button class="speak" data-text="throughput">🔊</button></td>
+              <td><span class="reading">(thru-put)</span><span class="ipa">/ˈθruːpʊt/</span></td>
+              <td class="pos">n</td>
+              <td>thông lượng</td>
+            </tr>
+            <tr>
+              <td><span class="term">resource usage</span><button class="speak" data-text="resource usage">🔊</button></td>
+              <td><span class="reading">(ri-sos diu-sịt)</span><span class="ipa">/ˈriːsɔːrs ˈjuːsɪdʒ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>mức sử dụng tài nguyên</td>
+            </tr>
+            <tr>
+              <td><span class="term">load testing</span><button class="speak" data-text="load testing">🔊</button></td>
+              <td><span class="reading">(lâuđ tés-ting)</span><span class="ipa">/loʊd ˈtestɪŋ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kiểm thử tải</td>
+            </tr>
+            <tr>
+              <td><span class="term">concurrent users</span><button class="speak" data-text="concurrent users">🔊</button></td>
+              <td><span class="reading">(cợn-cơ-rợnt diu-dơs)</span><span class="ipa">/kənˈkʌrənt ˈjuːzərz/</span></td>
+              <td class="pos">n phr.</td>
+              <td>người dùng đồng thời</td>
+            </tr>
+            <tr>
+              <td><span class="term">stress testing</span><button class="speak" data-text="stress testing">🔊</button></td>
+              <td><span class="reading">(strés tés-ting)</span><span class="ipa">/stres ˈtestɪŋ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kiểm thử chịu tải cực hạn</td>
+            </tr>
+            <tr>
+              <td><span class="term">breaking point</span><button class="speak" data-text="breaking point">🔊</button></td>
+              <td><span class="reading">(brây-king point)</span><span class="ipa">/ˈbreɪkɪŋ pɔɪnt/</span></td>
+              <td class="pos">n phr.</td>
+              <td>điểm gãy/giới hạn chịu đựng</td>
+            </tr>
+            <tr>
+              <td><span class="term">spike testing</span><button class="speak" data-text="spike testing">🔊</button></td>
+              <td><span class="reading">(spai-k tés-ting)</span><span class="ipa">/spaɪk ˈtestɪŋ/</span></td>
+              <td class="pos">n phr.</td>
+              <td>kiểm thử tăng đột biến</td>
+            </tr>
+            <tr>
+              <td><span class="term">virtual users</span><button class="speak" data-text="virtual users">🔊</button></td>
+              <td><span class="reading">(vơ-chu-ợl diu-dơs)</span><span class="ipa">/ˈvɜːrtʃuəl ˈjuːzərz/</span></td>
+              <td class="pos">n phr.</td>
+              <td>người dùng ảo (VU)</td>
+            </tr>
+            <tr>
+              <td><span class="term">response time percentile</span><button class="speak" data-text="response time percentile">🔊</button></td>
+              <td><span class="reading">(ri-spons taim pơ-sen-tai-ồ)</span><span class="ipa">/rɪˈspɒns taɪm pərˈsentaɪl/</span></td>
+              <td class="pos">n phr.</td>
+              <td>phân vị thời gian phản hồi</td>
+            </tr>
+            <tr>
+              <td><span class="term">error rate</span><button class="speak" data-text="error rate">🔊</button></td>
+              <td><span class="reading">(e-rơ rây-t)</span><span class="ipa">/ˈerər reɪt/</span></td>
+              <td class="pos">n phr.</td>
+              <td>tỷ lệ lỗi</td>
+            </tr>
+            <tr>
+              <td><span class="term">requests per second</span><button class="speak" data-text="requests per second">🔊</button></td>
+              <td><span class="reading">(ri-quest pơ sê-cợnd)</span><span class="ipa">/rɪˈkwests pər ˈsekənd/</span></td>
+              <td class="pos">n phr.</td>
+              <td>số yêu cầu mỗi giây (RPS)</td>
+            </tr>
+            <tr>
+              <td><span class="term">bottleneck</span><button class="speak" data-text="bottleneck">🔊</button></td>
+              <td><span class="reading">(bó-tồ-nếch)</span><span class="ipa">/ˈbɒtlnek/</span></td>
+              <td class="pos">n</td>
+              <td>điểm nghẽn</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="tip">💡 Mẹo: định nghĩa performance testing → phân biệt load/stress/spike/soak → nêu công cụ (k6, JMeter) và cách phân tích kết quả để tìm bottleneck. Bấm 🔊 để nghe phát âm.</p>
+
+    <footer>Interview Prep · QA Automation (Playwright &amp; Selenium)</footer>
+  </div>
+
+  <script>
+  /* ===== PHÁT ÂM + NGHE LẶP Anh–Việt (Web Speech API) ===== */
+  let RATE = 0.85;          // tốc độ đọc
+  let LOOP_COUNT = 0;       // 0 = lặp vô hạn (∞)
+  let enVoice = null, viVoice = null;
+  let loopActive = false, loopBtn = null, currentBtn = null;
+
+  function pickVoices(){
+    const vs = speechSynthesis.getVoices();
+    const en = vs.filter(v=>/^en/i.test(v.lang));
+    // Ưu tiên giọng OFFLINE (localService) để tránh lỗi "synthesis-failed"
+    enVoice = en.find(v=>v.localService && /en[-_]US/i.test(v.lang))
+           || en.find(v=>v.localService && /en[-_]GB/i.test(v.lang))
+           || en.find(v=>v.localService)
+           || en.find(v=>/en[-_]US/i.test(v.lang))
+           || en[0] || null;
+    const vi = vs.filter(v=>/^vi/i.test(v.lang));
+    viVoice = vi.find(v=>v.localService) || vi[0] || null;
+  }
+  pickVoices();
+  if (typeof speechSynthesis !== 'undefined') speechSynthesis.onvoiceschanged = pickVoices;
+
+  const setStatus = m => { const s=document.getElementById('spkStatus'); if(s) s.textContent=m; };
+  const wait = ms => new Promise(r=>setTimeout(r,ms));
+
+  /* --- Đọc 1 lần (nút 🔊) --- */
+  function speak(text, lang, btn){
+    if(!('speechSynthesis' in window)){ setStatus('⚠ Trình duyệt không hỗ trợ — dùng Chrome/Edge'); return; }
+    if(loopActive) stopLoop();
+    speechSynthesis.cancel();
+    if(currentBtn) currentBtn.classList.remove('speaking');
+    const isVi = /^vi/i.test(lang||'');
+    if(!enVoice || !viVoice) pickVoices();
+    setTimeout(()=>{
+      const u = new SpeechSynthesisUtterance(text);
+      const voice = isVi ? viVoice : enVoice;
+      u.lang = voice ? voice.lang : (isVi ? 'vi-VN' : 'en-US');
+      if(voice) u.voice = voice;
+      u.rate = RATE; u.pitch = 1;
+      u.onstart = ()=>setStatus('🔊 đang đọc…');
+      u.onend   = ()=>{ setStatus('✓'); if(btn) btn.classList.remove('speaking'); };
+      u.onerror = e=>{ setStatus('⚠ lỗi: '+(e.error||'')); if(btn) btn.classList.remove('speaking'); };
+      if(btn){ currentBtn=btn; btn.classList.add('speaking'); }
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    }, 90);
+  }
+
+  /* --- Nghe lặp Anh → Việt --- */
+  function speakOnce(text, voice, fallbackLang){
+    return new Promise(resolve=>{
+      if(!text){ resolve(); return; }
+      const u = new SpeechSynthesisUtterance(text);
+      if(voice){ u.voice=voice; u.lang=voice.lang; } else u.lang = fallbackLang || 'en-US';
+      u.rate = RATE; u.pitch = 1;
+      u.onend = resolve; u.onerror = resolve;
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ try{ speechSynthesis.resume(); }catch(e){} }, 80);
+    });
+  }
+  function stopLoop(){
+    loopActive = false; speechSynthesis.cancel();
+    if(loopBtn){ loopBtn.classList.remove('looping'); loopBtn=null; }
+  }
+  async function loopPairs(pairs, btn){
+    if(loopActive && loopBtn===btn){ stopLoop(); setStatus('⏹ đã dừng lặp'); return; }
+    stopLoop();
+    loopActive = true; loopBtn = btn; btn.classList.add('looping');
+    if(!enVoice || !viVoice) pickVoices();
+    let round = 0; await wait(120);
+    while(loopActive){
+      round++;
+      for(let i=0; i<pairs.length; i++){
+        if(!loopActive) break;
+        const pos = pairs.length>1 ? (' ['+(i+1)+'/'+pairs.length+']') : '';
+        const head = '🔁 Lần '+round+(LOOP_COUNT?('/'+LOOP_COUNT):'')+pos;
+        setStatus(head+' — 🇬🇧 English');
+        await speakOnce(pairs[i].en, enVoice, 'en-US');
+        if(!loopActive) break;
+        await wait(350);
+        if(!loopActive) break;
+        setStatus(head+' — 🇻🇳 Tiếng Việt'+(viVoice?'':' (⚠ máy chưa có giọng Việt)'));
+        await speakOnce(pairs[i].vi, viVoice, 'vi-VN');
+        if(!loopActive) break;
+        await wait(pairs.length>1 ? 300 : 600);
+      }
+      if(!loopActive) break;
+      if(LOOP_COUNT && round>=LOOP_COUNT){ stopLoop(); setStatus('✓ Xong '+round+' lần'); break; }
+      await wait(700);
+    }
+  }
+
+  function makeRep(label, title, onClick){
+    const b = document.createElement('button');
+    b.className = 'replabel'; b.type = 'button';
+    b.textContent = label; b.title = title;
+    b.addEventListener('click', e=>{ e.preventDefault(); onClick(); });
+    return b;
+  }
+
+  /* Nút 🔊 sẵn có -> dùng tốc độ + giọng phù hợp */
+  document.querySelectorAll('.speak').forEach(btn=>{
+    btn.addEventListener('click', ()=> speak(btn.getAttribute('data-text'), btn.getAttribute('data-lang')||'en-US', btn));
+  });
+
+  /* 🔁 Lặp CÂU TRẢ LỜI: đọc đoạn tiếng Anh rồi bản dịch tiếng Việt */
+  (function(){
+    const enBq = document.querySelector('.card.answer blockquote');
+    const viBq = document.querySelector('.card.vi-answer blockquote');
+    if(!enBq || !viBq) return;
+    const enText = enBq.textContent.trim();
+    const viText = viBq.textContent.trim();
+    const rep = makeRep('🔁 Lặp câu trả lời (Anh → Việt)',
+      'Nghe lặp: đọc câu trả lời tiếng Anh rồi bản dịch tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs([{en:enText, vi:viText}], rep));
+    enBq.after(rep);
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  (function(){
+    const table = document.querySelector('table.vocab');
+    if(!table) return;
+    const pairs = [];
+    table.querySelectorAll('tbody tr').forEach(tr=>{
+      const term = tr.querySelector('.term');
+      const vi = tr.querySelector('td:last-child');
+      if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+    });
+    if(!pairs.length) return;
+    const card = table.closest('.card');
+    const h2 = card ? card.querySelector('h2') : null;
+    const rep = makeRep('🔁 Lặp từ vựng (Anh → Việt)',
+      'Nghe lặp lần lượt: từng từ tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+      ()=>loopPairs(pairs, rep));
+    if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp */
+  document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      RATE = parseFloat(b.dataset.rate);
+      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  document.querySelectorAll('.ratebar button[data-loop]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      LOOP_COUNT = parseInt(b.dataset.loop,10);
+      document.querySelectorAll('.ratebar button[data-loop]').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+    });
+  });
+  window.addEventListener('load', ()=>{ try{ speechSynthesis.getVoices(); }catch(e){} });
+  </script>
+</body>
+</html>
