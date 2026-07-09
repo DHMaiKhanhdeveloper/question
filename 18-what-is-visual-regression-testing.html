@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -223,6 +261,76 @@
         <span class="keyword">component dùng chung</span>, và sau mỗi lần refactor CSS hoặc cập nhật
         <span class="keyword">design system</span>.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">Visual regression testing is a technique where I capture a screenshot of a page or component, save it as a baseline image, and then compare future screenshots against that baseline using a pixel diff algorithm.</p>
+        <p class="sen-vi">Visual regression testing là kỹ thuật mà tôi chụp ảnh màn hình của một trang hoặc một component, lưu nó làm ảnh baseline, sau đó so sánh các ảnh chụp sau này với baseline đó bằng thuật toán so sánh pixel.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">visual regression testing</span><button class="speak" data-text="visual regression testing">🔊</button></td><td><span class="reading">(vi-diu-ồ ri-gre-sần tes-tinh)</span><span class="ipa">/ˈvɪʒuəl rɪˈɡreʃn ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử hồi quy giao diện</td></tr>
+            <tr><td><span class="term">screenshot</span><button class="speak" data-text="screenshot">🔊</button></td><td><span class="reading">(scrin-shot)</span><span class="ipa">/ˈskriːnʃɒt/</span></td><td class="pos">n</td><td>ảnh chụp màn hình</td></tr>
+            <tr><td><span class="term">baseline image</span><button class="speak" data-text="baseline image">🔊</button></td><td><span class="reading">(bêi-slain i-mịch)</span><span class="ipa">/ˈbeɪslaɪn ˈɪmɪdʒ/</span></td><td class="pos">n phr.</td><td>ảnh chuẩn/gốc để so sánh</td></tr>
+            <tr><td><span class="term">pixel diff</span><button class="speak" data-text="pixel diff">🔊</button></td><td><span class="reading">(pic-sồ đíp)</span><span class="ipa">/ˈpɪksl dɪf/</span></td><td class="pos">n phr.</td><td>so sánh khác biệt theo điểm ảnh</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">If the difference goes above a configured threshold, the test fails and highlights exactly which pixels changed.</p>
+        <p class="sen-vi">Nếu độ khác biệt vượt quá một ngưỡng đã cấu hình, test sẽ thất bại và làm nổi bật chính xác những pixel nào đã thay đổi.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">difference</span><button class="speak" data-text="difference">🔊</button></td><td><span class="reading">(đíp-phợ-rợns)</span><span class="ipa">/ˈdɪfrəns/</span></td><td class="pos">n</td><td>sự khác biệt</td></tr>
+            <tr><td><span class="term">threshold</span><button class="speak" data-text="threshold">🔊</button></td><td><span class="reading">(thrét-hôuld)</span><span class="ipa">/ˈθreʃhəʊld/</span></td><td class="pos">n</td><td>ngưỡng (chấp nhận sai lệch)</td></tr>
+            <tr><td><span class="term">test fails</span><button class="speak" data-text="test fails">🔊</button></td><td><span class="reading">(test phêi-ồs)</span><span class="ipa">/test feɪlz/</span></td><td class="pos">v phr.</td><td>bài test thất bại</td></tr>
+            <tr><td><span class="term">highlight</span><button class="speak" data-text="highlight">🔊</button></td><td><span class="reading">(hai-lait)</span><span class="ipa">/ˈhaɪlaɪt/</span></td><td class="pos">v</td><td>làm nổi bật</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">In Playwright, I use the toHaveScreenshot() assertion, which handles capturing, comparing, and even updating baselines when the UI intentionally changes.</p>
+        <p class="sen-vi">Trong Playwright, tôi dùng assertion toHaveScreenshot(), nó xử lý việc chụp ảnh, so sánh, và thậm chí cập nhật baseline khi giao diện thay đổi có chủ đích.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">toHaveScreenshot()</span><button class="speak" data-text="to have screenshot">🔊</button></td><td><span class="reading">(tu hép scrin-shot)</span><span class="ipa">/tuː hæv ˈskriːnʃɒt/</span></td><td class="pos">method</td><td>assertion so sánh ảnh trong Playwright</td></tr>
+            <tr><td><span class="term">handle</span><button class="speak" data-text="handle">🔊</button></td><td><span class="reading">(hen-đồ)</span><span class="ipa">/ˈhændl/</span></td><td class="pos">v</td><td>xử lý</td></tr>
+            <tr><td><span class="term">update</span><button class="speak" data-text="update">🔊</button></td><td><span class="reading">(âp-đêt)</span><span class="ipa">/ʌpˈdeɪt/</span></td><td class="pos">v</td><td>cập nhật</td></tr>
+            <tr><td><span class="term">intentionally</span><button class="speak" data-text="intentionally">🔊</button></td><td><span class="reading">(in-ten-sần-nồ-li)</span><span class="ipa">/ɪnˈtenʃənəli/</span></td><td class="pos">adv</td><td>có chủ đích</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I mainly rely on this for catching unintended CSS or layout changes, things like broken spacing, overlapping elements, or a component silently losing its styling, that functional assertions like checking text or attributes would never catch.</p>
+        <p class="sen-vi">Tôi chủ yếu dùng kỹ thuật này để phát hiện những thay đổi CSS hoặc layout ngoài ý muốn, ví dụ như khoảng cách bị vỡ, các phần tử chồng lên nhau, hoặc một component bị mất style một cách âm thầm, những điều mà các assertion chức năng như kiểm tra text hay thuộc tính sẽ không bao giờ phát hiện được.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">unintended</span><button class="speak" data-text="unintended">🔊</button></td><td><span class="reading">(ân-in-ten-đợd)</span><span class="ipa">/ˌʌnɪnˈtendɪd/</span></td><td class="pos">adj</td><td>ngoài ý muốn</td></tr>
+            <tr><td><span class="term">layout change</span><button class="speak" data-text="layout change">🔊</button></td><td><span class="reading">(lây-aut chênh)</span><span class="ipa">/ˈleɪaʊt tʃeɪndʒ/</span></td><td class="pos">n phr.</td><td>thay đổi bố cục</td></tr>
+            <tr><td><span class="term">overlapping</span><button class="speak" data-text="overlapping">🔊</button></td><td><span class="reading">(âu-vơ-lép-pinh)</span><span class="ipa">/ˌəʊvəˈlæpɪŋ/</span></td><td class="pos">adj</td><td>chồng chéo, đè lên nhau</td></tr>
+            <tr><td><span class="term">styling</span><button class="speak" data-text="styling">🔊</button></td><td><span class="reading">(stai-linh)</span><span class="ipa">/ˈstaɪlɪŋ/</span></td><td class="pos">n</td><td>tạo kiểu, định dạng giao diện</td></tr>
+            <tr><td><span class="term">functional assertion</span><button class="speak" data-text="functional assertion">🔊</button></td><td><span class="reading">(phâng-sần-nồ ợ-sơ-sần)</span><span class="ipa">/ˈfʌŋkʃənl əˈsɜːʃn/</span></td><td class="pos">n phr.</td><td>khẳng định kiểm tra chức năng</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I usually run it on key pages, shared components, and after any CSS refactor or design system update.</p>
+        <p class="sen-vi">Tôi thường chạy nó trên các trang quan trọng, các component dùng chung, và sau mỗi lần refactor CSS hoặc cập nhật design system.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">key page</span><button class="speak" data-text="key page">🔊</button></td><td><span class="reading">(ki pếch)</span><span class="ipa">/kiː peɪdʒ/</span></td><td class="pos">n phr.</td><td>trang quan trọng</td></tr>
+            <tr><td><span class="term">shared component</span><button class="speak" data-text="shared component">🔊</button></td><td><span class="reading">(shéerd cợm-pâu-nợnt)</span><span class="ipa">/ʃeəd kəmˈpəʊnənt/</span></td><td class="pos">n phr.</td><td>thành phần dùng chung</td></tr>
+            <tr><td><span class="term">refactor</span><button class="speak" data-text="refactor">🔊</button></td><td><span class="reading">(ri-phéc-tơ)</span><span class="ipa">/ˌriːˈfæktər/</span></td><td class="pos">v/n</td><td>tái cấu trúc mã</td></tr>
+            <tr><td><span class="term">design system</span><button class="speak" data-text="design system">🔊</button></td><td><span class="reading">(đi-zain xít-tợm)</span><span class="ipa">/dɪˈzaɪn ˈsɪstəm/</span></td><td class="pos">n phr.</td><td>hệ thống thiết kế</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -488,7 +596,22 @@ test(<span class="s">'login card matches baseline'</span>, <span class="k">async
     enBq.after(rep);
   })();
 
-  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt (bảng chính) */
   (function(){
     const table = document.querySelector('table.vocab');
     if(!table) return;
@@ -507,11 +630,29 @@ test(<span class="s">'login card matches baseline'</span>, <span class="k">async
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

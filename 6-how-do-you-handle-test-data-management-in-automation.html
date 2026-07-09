@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -222,6 +260,78 @@
         khác nhau, tôi giữ cấu hình <span class="keyword">theo từng môi trường</span> và bộ dữ liệu riêng, để
         cùng một bộ test có thể chạy an toàn trên staging hoặc môi trường local.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">I try to keep test data independent from the UI and from other tests, so each test can run in isolation and in any order.</p>
+        <p class="sen-vi">Tôi cố gắng giữ cho test data độc lập với giao diện và với các test khác, để mỗi test có thể chạy độc lập và theo bất kỳ thứ tự nào.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">test data</span><button class="speak" data-text="test data">🔊</button></td><td><span class="reading">(test đây-tơ)</span><span class="ipa">/test ˈdeɪtə/</span></td><td class="pos">n phr.</td><td>dữ liệu kiểm thử</td></tr>
+            <tr><td><span class="term">independent</span><button class="speak" data-text="independent">🔊</button></td><td><span class="reading">(in-đi-pen-đợnt)</span><span class="ipa">/ˌɪndɪˈpendənt/</span></td><td class="pos">adj</td><td>độc lập</td></tr>
+            <tr><td><span class="term">isolation</span><button class="speak" data-text="isolation">🔊</button></td><td><span class="reading">(ai-sợ-lây-sần)</span><span class="ipa">/ˌaɪsəˈleɪʃn/</span></td><td class="pos">n</td><td>tính độc lập, tách biệt</td></tr>
+            <tr><td><span class="term">in any order</span><button class="speak" data-text="in any order">🔊</button></td><td><span class="reading">(in e-ni oa-đơ)</span><span class="ipa">/ɪn ˈeni ˈɔːdər/</span></td><td class="pos">adv phr.</td><td>theo bất kỳ thứ tự nào</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Whenever possible, I seed data directly through API calls or database calls before the test starts, instead of creating it manually through the UI, because that's much faster and more reliable.</p>
+        <p class="sen-vi">Bất cứ khi nào có thể, tôi tạo sẵn dữ liệu trực tiếp thông qua các lệnh gọi API hoặc lệnh gọi cơ sở dữ liệu trước khi test bắt đầu, thay vì tạo thủ công qua giao diện, vì cách đó nhanh và đáng tin cậy hơn nhiều.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">seed</span><button class="speak" data-text="seed">🔊</button></td><td><span class="reading">(xit)</span><span class="ipa">/siːd/</span></td><td class="pos">v</td><td>tạo sẵn dữ liệu ban đầu</td></tr>
+            <tr><td><span class="term">API call</span><button class="speak" data-text="API call">🔊</button></td><td><span class="reading">(ây-pi-ai col)</span><span class="ipa">/ˌeɪ piː ˈaɪ kɔːl/</span></td><td class="pos">n phr.</td><td>lệnh gọi API</td></tr>
+            <tr><td><span class="term">database call</span><button class="speak" data-text="database call">🔊</button></td><td><span class="reading">(đây-tơ-bêis col)</span><span class="ipa">/ˈdeɪtəbeɪs kɔːl/</span></td><td class="pos">n phr.</td><td>lệnh gọi cơ sở dữ liệu</td></tr>
+            <tr><td><span class="term">manually</span><button class="speak" data-text="manually">🔊</button></td><td><span class="reading">(me-niu-ợ-li)</span><span class="ipa">/ˈmænjuəli/</span></td><td class="pos">adv</td><td>thủ công</td></tr>
+            <tr><td><span class="term">reliable</span><button class="speak" data-text="reliable">🔊</button></td><td><span class="reading">(ri-lai-ợ-bồ)</span><span class="ipa">/rɪˈlaɪəbl/</span></td><td class="pos">adj</td><td>đáng tin cậy</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I also use factory functions and fixtures to generate realistic data, often combined with a library like Faker for random values, so tests don't collide when running in parallel.</p>
+        <p class="sen-vi">Tôi cũng dùng các hàm factory và fixture để sinh ra dữ liệu thực tế, thường kết hợp với thư viện như Faker để tạo giá trị ngẫu nhiên, để các test không bị xung đột khi chạy song song.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">factory function</span><button class="speak" data-text="factory function">🔊</button></td><td><span class="reading">(féc-tơ-ri phăng-sần)</span><span class="ipa">/ˈfæktri ˈfʌŋkʃn/</span></td><td class="pos">n phr.</td><td>hàm tạo dữ liệu (factory)</td></tr>
+            <tr><td><span class="term">fixtures</span><button class="speak" data-text="fixtures">🔊</button></td><td><span class="reading">(phích-chợs)</span><span class="ipa">/ˈfɪkstʃərz/</span></td><td class="pos">n</td><td>dữ liệu/thiết lập chuẩn bị sẵn cho test</td></tr>
+            <tr><td><span class="term">realistic data</span><button class="speak" data-text="realistic data">🔊</button></td><td><span class="reading">(ri-ợ-lít-tíc đây-tơ)</span><span class="ipa">/ˌriːəˈlɪstɪk ˈdeɪtə/</span></td><td class="pos">n phr.</td><td>dữ liệu thực tế</td></tr>
+            <tr><td><span class="term">random values</span><button class="speak" data-text="random values">🔊</button></td><td><span class="reading">(ren-đợm ve-liuz)</span><span class="ipa">/ˈrændəm ˈvæljuːz/</span></td><td class="pos">n phr.</td><td>giá trị ngẫu nhiên</td></tr>
+            <tr><td><span class="term">collide</span><button class="speak" data-text="collide">🔊</button></td><td><span class="reading">(cợ-lai-đ)</span><span class="ipa">/kəˈlaɪd/</span></td><td class="pos">v</td><td>xung đột, va chạm</td></tr>
+            <tr><td><span class="term">parallel</span><button class="speak" data-text="parallel">🔊</button></td><td><span class="reading">(pe-rợ-lồ)</span><span class="ipa">/ˈpærəlel/</span></td><td class="pos">adj</td><td>song song</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">For cleanup, I make sure every test tears down the data it created, either through an API call or a database rollback, so the environment stays clean.</p>
+        <p class="sen-vi">Về dọn dẹp, tôi đảm bảo mỗi test đều xóa bỏ dữ liệu mà nó đã tạo ra, thông qua lệnh gọi API hoặc rollback cơ sở dữ liệu, để môi trường luôn sạch sẽ.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">cleanup</span><button class="speak" data-text="cleanup">🔊</button></td><td><span class="reading">(cli-năp)</span><span class="ipa">/ˈkliːnʌp/</span></td><td class="pos">n</td><td>dọn dẹp</td></tr>
+            <tr><td><span class="term">tear down</span><button class="speak" data-text="tear down">🔊</button></td><td><span class="reading">(te-ơ đaon)</span><span class="ipa">/teər daʊn/</span></td><td class="pos">phr. v</td><td>gỡ bỏ, dọn dẹp sau test</td></tr>
+            <tr><td><span class="term">database rollback</span><button class="speak" data-text="database rollback">🔊</button></td><td><span class="reading">(đây-tơ-bêis rôl-béc)</span><span class="ipa">/ˈdeɪtəbeɪs ˈrəʊlbæk/</span></td><td class="pos">n phr.</td><td>hoàn tác cơ sở dữ liệu</td></tr>
+            <tr><td><span class="term">environment</span><button class="speak" data-text="environment">🔊</button></td><td><span class="reading">(en-vai-rợn-mợnt)</span><span class="ipa">/ɪnˈvaɪrənmənt/</span></td><td class="pos">n</td><td>môi trường</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">For different environments, I keep environment-specific configuration and datasets separate, so the same suite can run safely against staging or a local environment.</p>
+        <p class="sen-vi">Đối với các môi trường khác nhau, tôi giữ cấu hình và bộ dữ liệu riêng theo từng môi trường, để cùng một bộ test có thể chạy an toàn trên staging hoặc môi trường local.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">environment-specific</span><button class="speak" data-text="environment specific">🔊</button></td><td><span class="reading">(en-vai-rợn-mợnt spi-sí-phíc)</span><span class="ipa">/ɪnˈvaɪrənmənt spəˈsɪfɪk/</span></td><td class="pos">adj</td><td>đặc thù theo môi trường</td></tr>
+            <tr><td><span class="term">configuration</span><button class="speak" data-text="configuration">🔊</button></td><td><span class="reading">(cợn-phi-gu-rây-sần)</span><span class="ipa">/kənˌfɪɡəˈreɪʃn/</span></td><td class="pos">n</td><td>cấu hình</td></tr>
+            <tr><td><span class="term">dataset</span><button class="speak" data-text="dataset">🔊</button></td><td><span class="reading">(đây-tơ-xét)</span><span class="ipa">/ˈdeɪtəset/</span></td><td class="pos">n</td><td>bộ dữ liệu</td></tr>
+            <tr><td><span class="term">staging</span><button class="speak" data-text="staging">🔊</button></td><td><span class="reading">(xtê-jinh)</span><span class="ipa">/ˈsteɪdʒɪŋ/</span></td><td class="pos">n</td><td>môi trường thử nghiệm trước sản xuất</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -496,6 +606,21 @@ test(<span class="s">'user can update profile'</span>, <span class="k">async</sp
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -515,11 +640,29 @@ test(<span class="s">'user can update profile'</span>, <span class="k">async</sp
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

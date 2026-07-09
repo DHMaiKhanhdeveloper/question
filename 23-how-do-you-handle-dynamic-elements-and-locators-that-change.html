@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -225,6 +263,77 @@
         ngay từ đầu sprint để thêm test ID trước khi automation bắt đầu, giúp locator luôn
         <span class="keyword">bền vững</span> khi giao diện thay đổi.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">My first strategy is to push for stable attributes, like data-testid, that developers add specifically for automation and never change for styling reasons.</p>
+        <p class="sen-vi">Chiến lược đầu tiên của tôi là thúc đẩy dùng các thuộc tính ổn định, như data-testid, mà các lập trình viên thêm vào riêng cho mục đích automation và không bao giờ thay đổi vì lý do giao diện.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">stable attribute</span><button class="speak" data-text="stable attribute">🔊</button></td><td><span class="reading">(xtêi-bồ ợ-tri-biu-ợt)</span><span class="ipa">/ˈsteɪbl ˈætrɪbjuːt/</span></td><td class="pos">n phr.</td><td>thuộc tính ổn định</td></tr>
+            <tr><td><span class="term">data-testid</span><button class="speak" data-text="data test id">🔊</button></td><td><span class="reading">(đây-tơ test ai-đi)</span><span class="ipa">/ˈdeɪtə test aɪ diː/</span></td><td class="pos">n</td><td>thuộc tính HTML riêng để test</td></tr>
+            <tr><td><span class="term">developer</span><button class="speak" data-text="developer">🔊</button></td><td><span class="reading">(đi-vé-lợ-pơ)</span><span class="ipa">/dɪˈveləpər/</span></td><td class="pos">n</td><td>lập trình viên, nhà phát triển</td></tr>
+            <tr><td><span class="term">automation</span><button class="speak" data-text="automation">🔊</button></td><td><span class="reading">(o-tô-mây-sần)</span><span class="ipa">/ˌɔːtəˈmeɪʃn/</span></td><td class="pos">n</td><td>sự tự động hóa</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">When I don't have that, I prefer role-based locators, like getByRole with an accessible name, because they reflect what the user actually sees rather than the DOM structure.</p>
+        <p class="sen-vi">Khi không có sẵn thuộc tính đó, tôi ưu tiên các locator dựa trên role, như getByRole với tên có thể truy cập, vì chúng phản ánh những gì người dùng thực sự nhìn thấy thay vì cấu trúc DOM.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">role-based locator</span><button class="speak" data-text="role based locator">🔊</button></td><td><span class="reading">(rôl-bêist lâu-kêi-tơ)</span><span class="ipa">/rəʊl beɪst ləʊˈkeɪtər/</span></td><td class="pos">n phr.</td><td>locator dựa trên vai trò (role)</td></tr>
+            <tr><td><span class="term">accessible name</span><button class="speak" data-text="accessible name">🔊</button></td><td><span class="reading">(ắc-xe-xi-bồ nêim)</span><span class="ipa">/əkˈsesəbl neɪm/</span></td><td class="pos">n phr.</td><td>tên có thể truy cập (accessibility)</td></tr>
+            <tr><td><span class="term">reflect</span><button class="speak" data-text="reflect">🔊</button></td><td><span class="reading">(ri-phléct)</span><span class="ipa">/rɪˈflekt/</span></td><td class="pos">v</td><td>phản ánh</td></tr>
+            <tr><td><span class="term">DOM structure</span><button class="speak" data-text="DOM structure">🔊</button></td><td><span class="reading">(đôm xtrắc-chơ)</span><span class="ipa">/dɒm ˈstrʌktʃər/</span></td><td class="pos">n phr.</td><td>cấu trúc DOM</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I try to avoid brittle XPath or CSS selectors that depend on nesting, index position, or generated class names, since those break the moment a designer refactors a component.</p>
+        <p class="sen-vi">Tôi cố tránh các XPath hoặc CSS selector dễ vỡ phụ thuộc vào cấu trúc lồng nhau, vị trí chỉ số, hoặc tên class được sinh tự động, vì chúng sẽ hỏng ngay khi designer tái cấu trúc một component.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">brittle</span><button class="speak" data-text="brittle">🔊</button></td><td><span class="reading">(bri-tồ)</span><span class="ipa">/ˈbrɪtl/</span></td><td class="pos">adj</td><td>dễ vỡ, dễ hỏng</td></tr>
+            <tr><td><span class="term">XPath</span><button class="speak" data-text="X path">🔊</button></td><td><span class="reading">(éch-pát)</span><span class="ipa">/eks pɑːθ/</span></td><td class="pos">n</td><td>ngôn ngữ định vị theo đường dẫn XML</td></tr>
+            <tr><td><span class="term">CSS selector</span><button class="speak" data-text="C S S selector">🔊</button></td><td><span class="reading">(xi-ét-ét si-léc-tơ)</span><span class="ipa">/siː es es sɪˈlektər/</span></td><td class="pos">n phr.</td><td>bộ chọn CSS</td></tr>
+            <tr><td><span class="term">generated class name</span><button class="speak" data-text="generated class name">🔊</button></td><td><span class="reading">(gien-nợ-rêi-tợd clas nêim)</span><span class="ipa">/ˈdʒenəreɪtɪd klɑːs neɪm/</span></td><td class="pos">n phr.</td><td>tên class được sinh tự động</td></tr>
+            <tr><td><span class="term">refactor</span><button class="speak" data-text="refactor">🔊</button></td><td><span class="reading">(ri-phác-tơ)</span><span class="ipa">/riːˈfæktər/</span></td><td class="pos">v</td><td>tái cấu trúc</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">For elements that render asynchronously, I wait for the specific element or network response to settle instead of adding fixed sleeps, which keeps the test both stable and fast.</p>
+        <p class="sen-vi">Với các phần tử hiển thị bất đồng bộ, tôi chờ phần tử cụ thể hoặc phản hồi mạng ổn định thay vì thêm các lệnh sleep cố định, giúp test vừa ổn định vừa nhanh.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">asynchronously</span><button class="speak" data-text="asynchronously">🔊</button></td><td><span class="reading">(ây-xin-crơ-nợt-li)</span><span class="ipa">/eɪˈsɪŋkrənəsli/</span></td><td class="pos">adv</td><td>một cách bất đồng bộ</td></tr>
+            <tr><td><span class="term">wait for</span><button class="speak" data-text="wait for">🔊</button></td><td><span class="reading">(wêit fo)</span><span class="ipa">/weɪt fɔːr/</span></td><td class="pos">phr.v</td><td>chờ đợi</td></tr>
+            <tr><td><span class="term">network response</span><button class="speak" data-text="network response">🔊</button></td><td><span class="reading">(net-oơc rít-xpọns)</span><span class="ipa">/ˈnetwɜːk rɪˈspɒns/</span></td><td class="pos">n phr.</td><td>phản hồi mạng</td></tr>
+            <tr><td><span class="term">fixed sleep</span><button class="speak" data-text="fixed sleep">🔊</button></td><td><span class="reading">(phíc-xt xlip)</span><span class="ipa">/fɪkst sliːp/</span></td><td class="pos">n phr.</td><td>lệnh chờ cố định (hard-coded)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I also work closely with developers early in the sprint to get test IDs added before automation starts, so locators stay resilient as the UI evolves.</p>
+        <p class="sen-vi">Tôi cũng phối hợp chặt chẽ với các lập trình viên ngay từ đầu sprint để thêm test ID trước khi automation bắt đầu, giúp locator luôn bền vững khi giao diện thay đổi.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">work closely with</span><button class="speak" data-text="work closely with">🔊</button></td><td><span class="reading">(uơc clâu-xli uít)</span><span class="ipa">/wɜːk ˈkləʊsli wɪð/</span></td><td class="pos">phr.</td><td>phối hợp chặt chẽ với</td></tr>
+            <tr><td><span class="term">sprint</span><button class="speak" data-text="sprint">🔊</button></td><td><span class="reading">(xprint)</span><span class="ipa">/sprɪnt/</span></td><td class="pos">n</td><td>chu kỳ phát triển ngắn (sprint)</td></tr>
+            <tr><td><span class="term">test ID</span><button class="speak" data-text="test I D">🔊</button></td><td><span class="reading">(test ai-đi)</span><span class="ipa">/test aɪ diː/</span></td><td class="pos">n phr.</td><td>mã định danh dùng để test</td></tr>
+            <tr><td><span class="term">resilient</span><button class="speak" data-text="resilient">🔊</button></td><td><span class="reading">(ri-zi-li-ợnt)</span><span class="ipa">/rɪˈzɪliənt/</span></td><td class="pos">adj</td><td>bền vững, khó bị phá vỡ</td></tr>
+            <tr><td><span class="term">evolve</span><button class="speak" data-text="evolve">🔊</button></td><td><span class="reading">(i-vôlv)</span><span class="ipa">/ɪˈvɒlv/</span></td><td class="pos">v</td><td>phát triển, thay đổi dần</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -489,6 +598,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -508,11 +632,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

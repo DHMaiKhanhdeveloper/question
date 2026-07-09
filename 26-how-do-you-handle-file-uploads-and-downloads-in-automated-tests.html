@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -223,6 +261,77 @@
         Cách tiếp cận này giúp test upload và download <span class="keyword">nhanh</span> và
         <span class="keyword">đáng tin cậy</span>, không phụ thuộc vào hộp thoại chọn file của hệ điều hành.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">For file uploads, I use Playwright's setInputFiles method on the hidden file input element, passing an absolute path to a fixture file, which avoids dealing with the native operating system dialog completely.</p>
+        <p class="sen-vi">Đối với upload file, tôi dùng phương thức setInputFiles của Playwright trên phần tử file input bị ẩn, truyền vào đường dẫn tuyệt đối tới một file fixture, nhờ đó tránh hoàn toàn việc phải xử lý hộp thoại gốc của hệ điều hành.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">setInputFiles</span><button class="speak" data-text="set input files">🔊</button></td><td><span class="reading">(sét in-pút phaiơls)</span><span class="ipa">/set ˈɪnpʊt faɪlz/</span></td><td class="pos">method</td><td>phương thức gán file cho input</td></tr>
+            <tr><td><span class="term">file input element</span><button class="speak" data-text="file input element">🔊</button></td><td><span class="reading">(phaiơl in-pút e-lơ-mợnt)</span><span class="ipa">/faɪl ˈɪnpʊt ˈelɪmənt/</span></td><td class="pos">n phr.</td><td>phần tử input kiểu file</td></tr>
+            <tr><td><span class="term">absolute path</span><button class="speak" data-text="absolute path">🔊</button></td><td><span class="reading">(áp-sợ-lut path)</span><span class="ipa">/ˈæbsəluːt pɑːθ/</span></td><td class="pos">n phr.</td><td>đường dẫn tuyệt đối</td></tr>
+            <tr><td><span class="term">fixture file</span><button class="speak" data-text="fixture file">🔊</button></td><td><span class="reading">(phích-chơ phaiơl)</span><span class="ipa">/ˈfɪkstʃər faɪl/</span></td><td class="pos">n phr.</td><td>file mẫu dùng cho test</td></tr>
+            <tr><td><span class="term">native OS dialog</span><button class="speak" data-text="native OS dialog">🔊</button></td><td><span class="reading">(nây-tiv âu-ét đai-ợ-lóg)</span><span class="ipa">/ˈneɪtɪv oʊ es ˈdaɪəlɒɡ/</span></td><td class="pos">n phr.</td><td>hộp thoại gốc của hệ điều hành</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">For downloads, I listen for the download event using page.waitForEvent('download') before triggering the action that starts the download, then I call saveAs to store the file, usually in a temp directory created for that test run.</p>
+        <p class="sen-vi">Đối với download, tôi lắng nghe sự kiện download bằng page.waitForEvent('download') trước khi kích hoạt hành động bắt đầu tải file, sau đó gọi saveAs để lưu file, thường vào một thư mục tạm được tạo riêng cho lần chạy test đó.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">download event</span><button class="speak" data-text="download event">🔊</button></td><td><span class="reading">(đao-lâuđ i-vén)</span><span class="ipa">/ˈdaʊnloʊd ɪˈvent/</span></td><td class="pos">n phr.</td><td>sự kiện tải file xuống</td></tr>
+            <tr><td><span class="term">trigger</span><button class="speak" data-text="trigger">🔊</button></td><td><span class="reading">(tríc-gơ)</span><span class="ipa">/ˈtrɪɡər/</span></td><td class="pos">v</td><td>kích hoạt</td></tr>
+            <tr><td><span class="term">saveAs</span><button class="speak" data-text="save as">🔊</button></td><td><span class="reading">(xêiv-ét)</span><span class="ipa">/seɪv æz/</span></td><td class="pos">method</td><td>phương thức lưu file đã tải</td></tr>
+            <tr><td><span class="term">temp directory</span><button class="speak" data-text="temp directory">🔊</button></td><td><span class="reading">(tem đai-réc-tơ-ri)</span><span class="ipa">/temp dəˈrektəri/</span></td><td class="pos">n phr.</td><td>thư mục tạm</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">After that, I verify the downloaded file by checking its suggestedFilename, its size, and sometimes reading its content to confirm it matches the expected data.</p>
+        <p class="sen-vi">Sau đó, tôi xác minh file đã tải xuống bằng cách kiểm tra suggestedFilename, kích thước file, và đôi khi đọc nội dung file để xác nhận nó khớp với dữ liệu mong đợi.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">verify the downloaded file</span><button class="speak" data-text="verify the downloaded file">🔊</button></td><td><span class="reading">(ve-ri-phai thợ đao-lâu-đợd phaiơl)</span><span class="ipa">/ˈverɪfaɪ ðə ˈdaʊnloʊdɪd faɪl/</span></td><td class="pos">v phr.</td><td>xác minh file đã tải xuống</td></tr>
+            <tr><td><span class="term">suggestedFilename</span><button class="speak" data-text="suggested filename">🔊</button></td><td><span class="reading">(sợ-ghé-stịđ phaiơl-nêm)</span><span class="ipa">/səˈdʒestɪd ˈfaɪlneɪm/</span></td><td class="pos">property</td><td>tên file được đề xuất</td></tr>
+            <tr><td><span class="term">file size</span><button class="speak" data-text="file size">🔊</button></td><td><span class="reading">(phaiơl saiz)</span><span class="ipa">/faɪl saɪz/</span></td><td class="pos">n phr.</td><td>kích thước file</td></tr>
+            <tr><td><span class="term">reading its content</span><button class="speak" data-text="reading its content">🔊</button></td><td><span class="reading">(ri-đing its cón-tent)</span><span class="ipa">/ˈriːdɪŋ ɪts ˈkɒntent/</span></td><td class="pos">v phr.</td><td>đọc nội dung file</td></tr>
+            <tr><td><span class="term">expected data</span><button class="speak" data-text="expected data">🔊</button></td><td><span class="reading">(ịk-spéc-tịđ đây-tơ)</span><span class="ipa">/ɪkˈspektɪd ˈdeɪtə/</span></td><td class="pos">n phr.</td><td>dữ liệu mong đợi</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I always clean up temp directories after the test to avoid leftover files.</p>
+        <p class="sen-vi">Tôi luôn dọn dẹp các thư mục tạm sau khi test xong để tránh còn sót lại file thừa.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">clean up</span><button class="speak" data-text="clean up">🔊</button></td><td><span class="reading">(cli-nợp)</span><span class="ipa">/kliːn ʌp/</span></td><td class="pos">phr. v</td><td>dọn dẹp</td></tr>
+            <tr><td><span class="term">avoid</span><button class="speak" data-text="avoid">🔊</button></td><td><span class="reading">(ợ-vọid)</span><span class="ipa">/əˈvɔɪd/</span></td><td class="pos">v</td><td>tránh</td></tr>
+            <tr><td><span class="term">leftover files</span><button class="speak" data-text="leftover files">🔊</button></td><td><span class="reading">(léf-tô-vơ phaiơls)</span><span class="ipa">/ˈleftoʊvər faɪlz/</span></td><td class="pos">n phr.</td><td>file còn sót lại</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">This approach keeps upload and download tests fast, reliable, and independent of the OS file picker.</p>
+        <p class="sen-vi">Cách tiếp cận này giúp test upload và download nhanh, đáng tin cậy, và không phụ thuộc vào hộp thoại chọn file của hệ điều hành.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">approach</span><button class="speak" data-text="approach">🔊</button></td><td><span class="reading">(ợ-prâuch)</span><span class="ipa">/əˈproʊtʃ/</span></td><td class="pos">n</td><td>cách tiếp cận</td></tr>
+            <tr><td><span class="term">fast</span><button class="speak" data-text="fast">🔊</button></td><td><span class="reading">(phast)</span><span class="ipa">/fɑːst/</span></td><td class="pos">adj</td><td>nhanh</td></tr>
+            <tr><td><span class="term">reliable</span><button class="speak" data-text="reliable">🔊</button></td><td><span class="reading">(ri-lai-ợ-bồ)</span><span class="ipa">/rɪˈlaɪəbl/</span></td><td class="pos">adj</td><td>đáng tin cậy</td></tr>
+            <tr><td><span class="term">independent of</span><button class="speak" data-text="independent of">🔊</button></td><td><span class="reading">(in-đi-pén-đợnt ọv)</span><span class="ipa">/ˌɪndɪˈpendənt ɒv/</span></td><td class="pos">adj phr.</td><td>không phụ thuộc vào</td></tr>
+            <tr><td><span class="term">file picker</span><button class="speak" data-text="file picker">🔊</button></td><td><span class="reading">(phaiơl pích-cơ)</span><span class="ipa">/faɪl ˈpɪkər/</span></td><td class="pos">n phr.</td><td>hộp thoại chọn file</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -492,6 +601,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -511,11 +635,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

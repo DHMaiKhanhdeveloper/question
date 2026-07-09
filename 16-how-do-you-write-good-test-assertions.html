@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -221,6 +259,74 @@
         cùng một test mà không dừng lại ngay khi gặp lỗi đầu tiên, giúp có cái nhìn đầy đủ hơn về những gì
         thực sự sai.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">When I write assertions, I try to make them specific and meaningful rather than overly broad checks like just verifying the page didn't crash.</p>
+        <p class="sen-vi">Khi viết assertion, tôi cố gắng làm cho chúng cụ thể và có ý nghĩa thay vì những kiểm tra quá chung chung như chỉ xác nhận trang không bị crash.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">specific</span><button class="speak" data-text="specific">🔊</button></td><td><span class="reading">(spờ-xí-phịc)</span><span class="ipa">/spəˈsɪfɪk/</span></td><td class="pos">adj</td><td>cụ thể</td></tr>
+            <tr><td><span class="term">meaningful</span><button class="speak" data-text="meaningful">🔊</button></td><td><span class="reading">(mi-ninh-phồ)</span><span class="ipa">/ˈmiːnɪŋfl/</span></td><td class="pos">adj</td><td>có ý nghĩa</td></tr>
+            <tr><td><span class="term">overly broad check</span><button class="speak" data-text="overly broad check">🔊</button></td><td><span class="reading">(âu-vờ-li brốt chéc)</span><span class="ipa">/ˈəʊvəli brɔːd tʃek/</span></td><td class="pos">n phr.</td><td>kiểm tra quá chung chung</td></tr>
+            <tr><td><span class="term">crash</span><button class="speak" data-text="crash">🔊</button></td><td><span class="reading">(cờ-ráx)</span><span class="ipa">/kræʃ/</span></td><td class="pos">v</td><td>bị sập, bị lỗi nghiêm trọng</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I use expect with the proper matcher for the situation, such as toHaveText for exact content or toBeVisible for element state, instead of a generic truthy check.</p>
+        <p class="sen-vi">Tôi dùng expect với matcher phù hợp cho từng tình huống, ví dụ toHaveText cho nội dung chính xác hoặc toBeVisible cho trạng thái hiển thị của element, thay vì một kiểm tra truthy chung chung.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">proper matcher</span><button class="speak" data-text="proper matcher">🔊</button></td><td><span class="reading">(prá-pờ mét-chờ)</span><span class="ipa">/ˈprɒpər ˈmætʃər/</span></td><td class="pos">n phr.</td><td>matcher phù hợp</td></tr>
+            <tr><td><span class="term">toHaveText</span><button class="speak" data-text="to have text">🔊</button></td><td><span class="reading">(tu hét tếch-xtơ)</span><span class="ipa">/tuː hæv tekst/</span></td><td class="pos">API</td><td>matcher kiểm tra nội dung text</td></tr>
+            <tr><td><span class="term">toBeVisible</span><button class="speak" data-text="to be visible">🔊</button></td><td><span class="reading">(tu bi vi-zi-bồ)</span><span class="ipa">/tuː biː ˈvɪzəbl/</span></td><td class="pos">API</td><td>matcher kiểm tra hiển thị</td></tr>
+            <tr><td><span class="term">generic truthy check</span><button class="speak" data-text="generic truthy check">🔊</button></td><td><span class="reading">(chê-nê-rịc trú-thi chéc)</span><span class="ipa">/dʒəˈnerɪk ˈtruːθi tʃek/</span></td><td class="pos">n phr.</td><td>kiểm tra đúng/sai chung chung</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I also keep each test focused on one logical assertion or one behavior, so when it fails, I immediately know what broke instead of digging through unrelated checks.</p>
+        <p class="sen-vi">Tôi cũng giữ mỗi test chỉ tập trung vào một assertion logic hoặc một hành vi, nhờ vậy khi test fail, tôi biết ngay chỗ nào bị lỗi thay vì phải lục lại các kiểm tra không liên quan.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">one logical assertion</span><button class="speak" data-text="one logical assertion">🔊</button></td><td><span class="reading">(oăn lo-chi-cồ ợ-sơ-sần)</span><span class="ipa">/wʌn ˈlɒdʒɪkl əˈsɜːʃn/</span></td><td class="pos">n phr.</td><td>một khẳng định logic</td></tr>
+            <tr><td><span class="term">behavior</span><button class="speak" data-text="behavior">🔊</button></td><td><span class="reading">(bi-hê-vi-ơ)</span><span class="ipa">/bɪˈheɪvjər/</span></td><td class="pos">n</td><td>hành vi</td></tr>
+            <tr><td><span class="term">broke</span><button class="speak" data-text="broke">🔊</button></td><td><span class="reading">(brâuk)</span><span class="ipa">/brəʊk/</span></td><td class="pos">v</td><td>bị hỏng, bị gãy (quá khứ của break)</td></tr>
+            <tr><td><span class="term">unrelated check</span><button class="speak" data-text="unrelated check">🔊</button></td><td><span class="reading">(ần-ri-lây-tịd chéc)</span><span class="ipa">/ˌʌnrɪˈleɪtɪd tʃek/</span></td><td class="pos">n phr.</td><td>kiểm tra không liên quan</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Good assertions also produce clear failure messages, so I add custom messages or use matchers that already describe the expected versus actual value.</p>
+        <p class="sen-vi">Assertion tốt cũng cho ra thông báo lỗi rõ ràng, nên tôi thêm custom message hoặc dùng các matcher đã tự mô tả giá trị mong đợi so với thực tế.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">clear failure message</span><button class="speak" data-text="clear failure message">🔊</button></td><td><span class="reading">(cli-ơ phêi-lia mé-sịch)</span><span class="ipa">/klɪər ˈfeɪljər ˈmesɪdʒ/</span></td><td class="pos">n phr.</td><td>thông báo lỗi rõ ràng</td></tr>
+            <tr><td><span class="term">custom message</span><button class="speak" data-text="custom message">🔊</button></td><td><span class="reading">(cớt-tơm mé-sịch)</span><span class="ipa">/ˈkʌstəm ˈmesɪdʒ/</span></td><td class="pos">n phr.</td><td>thông báo tùy chỉnh</td></tr>
+            <tr><td><span class="term">expected versus actual value</span><button class="speak" data-text="expected versus actual value">🔊</button></td><td><span class="reading">(ích-péc-tịd vơ-sợs ắc-chuồ vẹ-liu)</span><span class="ipa">/ɪkˈspektɪd ˈvɜːsəs ˈæktʃuəl ˈvæljuː/</span></td><td class="pos">n phr.</td><td>giá trị mong đợi so với thực tế</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Finally, I use soft assertions when I need to validate multiple independent things in one test without stopping at the first failure, which gives a fuller picture of what actually went wrong.</p>
+        <p class="sen-vi">Cuối cùng, tôi dùng soft assertion khi cần kiểm tra nhiều điều độc lập trong cùng một test mà không dừng lại ngay khi gặp lỗi đầu tiên, giúp có cái nhìn đầy đủ hơn về những gì thực sự sai.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">soft assertion</span><button class="speak" data-text="soft assertion">🔊</button></td><td><span class="reading">(soft ợ-sơ-sần)</span><span class="ipa">/sɒft əˈsɜːʃn/</span></td><td class="pos">n phr.</td><td>khẳng định mềm (không dừng test khi fail)</td></tr>
+            <tr><td><span class="term">independent things</span><button class="speak" data-text="independent things">🔊</button></td><td><span class="reading">(in-đi-pen-đợnt thinh-x)</span><span class="ipa">/ˌɪndɪˈpendənt θɪŋz/</span></td><td class="pos">n phr.</td><td>những điều độc lập</td></tr>
+            <tr><td><span class="term">stop at the first failure</span><button class="speak" data-text="stop at the first failure">🔊</button></td><td><span class="reading">(stọp ợt thờ phơst phêi-liơ)</span><span class="ipa">/stɒp ət ðə fɜːst ˈfeɪljər/</span></td><td class="pos">v phr.</td><td>dừng lại ngay khi gặp lỗi đầu tiên</td></tr>
+            <tr><td><span class="term">fuller picture</span><button class="speak" data-text="fuller picture">🔊</button></td><td><span class="reading">(phu-lơ pịc-chờ)</span><span class="ipa">/ˈfʊlər ˈpɪktʃər/</span></td><td class="pos">n phr.</td><td>cái nhìn đầy đủ hơn</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -485,6 +591,21 @@ expect(text).<span class="f">toBeTruthy</span>(); <span class="c">// pass ngay c
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -504,11 +625,29 @@ expect(text).<span class="f">toBeTruthy</span>(); <span class="c">// pass ngay c
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

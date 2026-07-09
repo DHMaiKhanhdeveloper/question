@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -228,6 +266,101 @@
         trong khi vẫn đảm bảo <span class="keyword">độ tin cậy</span> rằng hệ thống hoạt động đúng từ đầu
         đến cuối.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">The test pyramid is a model that describes how many tests you should have at each layer of your test suite.</p>
+        <p class="sen-vi">Test pyramid là một mô hình mô tả bạn nên có bao nhiêu test ở mỗi lớp trong bộ test của mình.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">test pyramid</span><button class="speak" data-text="test pyramid">🔊</button></td><td><span class="reading">(test pi-rợ-mid)</span><span class="ipa">/test ˈpɪrəmɪd/</span></td><td class="pos">n phr.</td><td>kim tự tháp kiểm thử</td></tr>
+            <tr><td><span class="term">model</span><button class="speak" data-text="model">🔊</button></td><td><span class="reading">(mo-đồl)</span><span class="ipa">/ˈmɒdl/</span></td><td class="pos">n</td><td>mô hình</td></tr>
+            <tr><td><span class="term">layer</span><button class="speak" data-text="layer">🔊</button></td><td><span class="reading">(lây-ơ)</span><span class="ipa">/ˈleɪər/</span></td><td class="pos">n</td><td>lớp, tầng</td></tr>
+            <tr><td><span class="term">test suite</span><button class="speak" data-text="test suite">🔊</button></td><td><span class="reading">(test suýt)</span><span class="ipa">/test swiːt/</span></td><td class="pos">n phr.</td><td>bộ (tập hợp) các test</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">At the bottom, you have unit tests, which are the fastest, cheapest, and most numerous, because they check a single function or class in isolation without any external dependencies.</p>
+        <p class="sen-vi">Ở dưới cùng là các unit test, nhanh nhất, rẻ nhất và nhiều số lượng nhất, vì chúng kiểm tra một hàm hoặc một class duy nhất một cách độc lập, không phụ thuộc vào bất kỳ thành phần bên ngoài nào.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">unit test</span><button class="speak" data-text="unit test">🔊</button></td><td><span class="reading">(diu-nịt test)</span><span class="ipa">/ˈjuːnɪt test/</span></td><td class="pos">n phr.</td><td>kiểm thử đơn vị</td></tr>
+            <tr><td><span class="term">numerous</span><button class="speak" data-text="numerous">🔊</button></td><td><span class="reading">(niu-mợ-rợs)</span><span class="ipa">/ˈnjuːmərəs/</span></td><td class="pos">adj</td><td>nhiều, đông đảo</td></tr>
+            <tr><td><span class="term">isolation</span><button class="speak" data-text="isolation">🔊</button></td><td><span class="reading">(ai-sợ-lây-sần)</span><span class="ipa">/ˌaɪsəˈleɪʃn/</span></td><td class="pos">n</td><td>sự cô lập, độc lập</td></tr>
+            <tr><td><span class="term">external dependencies</span><button class="speak" data-text="external dependencies">🔊</button></td><td><span class="reading">(ếch-xtơ-nồl đi-pen-đần-sịs)</span><span class="ipa">/ɪkˈstɜːnl dɪˈpendənsiz/</span></td><td class="pos">n phr.</td><td>các phụ thuộc bên ngoài</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">In the middle, you have integration tests, which verify that multiple components, like a service and a database, work correctly together.</p>
+        <p class="sen-vi">Ở giữa là các integration test, dùng để kiểm chứng rằng nhiều thành phần, ví dụ một service và một database, hoạt động đúng khi kết hợp với nhau.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">integration test</span><button class="speak" data-text="integration test">🔊</button></td><td><span class="reading">(in-tơ-grây-sần test)</span><span class="ipa">/ˌɪntɪˈɡreɪʃn test/</span></td><td class="pos">n phr.</td><td>kiểm thử tích hợp</td></tr>
+            <tr><td><span class="term">verify</span><button class="speak" data-text="verify">🔊</button></td><td><span class="reading">(ve-ri-phai)</span><span class="ipa">/ˈverɪfaɪ/</span></td><td class="pos">v</td><td>kiểm chứng, xác minh</td></tr>
+            <tr><td><span class="term">component</span><button class="speak" data-text="component">🔊</button></td><td><span class="reading">(cợm-pô-nợnt)</span><span class="ipa">/kəmˈpəʊnənt/</span></td><td class="pos">n</td><td>thành phần</td></tr>
+            <tr><td><span class="term">database</span><button class="speak" data-text="database">🔊</button></td><td><span class="reading">(đây-tơ-bây-sờ)</span><span class="ipa">/ˈdeɪtəbeɪs/</span></td><td class="pos">n</td><td>cơ sở dữ liệu</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">At the top, you have a small number of end-to-end, or UI, tests, which simulate real user flows through the whole application.</p>
+        <p class="sen-vi">Trên đỉnh là một số lượng nhỏ các test end-to-end, hay còn gọi là UI test, mô phỏng luồng thao tác thực tế của người dùng xuyên suốt toàn bộ ứng dụng.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">end-to-end</span><button class="speak" data-text="end to end">🔊</button></td><td><span class="reading">(en tu en)</span><span class="ipa">/ˌend tuː ˈend/</span></td><td class="pos">adj phr.</td><td>từ đầu đến cuối (e2e)</td></tr>
+            <tr><td><span class="term">UI test</span><button class="speak" data-text="UI test">🔊</button></td><td><span class="reading">(diu-ai test)</span><span class="ipa">/ˌjuː ˈaɪ test/</span></td><td class="pos">n phr.</td><td>kiểm thử giao diện người dùng</td></tr>
+            <tr><td><span class="term">simulate</span><button class="speak" data-text="simulate">🔊</button></td><td><span class="reading">(xim-diu-lêt)</span><span class="ipa">/ˈsɪmjuleɪt/</span></td><td class="pos">v</td><td>mô phỏng</td></tr>
+            <tr><td><span class="term">user flow</span><button class="speak" data-text="user flow">🔊</button></td><td><span class="reading">(diu-dơ flâu)</span><span class="ipa">/ˈjuːzər fləʊ/</span></td><td class="pos">n phr.</td><td>luồng thao tác người dùng</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">The pyramid shape matters because e2e tests are slow, flaky, and expensive to maintain, while unit tests run in milliseconds and pinpoint failures precisely.</p>
+        <p class="sen-vi">Hình dạng kim tự tháp này quan trọng vì các test e2e chạy chậm, dễ bị flaky, và tốn kém để bảo trì, trong khi unit test chạy trong vài mili-giây và chỉ ra chính xác vị trí lỗi.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">shape</span><button class="speak" data-text="shape">🔊</button></td><td><span class="reading">(sếp)</span><span class="ipa">/ʃeɪp/</span></td><td class="pos">n</td><td>hình dạng</td></tr>
+            <tr><td><span class="term">flaky</span><button class="speak" data-text="flaky">🔊</button></td><td><span class="reading">(fley-ki)</span><span class="ipa">/ˈfleɪki/</span></td><td class="pos">adj</td><td>không ổn định, lúc pass lúc fail</td></tr>
+            <tr><td><span class="term">maintain</span><button class="speak" data-text="maintain">🔊</button></td><td><span class="reading">(mên-tên)</span><span class="ipa">/meɪnˈteɪn/</span></td><td class="pos">v</td><td>bảo trì, duy trì</td></tr>
+            <tr><td><span class="term">milliseconds</span><button class="speak" data-text="milliseconds">🔊</button></td><td><span class="reading">(mi-li-xê-cợn-đì)</span><span class="ipa">/ˈmɪlisekəndz/</span></td><td class="pos">n</td><td>phần nghìn giây</td></tr>
+            <tr><td><span class="term">pinpoint</span><button class="speak" data-text="pinpoint">🔊</button></td><td><span class="reading">(pin-poin)</span><span class="ipa">/ˈpɪnpɔɪnt/</span></td><td class="pos">v</td><td>chỉ ra chính xác</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">So I aim for a large base of unit tests, a moderate layer of integration tests, and just enough e2e tests to cover the critical user journeys.</p>
+        <p class="sen-vi">Vì vậy tôi luôn hướng tới một nền tảng lớn gồm unit test, một lớp vừa phải gồm integration test, và chỉ vừa đủ e2e test để bao phủ các luồng người dùng quan trọng nhất.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">aim for</span><button class="speak" data-text="aim for">🔊</button></td><td><span class="reading">(êm phò)</span><span class="ipa">/eɪm fɔːr/</span></td><td class="pos">phr.v</td><td>hướng tới, nhắm tới</td></tr>
+            <tr><td><span class="term">base</span><button class="speak" data-text="base">🔊</button></td><td><span class="reading">(bây-sờ)</span><span class="ipa">/beɪs/</span></td><td class="pos">n</td><td>nền tảng, phần đáy</td></tr>
+            <tr><td><span class="term">moderate</span><button class="speak" data-text="moderate">🔊</button></td><td><span class="reading">(mo-đợ-rợt)</span><span class="ipa">/ˈmɒdərət/</span></td><td class="pos">adj</td><td>vừa phải</td></tr>
+            <tr><td><span class="term">critical user journey</span><button class="speak" data-text="critical user journey">🔊</button></td><td><span class="reading">(cri-ti-cồl diu-dơ jơ-ni)</span><span class="ipa">/ˈkrɪtɪkl ˈjuːzər ˈdʒɜːni/</span></td><td class="pos">n phr.</td><td>hành trình quan trọng của người dùng</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">This keeps the whole suite fast, reliable, and cheap to maintain while still giving confidence that the system works end to end.</p>
+        <p class="sen-vi">Điều này giúp toàn bộ bộ test chạy nhanh, đáng tin cậy, và rẻ để bảo trì, trong khi vẫn đảm bảo độ tin cậy rằng hệ thống hoạt động đúng từ đầu đến cuối.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">reliable</span><button class="speak" data-text="reliable">🔊</button></td><td><span class="reading">(ri-lai-ợ-bồl)</span><span class="ipa">/rɪˈlaɪəbl/</span></td><td class="pos">adj</td><td>đáng tin cậy</td></tr>
+            <tr><td><span class="term">cheap</span><button class="speak" data-text="cheap">🔊</button></td><td><span class="reading">(chíp)</span><span class="ipa">/tʃiːp/</span></td><td class="pos">adj</td><td>rẻ, tốn ít chi phí</td></tr>
+            <tr><td><span class="term">confidence</span><button class="speak" data-text="confidence">🔊</button></td><td><span class="reading">(con-fi-đần)</span><span class="ipa">/ˈkɒnfɪdəns/</span></td><td class="pos">n</td><td>sự tự tin, độ tin cậy</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -487,6 +620,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -506,11 +654,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

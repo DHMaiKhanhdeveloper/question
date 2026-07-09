@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -223,6 +261,77 @@
         đọc một feature file và hiểu ngay hành vi mong đợi, giúp giảm
         <span class="keyword">hiểu lầm</span> giữa người kỹ thuật và người không chuyên kỹ thuật.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">Behavior-Driven Development, or BDD, is an approach where you describe application behavior in plain, structured language using the Given, When, Then format, so QA, developers, and business stakeholders share a shared understanding of what a feature should do before any code is written.</p>
+        <p class="sen-vi">Behavior-Driven Development, hay BDD, là một cách tiếp cận trong đó bạn mô tả hành vi (behavior) của ứng dụng bằng ngôn ngữ đơn giản, có cấu trúc theo định dạng Given, When, Then, nhờ vậy QA, developer và các bên liên quan về nghiệp vụ có được sự hiểu biết chung về việc tính năng đó nên hoạt động như thế nào trước khi viết bất kỳ dòng code nào.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">approach</span><button class="speak" data-text="approach">🔊</button></td><td><span class="reading">(ợ-prâuch)</span><span class="ipa">/əˈprəʊtʃ/</span></td><td class="pos">n</td><td>cách tiếp cận</td></tr>
+            <tr><td><span class="term">behavior</span><button class="speak" data-text="behavior">🔊</button></td><td><span class="reading">(bi-hê-vi-ơ)</span><span class="ipa">/bɪˈheɪvjər/</span></td><td class="pos">n</td><td>hành vi</td></tr>
+            <tr><td><span class="term">Given, When, Then</span><button class="speak" data-text="Given When Then">🔊</button></td><td><span class="reading">(ghi-vần, wen, đen)</span><span class="ipa">/ˈɡɪvn wen ðen/</span></td><td class="pos">n phr.</td><td>cấu trúc điều kiện – hành động – kết quả</td></tr>
+            <tr><td><span class="term">stakeholder</span><button class="speak" data-text="stakeholder">🔊</button></td><td><span class="reading">(stêik-hâu-đơ)</span><span class="ipa">/ˈsteɪkhəʊldər/</span></td><td class="pos">n</td><td>bên liên quan</td></tr>
+            <tr><td><span class="term">shared understanding</span><button class="speak" data-text="shared understanding">🔊</button></td><td><span class="reading">(sheđ ăn-đơ-x-ten-đing)</span><span class="ipa">/ʃeəd ˌʌndəˈstændɪŋ/</span></td><td class="pos">n phr.</td><td>sự hiểu biết chung</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">These scenarios become an executable specification, meaning the same document that describes the requirement can actually be run as an automated test.</p>
+        <p class="sen-vi">Những kịch bản này trở thành một đặc tả có thể thực thi, nghĩa là chính tài liệu mô tả yêu cầu cũng có thể được chạy như một bài test tự động.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">scenario</span><button class="speak" data-text="scenario">🔊</button></td><td><span class="reading">(si-na-ri-âu)</span><span class="ipa">/sɪˈnɑːriəʊ/</span></td><td class="pos">n</td><td>kịch bản, tình huống cụ thể</td></tr>
+            <tr><td><span class="term">executable specification</span><button class="speak" data-text="executable specification">🔊</button></td><td><span class="reading">(ec-si-kiu-tơ-bồ spe-si-fi-kây-sần)</span><span class="ipa">/ˈeksɪkjuːtəbl ˌspesɪfɪˈkeɪʃn/</span></td><td class="pos">n phr.</td><td>đặc tả có thể thực thi</td></tr>
+            <tr><td><span class="term">requirement</span><button class="speak" data-text="requirement">🔊</button></td><td><span class="reading">(ri-quai-ợ-mợnt)</span><span class="ipa">/rɪˈkwaɪərmənt/</span></td><td class="pos">n</td><td>yêu cầu</td></tr>
+            <tr><td><span class="term">automated test</span><button class="speak" data-text="automated test">🔊</button></td><td><span class="reading">(o-tơ-mây-tịd test)</span><span class="ipa">/ˈɔːtəmeɪtɪd test/</span></td><td class="pos">n phr.</td><td>bài test tự động</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Yes, I have used Cucumber with Gherkin syntax.</p>
+        <p class="sen-vi">Đúng vậy, tôi đã dùng Cucumber với cú pháp Gherkin.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">Cucumber</span><button class="speak" data-text="Cucumber">🔊</button></td><td><span class="reading">(kiu-căm-bơ)</span><span class="ipa">/ˈkjuːkʌmbər/</span></td><td class="pos">n</td><td>công cụ chạy BDD dựa trên Gherkin</td></tr>
+            <tr><td><span class="term">Gherkin</span><button class="speak" data-text="Gherkin">🔊</button></td><td><span class="reading">(gơ-kin)</span><span class="ipa">/ˈɡɜːkɪn/</span></td><td class="pos">n</td><td>ngôn ngữ viết kịch bản BDD</td></tr>
+            <tr><td><span class="term">syntax</span><button class="speak" data-text="syntax">🔊</button></td><td><span class="reading">(xin-tấx)</span><span class="ipa">/ˈsɪntæks/</span></td><td class="pos">n</td><td>cú pháp</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I write feature files with scenarios in Gherkin, and then implement step definitions in code that map each Given, When, and Then line to real automation logic, like navigating pages or clicking elements.</p>
+        <p class="sen-vi">Tôi viết các feature file với các scenario bằng Gherkin, sau đó cài đặt các step definition trong code để ánh xạ từng dòng Given, When, Then thành logic tự động hóa thật sự, ví dụ như điều hướng trang hoặc click vào phần tử.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">feature file</span><button class="speak" data-text="feature file">🔊</button></td><td><span class="reading">(fi-chơ fai-ồ)</span><span class="ipa">/ˈfiːtʃər faɪl/</span></td><td class="pos">n phr.</td><td>tệp mô tả tính năng bằng Gherkin</td></tr>
+            <tr><td><span class="term">step definition</span><button class="speak" data-text="step definition">🔊</button></td><td><span class="reading">(step đe-fi-ni-sần)</span><span class="ipa">/step ˌdefɪˈnɪʃn/</span></td><td class="pos">n phr.</td><td>đoạn code ánh xạ bước Gherkin sang thao tác thật</td></tr>
+            <tr><td><span class="term">map</span><button class="speak" data-text="map">🔊</button></td><td><span class="reading">(mép)</span><span class="ipa">/mæp/</span></td><td class="pos">v</td><td>ánh xạ</td></tr>
+            <tr><td><span class="term">automation logic</span><button class="speak" data-text="automation logic">🔊</button></td><td><span class="reading">(o-tơ-mây-sần lo-jịc)</span><span class="ipa">/ˌɔːtəˈmeɪʃn ˈlɒdʒɪk/</span></td><td class="pos">n phr.</td><td>logic tự động hóa</td></tr>
+            <tr><td><span class="term">navigate</span><button class="speak" data-text="navigate">🔊</button></td><td><span class="reading">(ne-vi-ghêt)</span><span class="ipa">/ˈnævɪɡeɪt/</span></td><td class="pos">v</td><td>điều hướng (trang)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">The biggest advantage is collaboration and living documentation: anyone on the team can read a feature file and immediately understand the expected behavior, which reduces miscommunication between technical and non-technical people.</p>
+        <p class="sen-vi">Lợi ích lớn nhất là sự cộng tác và tài liệu sống (living documentation): bất kỳ ai trong nhóm cũng có thể đọc một feature file và hiểu ngay hành vi mong đợi, giúp giảm hiểu lầm giữa người kỹ thuật và người không chuyên kỹ thuật.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">collaboration</span><button class="speak" data-text="collaboration">🔊</button></td><td><span class="reading">(cợ-la-bơ-rây-sần)</span><span class="ipa">/kəˌlæbəˈreɪʃn/</span></td><td class="pos">n</td><td>sự cộng tác</td></tr>
+            <tr><td><span class="term">living documentation</span><button class="speak" data-text="living documentation">🔊</button></td><td><span class="reading">(li-vinh đóc-kiu-mần-tây-sần)</span><span class="ipa">/ˈlɪvɪŋ ˌdɒkjumenˈteɪʃn/</span></td><td class="pos">n phr.</td><td>tài liệu sống, luôn cập nhật theo test</td></tr>
+            <tr><td><span class="term">expected behavior</span><button class="speak" data-text="expected behavior">🔊</button></td><td><span class="reading">(ịk-xpéc-tịd bi-hê-vi-ơ)</span><span class="ipa">/ɪkˈspektɪd bɪˈheɪvjər/</span></td><td class="pos">n phr.</td><td>hành vi mong đợi</td></tr>
+            <tr><td><span class="term">reduce</span><button class="speak" data-text="reduce">🔊</button></td><td><span class="reading">(ri-đius)</span><span class="ipa">/rɪˈdjuːs/</span></td><td class="pos">v</td><td>giảm</td></tr>
+            <tr><td><span class="term">miscommunication</span><button class="speak" data-text="miscommunication">🔊</button></td><td><span class="reading">(mis-cợ-miu-ni-kây-sần)</span><span class="ipa">/ˌmɪskəˌmjuːnɪˈkeɪʃn/</span></td><td class="pos">n</td><td>sự hiểu lầm, giao tiếp sai</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -488,6 +597,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -507,11 +631,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -225,6 +263,67 @@
         hợp các <span class="keyword">cloud grid</span> như <span class="keyword">BrowserStack</span> hoặc
         <span class="keyword">Sauce Labs</span> vào <span class="keyword">CI pipeline</span>.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">Cross-browser testing is the practice of verifying that a web application behaves and renders correctly across different browsers, browser engines, and devices, since each engine can handle CSS, JavaScript, and layout slightly differently.</p>
+        <p class="sen-vi">Cross-browser testing là quá trình kiểm tra xem một ứng dụng web có hoạt động và hiển thị đúng trên các trình duyệt, các engine trình duyệt và các thiết bị khác nhau hay không, vì mỗi engine có thể xử lý CSS, JavaScript và bố cục theo cách hơi khác nhau.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">cross-browser testing</span><button class="speak" data-text="cross browser testing">🔊</button></td><td><span class="reading">(crốt brao-dơ tét-tinh)</span><span class="ipa">/krɒs ˈbraʊzər ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử đa trình duyệt</td></tr>
+            <tr><td><span class="term">web application</span><button class="speak" data-text="web application">🔊</button></td><td><span class="reading">(oeb ap-li-kê-sần)</span><span class="ipa">/web ˌæplɪˈkeɪʃn/</span></td><td class="pos">n phr.</td><td>ứng dụng web</td></tr>
+            <tr><td><span class="term">browser engine</span><button class="speak" data-text="browser engine">🔊</button></td><td><span class="reading">(brao-dơ en-jin)</span><span class="ipa">/ˈbraʊzər ˈendʒɪn/</span></td><td class="pos">n phr.</td><td>engine (lõi xử lý) trình duyệt</td></tr>
+            <tr><td><span class="term">layout</span><button class="speak" data-text="layout">🔊</button></td><td><span class="reading">(lây-aot)</span><span class="ipa">/ˈleɪaʊt/</span></td><td class="pos">n</td><td>bố cục giao diện</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">In my automation work, I rely on Playwright because it ships with three rendering engines out of the box: Chromium for Chrome and Edge, Firefox's Gecko engine, and WebKit, which mirrors Safari.</p>
+        <p class="sen-vi">Trong công việc tự động hóa, tôi dùng Playwright vì nó tích hợp sẵn ba engine kết xuất: Chromium cho Chrome và Edge, engine Gecko của Firefox, và WebKit, tương ứng với Safari.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">rely on</span><button class="speak" data-text="rely on">🔊</button></td><td><span class="reading">(ri-lai on)</span><span class="ipa">/rɪˈlaɪ ɒn/</span></td><td class="pos">phr.v</td><td>tin dùng, dựa vào</td></tr>
+            <tr><td><span class="term">rendering engine</span><button class="speak" data-text="rendering engine">🔊</button></td><td><span class="reading">(ren-đơ-rinh en-jin)</span><span class="ipa">/ˈrendərɪŋ ˈendʒɪn/</span></td><td class="pos">n phr.</td><td>engine kết xuất (dựng giao diện)</td></tr>
+            <tr><td><span class="term">Chromium</span><button class="speak" data-text="Chromium">🔊</button></td><td><span class="reading">(crâu-mi-ợm)</span><span class="ipa">/ˈkrəʊmiəm/</span></td><td class="pos">n</td><td>engine nguồn mở của Chrome/Edge</td></tr>
+            <tr><td><span class="term">Gecko engine</span><button class="speak" data-text="Gecko engine">🔊</button></td><td><span class="reading">(ghéc-cô en-jin)</span><span class="ipa">/ˈɡekəʊ ˈendʒɪn/</span></td><td class="pos">n phr.</td><td>engine kết xuất của Firefox</td></tr>
+            <tr><td><span class="term">WebKit</span><button class="speak" data-text="WebKit">🔊</button></td><td><span class="reading">(oeb-kít)</span><span class="ipa">/ˈwebkɪt/</span></td><td class="pos">n</td><td>engine của Safari</td></tr>
+            <tr><td><span class="term">mirror</span><button class="speak" data-text="mirror">🔊</button></td><td><span class="reading">(mi-rơ)</span><span class="ipa">/ˈmɪrər/</span></td><td class="pos">v</td><td>phản chiếu, tương ứng với</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I define separate projects in the playwright.config.js file, each pointing to a different browser and device profile, including mobile viewport emulation, and then run the same test suite against all of them in parallel.</p>
+        <p class="sen-vi">Tôi định nghĩa các project riêng biệt trong file playwright.config.js, mỗi project trỏ tới một trình duyệt và cấu hình thiết bị khác nhau, bao gồm cả giả lập màn hình di động, rồi chạy cùng một bộ test song song trên tất cả các trình duyệt đó.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">define</span><button class="speak" data-text="define">🔊</button></td><td><span class="reading">(đi-phain)</span><span class="ipa">/dɪˈfaɪn/</span></td><td class="pos">v</td><td>định nghĩa, khai báo</td></tr>
+            <tr><td><span class="term">project</span><button class="speak" data-text="project">🔊</button></td><td><span class="reading">(prá-jéct)</span><span class="ipa">/ˈprɒdʒekt/</span></td><td class="pos">n</td><td>cấu hình dự án (trong Playwright config)</td></tr>
+            <tr><td><span class="term">device profile</span><button class="speak" data-text="device profile">🔊</button></td><td><span class="reading">(đi-vais prâu-phai)</span><span class="ipa">/dɪˈvaɪs ˈprəʊfaɪl/</span></td><td class="pos">n phr.</td><td>cấu hình thiết bị</td></tr>
+            <tr><td><span class="term">mobile viewport emulation</span><button class="speak" data-text="mobile viewport emulation">🔊</button></td><td><span class="reading">(mâu-bai viu-po ê-miu-lây-sần)</span><span class="ipa">/ˈməʊbaɪl ˈvjuːpɔːt ˌemjuˈleɪʃn/</span></td><td class="pos">n phr.</td><td>giả lập màn hình di động</td></tr>
+            <tr><td><span class="term">test suite</span><button class="speak" data-text="test suite">🔊</button></td><td><span class="reading">(test suýt)</span><span class="ipa">/test swiːt/</span></td><td class="pos">n phr.</td><td>bộ (tập hợp) các test</td></tr>
+            <tr><td><span class="term">in parallel</span><button class="speak" data-text="in parallel">🔊</button></td><td><span class="reading">(in pe-rợ-lồ)</span><span class="ipa">/ɪn ˈpærəlel/</span></td><td class="pos">adv phr.</td><td>chạy song song</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">For broader real-device coverage, especially older browser versions or actual Safari on macOS, I integrate cloud grids like BrowserStack or Sauce Labs into the CI pipeline.</p>
+        <p class="sen-vi">Để mở rộng phạm vi kiểm thử trên thiết bị thật, đặc biệt là các phiên bản trình duyệt cũ hoặc Safari thật trên macOS, tôi tích hợp các cloud grid như BrowserStack hoặc Sauce Labs vào pipeline CI.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">real-device coverage</span><button class="speak" data-text="real device coverage">🔊</button></td><td><span class="reading">(ri-ợl đi-vais cơ-vơ-rịch)</span><span class="ipa">/ˈrɪəl dɪˈvaɪs ˈkʌvərɪdʒ/</span></td><td class="pos">n phr.</td><td>phạm vi kiểm thử trên thiết bị thật</td></tr>
+            <tr><td><span class="term">integrate</span><button class="speak" data-text="integrate">🔊</button></td><td><span class="reading">(in-ti-grêt)</span><span class="ipa">/ˈɪntɪɡreɪt/</span></td><td class="pos">v</td><td>tích hợp</td></tr>
+            <tr><td><span class="term">cloud grid</span><button class="speak" data-text="cloud grid">🔊</button></td><td><span class="reading">(clao grít)</span><span class="ipa">/klaʊd ɡrɪd/</span></td><td class="pos">n phr.</td><td>hạ tầng trình duyệt đám mây</td></tr>
+            <tr><td><span class="term">BrowserStack</span><button class="speak" data-text="BrowserStack">🔊</button></td><td><span class="reading">(brao-dơ-xtác)</span><span class="ipa">/ˈbraʊzərstæk/</span></td><td class="pos">n</td><td>dịch vụ test đa trình duyệt/thiết bị đám mây</td></tr>
+            <tr><td><span class="term">CI pipeline</span><button class="speak" data-text="CI pipeline">🔊</button></td><td><span class="reading">(xi-ai pai-lain)</span><span class="ipa">/ˌsiːˈaɪ ˈpaɪplaɪn/</span></td><td class="pos">n phr.</td><td>quy trình tích hợp liên tục</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -504,6 +603,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -523,11 +637,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -223,6 +261,79 @@
         <span class="keyword">manual testing</span> với <span class="keyword">screen reader</span> như NVDA
         hoặc VoiceOver để đảm bảo độ bao phủ đầy đủ.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">I integrate accessibility testing by adding automated a11y scans directly into my existing test suite and CI pipeline.</p>
+        <p class="sen-vi">Tôi tích hợp accessibility testing bằng cách thêm các bản quét a11y tự động thẳng vào bộ test hiện có và vào CI pipeline.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">accessibility testing</span><button class="speak" data-text="accessibility testing">🔊</button></td><td><span class="reading">(ắc-xe-sợ-bi-lợ-ti tét-tinh)</span><span class="ipa">/əkˌsesəˈbɪləti ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử khả năng tiếp cận</td></tr>
+            <tr><td><span class="term">automated</span><button class="speak" data-text="automated">🔊</button></td><td><span class="reading">(o-tơ-mây-tịt)</span><span class="ipa">/ˈɔːtəmeɪtɪd/</span></td><td class="pos">adj</td><td>được tự động hóa</td></tr>
+            <tr><td><span class="term">test suite</span><button class="speak" data-text="test suite">🔊</button></td><td><span class="reading">(test suýt)</span><span class="ipa">/test swiːt/</span></td><td class="pos">n phr.</td><td>bộ test</td></tr>
+            <tr><td><span class="term">CI pipeline</span><button class="speak" data-text="CI pipeline">🔊</button></td><td><span class="reading">(xi-ai pai-plain)</span><span class="ipa">/siː aɪ ˈpaɪplaɪn/</span></td><td class="pos">n phr.</td><td>quy trình tích hợp liên tục</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Using axe-core with Playwright, I inject the axe engine into a page after it loads and assert that there are zero violations against the WCAG guidelines, usually WCAG 2.1 AA.</p>
+        <p class="sen-vi">Dùng axe-core kết hợp với Playwright, tôi inject engine axe vào trang sau khi trang tải xong và assert rằng không có vi phạm nào so với các hướng dẫn WCAG, thường là WCAG 2.1 AA.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">axe-core</span><button class="speak" data-text="axe core">🔊</button></td><td><span class="reading">(ác-co)</span><span class="ipa">/æks kɔːr/</span></td><td class="pos">n</td><td>thư viện quét a11y phổ biến</td></tr>
+            <tr><td><span class="term">inject</span><button class="speak" data-text="inject">🔊</button></td><td><span class="reading">(in-chéc)</span><span class="ipa">/ɪnˈdʒekt/</span></td><td class="pos">v</td><td>chèn vào, tiêm vào</td></tr>
+            <tr><td><span class="term">assert</span><button class="speak" data-text="assert">🔊</button></td><td><span class="reading">(ợ-xợt)</span><span class="ipa">/əˈsɜːrt/</span></td><td class="pos">v</td><td>khẳng định, kiểm tra đúng/sai</td></tr>
+            <tr><td><span class="term">zero violations</span><button class="speak" data-text="zero violations">🔊</button></td><td><span class="reading">(zi-rô vai-ơ-lây-sần)</span><span class="ipa">/ˈzɪəroʊ ˌvaɪəˈleɪʃnz/</span></td><td class="pos">n phr.</td><td>không có vi phạm nào</td></tr>
+            <tr><td><span class="term">WCAG guidelines</span><button class="speak" data-text="WCAG guidelines">🔊</button></td><td><span class="reading">(đắp-liu-si-ê-chi gai-lain)</span><span class="ipa">/ˈdʌbljuː siː eɪ dʒiː ˈɡaɪdlaɪnz/</span></td><td class="pos">n phr.</td><td>hướng dẫn tiêu chuẩn khả năng tiếp cận web</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">These scans catch issues like missing ARIA attributes, poor color contrast, and missing alt text automatically on every pull request.</p>
+        <p class="sen-vi">Các bản quét này tự động phát hiện những vấn đề như thiếu thuộc tính ARIA, độ tương phản màu kém, và thiếu alt text trên mỗi pull request.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">scan</span><button class="speak" data-text="scan">🔊</button></td><td><span class="reading">(xken)</span><span class="ipa">/skæn/</span></td><td class="pos">n</td><td>lượt quét</td></tr>
+            <tr><td><span class="term">ARIA attributes</span><button class="speak" data-text="ARIA attributes">🔊</button></td><td><span class="reading">(a-ri-a ợ-tri-biuts)</span><span class="ipa">/ˈæriə əˈtrɪbjuːts/</span></td><td class="pos">n phr.</td><td>thuộc tính ARIA hỗ trợ tiếp cận</td></tr>
+            <tr><td><span class="term">color contrast</span><button class="speak" data-text="color contrast">🔊</button></td><td><span class="reading">(cơ-lơ cân-trát)</span><span class="ipa">/ˈkʌlər ˈkɒntrɑːst/</span></td><td class="pos">n phr.</td><td>độ tương phản màu sắc</td></tr>
+            <tr><td><span class="term">alt text</span><button class="speak" data-text="alt text">🔊</button></td><td><span class="reading">(ôn-tơ-nợ-tiv téc-xtơ)</span><span class="ipa">/ˈɔːlt tekst/</span></td><td class="pos">n phr.</td><td>văn bản thay thế cho hình ảnh</td></tr>
+            <tr><td><span class="term">pull request</span><button class="speak" data-text="pull request">🔊</button></td><td><span class="reading">(pun ri-quét)</span><span class="ipa">/pʊl rɪˈkwest/</span></td><td class="pos">n phr.</td><td>yêu cầu kéo (PR) trên Git</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I also add keyboard navigation checks, verifying that I can tab through interactive elements and that focus order makes sense.</p>
+        <p class="sen-vi">Tôi cũng thêm các kiểm tra điều hướng bằng bàn phím, xác minh rằng tôi có thể dùng phím Tab để di chuyển qua các phần tử tương tác và thứ tự focus hợp lý.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">keyboard navigation checks</span><button class="speak" data-text="keyboard navigation checks">🔊</button></td><td><span class="reading">(ki-bo-đờ na-vơ-gây-sần chéc)</span><span class="ipa">/ˈkiːbɔːrd ˌnævɪˈɡeɪʃn tʃeks/</span></td><td class="pos">n phr.</td><td>kiểm tra điều hướng bằng bàn phím</td></tr>
+            <tr><td><span class="term">verify</span><button class="speak" data-text="verify">🔊</button></td><td><span class="reading">(vê-ri-phai)</span><span class="ipa">/ˈverɪfaɪ/</span></td><td class="pos">v</td><td>xác minh</td></tr>
+            <tr><td><span class="term">tab through</span><button class="speak" data-text="tab through">🔊</button></td><td><span class="reading">(táp thru)</span><span class="ipa">/tæb θruː/</span></td><td class="pos">phr.v</td><td>di chuyển qua bằng phím Tab</td></tr>
+            <tr><td><span class="term">interactive elements</span><button class="speak" data-text="interactive elements">🔊</button></td><td><span class="reading">(in-tơ-ráct-tiv e-lơ-mợnts)</span><span class="ipa">/ˌɪntərˈæktɪv ˈelɪmənts/</span></td><td class="pos">n phr.</td><td>các phần tử tương tác</td></tr>
+            <tr><td><span class="term">focus order</span><button class="speak" data-text="focus order">🔊</button></td><td><span class="reading">(phâu-cợs o-đờ)</span><span class="ipa">/ˈfoʊkəs ˈɔːrdər/</span></td><td class="pos">n phr.</td><td>thứ tự focus khi tab</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">That said, I always remind the team that automated a11y testing only catches around thirty to fifty percent of real accessibility issues, so we still rely on manual testing with screen readers like NVDA or VoiceOver for full coverage.</p>
+        <p class="sen-vi">Tuy vậy, tôi luôn nhắc nhóm rằng automated a11y testing chỉ phát hiện được khoảng ba mươi đến năm mươi phần trăm các vấn đề accessibility thực tế, nên chúng tôi vẫn dựa vào manual testing với screen reader như NVDA hoặc VoiceOver để đảm bảo độ bao phủ đầy đủ.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">automated a11y testing</span><button class="speak" data-text="automated a11y testing">🔊</button></td><td><span class="reading">(o-tơ-mây-tịt ây-i-lơ-vần-i tét-tinh)</span><span class="ipa">/ˈɔːtəmeɪtɪd ˌeɪ ɪˈlevən waɪ ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử a11y tự động</td></tr>
+            <tr><td><span class="term">rely on</span><button class="speak" data-text="rely on">🔊</button></td><td><span class="reading">(ri-lai on)</span><span class="ipa">/rɪˈlaɪ ɒn/</span></td><td class="pos">phr.v</td><td>dựa vào, phụ thuộc vào</td></tr>
+            <tr><td><span class="term">manual testing</span><button class="speak" data-text="manual testing">🔊</button></td><td><span class="reading">(me-niu-ơl tét-tinh)</span><span class="ipa">/ˈmænjuəl ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử thủ công</td></tr>
+            <tr><td><span class="term">screen reader</span><button class="speak" data-text="screen reader">🔊</button></td><td><span class="reading">(scrin ri-đờ)</span><span class="ipa">/skriːn ˈriːdər/</span></td><td class="pos">n phr.</td><td>trình đọc màn hình</td></tr>
+            <tr><td><span class="term">full coverage</span><button class="speak" data-text="full coverage">🔊</button></td><td><span class="reading">(phun cơ-vơ-rịch)</span><span class="ipa">/fʊl ˈkʌvərɪdʒ/</span></td><td class="pos">n phr.</td><td>độ bao phủ đầy đủ</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -488,6 +599,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -507,11 +633,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

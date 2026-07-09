@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -224,6 +262,81 @@
         thay vì cố gắng đạt từng phần trăm còn lại, vì vài phần trăm cuối cùng thường mang lại
         <span class="keyword">lợi ích giảm dần</span> so với công sức bỏ ra.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">I measure test coverage using tools like Istanbul or nyc for JavaScript, which instrument the code and generate a coverage report showing line coverage, branch coverage, function coverage, and statement coverage.</p>
+        <p class="sen-vi">Tôi đo test coverage bằng các công cụ như Istanbul hoặc nyc cho JavaScript, những công cụ này sẽ instrument mã nguồn và tạo ra một coverage report cho thấy line coverage, branch coverage, function coverage và statement coverage.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">test coverage</span><button class="speak" data-text="test coverage">🔊</button></td><td><span class="reading">(test cắ-vợ-rịt)</span><span class="ipa">/test ˈkʌvərɪdʒ/</span></td><td class="pos">n phr.</td><td>độ bao phủ kiểm thử</td></tr>
+            <tr><td><span class="term">instrument the code</span><button class="speak" data-text="instrument the code">🔊</button></td><td><span class="reading">(ín-strợ-mợnt)</span><span class="ipa">/ˈɪnstrəmənt ðə kəʊd/</span></td><td class="pos">v phr.</td><td>chèn mã theo dõi vào để đo coverage</td></tr>
+            <tr><td><span class="term">coverage report</span><button class="speak" data-text="coverage report">🔊</button></td><td><span class="reading">(cắ-vợ-rịt ri-pot)</span><span class="ipa">/ˈkʌvərɪdʒ rɪˈpɔːt/</span></td><td class="pos">n phr.</td><td>báo cáo độ bao phủ</td></tr>
+            <tr><td><span class="term">line coverage</span><button class="speak" data-text="line coverage">🔊</button></td><td><span class="reading">(lain cắ-vợ-rịt)</span><span class="ipa">/laɪn ˈkʌvərɪdʒ/</span></td><td class="pos">n phr.</td><td>độ bao phủ theo dòng</td></tr>
+            <tr><td><span class="term">branch coverage</span><button class="speak" data-text="branch coverage">🔊</button></td><td><span class="reading">(bran-chờ cắ-vợ-rịt)</span><span class="ipa">/brɑːntʃ ˈkʌvərɪdʒ/</span></td><td class="pos">n phr.</td><td>độ bao phủ theo nhánh điều kiện</td></tr>
+            <tr><td><span class="term">function coverage</span><button class="speak" data-text="function coverage">🔊</button></td><td><span class="reading">(phăng-sần cắ-vợ-rịt)</span><span class="ipa">/ˈfʌŋkʃn ˈkʌvərɪdʒ/</span></td><td class="pos">n phr.</td><td>độ bao phủ theo hàm</td></tr>
+            <tr><td><span class="term">statement coverage</span><button class="speak" data-text="statement coverage">🔊</button></td><td><span class="reading">(stết-mợnt cắ-vợ-rịt)</span><span class="ipa">/ˈsteɪtmənt ˈkʌvərɪdʒ/</span></td><td class="pos">n phr.</td><td>độ bao phủ theo câu lệnh</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Line coverage tells me which lines executed, while branch coverage shows whether every if-else path was tested, which is usually a stronger signal.</p>
+        <p class="sen-vi">Line coverage cho biết những dòng nào đã được thực thi, còn branch coverage cho thấy liệu mọi nhánh if-else đã được test hay chưa, đây thường là một tín hiệu mạnh hơn.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">execute</span><button class="speak" data-text="execute">🔊</button></td><td><span class="reading">(ếch-xi-kiut)</span><span class="ipa">/ˈeksɪkjuːt/</span></td><td class="pos">v</td><td>thực thi</td></tr>
+            <tr><td><span class="term">if-else path</span><button class="speak" data-text="if else path">🔊</button></td><td><span class="reading">(íp en-xò path)</span><span class="ipa">/ɪf els pɑːθ/</span></td><td class="pos">n phr.</td><td>nhánh điều kiện if-else</td></tr>
+            <tr><td><span class="term">tested</span><button class="speak" data-text="tested">🔊</button></td><td><span class="reading">(tết-tịd)</span><span class="ipa">/ˈtestɪd/</span></td><td class="pos">v (adj)</td><td>đã được kiểm thử</td></tr>
+            <tr><td><span class="term">stronger signal</span><button class="speak" data-text="stronger signal">🔊</button></td><td><span class="reading">(strong-gợ xíc-nồl)</span><span class="ipa">/ˈstrɒŋɡər ˈsɪɡnəl/</span></td><td class="pos">n phr.</td><td>tín hiệu mạnh hơn, đáng tin hơn</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">However, I don't treat 100% coverage as the goal.</p>
+        <p class="sen-vi">Tuy nhiên, tôi không xem 100% coverage là mục tiêu.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">treat...as</span><button class="speak" data-text="treat as">🔊</button></td><td><span class="reading">(trít ...ez)</span><span class="ipa">/triːt … æz/</span></td><td class="pos">v phr.</td><td>xem/coi ... là</td></tr>
+            <tr><td><span class="term">100% coverage</span><button class="speak" data-text="one hundred percent coverage">🔊</button></td><td><span class="reading">(oăn hân-đrợt pơ-xen)</span><span class="ipa">/wʌn ˈhʌndrəd pərˈsent/</span></td><td class="pos">n phr.</td><td>coverage đạt 100%</td></tr>
+            <tr><td><span class="term">goal</span><button class="speak" data-text="goal">🔊</button></td><td><span class="reading">(gôồ)</span><span class="ipa">/ɡəʊl/</span></td><td class="pos">n</td><td>mục tiêu</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">A high percentage can be misleading because a line can execute without the assertion actually verifying meaningful behavior.</p>
+        <p class="sen-vi">Một tỷ lệ phần trăm cao có thể gây hiểu lầm vì một dòng code có thể được thực thi mà assertion lại không thực sự kiểm tra hành vi có ý nghĩa.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">high percentage</span><button class="speak" data-text="high percentage">🔊</button></td><td><span class="reading">(hai pơ-xen-tịch)</span><span class="ipa">/haɪ pərˈsentɪdʒ/</span></td><td class="pos">n phr.</td><td>tỷ lệ phần trăm cao</td></tr>
+            <tr><td><span class="term">misleading</span><button class="speak" data-text="misleading">🔊</button></td><td><span class="reading">(mít-sờ-li-đing)</span><span class="ipa">/ˌmɪsˈliːdɪŋ/</span></td><td class="pos">adj</td><td>gây hiểu lầm</td></tr>
+            <tr><td><span class="term">assertion</span><button class="speak" data-text="assertion">🔊</button></td><td><span class="reading">(ợ-sơ-sần)</span><span class="ipa">/əˈsɜːʃn/</span></td><td class="pos">n</td><td>lệnh kiểm tra khẳng định kết quả</td></tr>
+            <tr><td><span class="term">verify</span><button class="speak" data-text="verify">🔊</button></td><td><span class="reading">(vê-ri-phai)</span><span class="ipa">/ˈverɪfaɪ/</span></td><td class="pos">v</td><td>kiểm tra, xác minh</td></tr>
+            <tr><td><span class="term">meaningful behavior</span><button class="speak" data-text="meaningful behavior">🔊</button></td><td><span class="reading">(mi-ninh-phồ bi-hêi-viợ)</span><span class="ipa">/ˈmiːnɪŋfl bɪˈheɪvjər/</span></td><td class="pos">n phr.</td><td>hành vi có ý nghĩa</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Instead, I use coverage as a diagnostic tool to find untested areas, and I prioritize risk-based coverage, focusing effort on critical business logic and edge cases rather than chasing every remaining percentage point, since the last few percent usually bring diminishing returns for the time invested.</p>
+        <p class="sen-vi">Thay vào đó, tôi dùng coverage như một công cụ chẩn đoán để tìm ra những vùng chưa được test, và tôi ưu tiên risk-based coverage, tập trung nỗ lực vào business logic quan trọng và các edge case thay vì cố gắng đạt từng phần trăm còn lại, vì vài phần trăm cuối cùng thường mang lại lợi ích giảm dần so với công sức bỏ ra.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">diagnostic tool</span><button class="speak" data-text="diagnostic tool">🔊</button></td><td><span class="reading">(đai-ợg-nót-tíc thul)</span><span class="ipa">/ˌdaɪəɡˈnɒstɪk tuːl/</span></td><td class="pos">n phr.</td><td>công cụ chẩn đoán</td></tr>
+            <tr><td><span class="term">untested areas</span><button class="speak" data-text="untested areas">🔊</button></td><td><span class="reading">(ăn-tết-tịd e-ri-ợs)</span><span class="ipa">/ʌnˈtestɪd ˈeəriəz/</span></td><td class="pos">n phr.</td><td>những vùng chưa được test</td></tr>
+            <tr><td><span class="term">risk-based coverage</span><button class="speak" data-text="risk based coverage">🔊</button></td><td><span class="reading">(rít-cơ bết cắ-vợ-rịt)</span><span class="ipa">/rɪsk beɪst ˈkʌvərɪdʒ/</span></td><td class="pos">n phr.</td><td>bao phủ theo mức độ rủi ro</td></tr>
+            <tr><td><span class="term">business logic</span><button class="speak" data-text="business logic">🔊</button></td><td><span class="reading">(bít-nợt ló-gích)</span><span class="ipa">/ˈbɪznəs ˈlɒdʒɪk/</span></td><td class="pos">n phr.</td><td>logic nghiệp vụ</td></tr>
+            <tr><td><span class="term">edge case</span><button class="speak" data-text="edge case">🔊</button></td><td><span class="reading">(ét-giơ kêis)</span><span class="ipa">/edʒ keɪs/</span></td><td class="pos">n phr.</td><td>trường hợp biên/hiếm gặp</td></tr>
+            <tr><td><span class="term">percentage point</span><button class="speak" data-text="percentage point">🔊</button></td><td><span class="reading">(pơ-xen-tịch poin)</span><span class="ipa">/pərˈsentɪdʒ pɒɪnt/</span></td><td class="pos">n phr.</td><td>điểm phần trăm</td></tr>
+            <tr><td><span class="term">diminishing returns</span><button class="speak" data-text="diminishing returns">🔊</button></td><td><span class="reading">(đi-mi-nhi-sing ri-tơns)</span><span class="ipa">/dɪˈmɪnɪʃɪŋ rɪˈtɜːnz/</span></td><td class="pos">n phr.</td><td>lợi ích giảm dần khi tiếp tục đầu tư công sức</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -484,7 +597,22 @@
     enBq.after(rep);
   })();
 
-  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt (bảng chính) */
   (function(){
     const table = document.querySelector('table.vocab');
     if(!table) return;
@@ -503,11 +631,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

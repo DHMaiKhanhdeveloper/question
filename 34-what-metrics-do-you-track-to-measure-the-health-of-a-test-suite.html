@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -221,6 +259,89 @@
         <span class="keyword">test bị hỏng</span>, vì một suite liên tục bị hỏng thì thực chất không
         tiết kiệm được thời gian nào cả.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">I track a handful of core metrics on a dashboard.</p>
+        <p class="sen-vi">Tôi theo dõi một số chỉ số cốt lõi trên một dashboard.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">track</span><button class="speak" data-text="track">🔊</button></td><td><span class="reading">(tréc)</span><span class="ipa">/træk/</span></td><td class="pos">v</td><td>theo dõi</td></tr>
+            <tr><td><span class="term">a handful of</span><button class="speak" data-text="a handful of">🔊</button></td><td><span class="reading">(ợ hen-phun ợv)</span><span class="ipa">/ə ˈhændfʊl əv/</span></td><td class="pos">n phr.</td><td>một số ít, một nhóm nhỏ</td></tr>
+            <tr><td><span class="term">core metric</span><button class="speak" data-text="core metric">🔊</button></td><td><span class="reading">(co me-tríc)</span><span class="ipa">/kɔː ˈmetrɪk/</span></td><td class="pos">n phr.</td><td>chỉ số cốt lõi</td></tr>
+            <tr><td><span class="term">dashboard</span><button class="speak" data-text="dashboard">🔊</button></td><td><span class="reading">(đét-bo-đ)</span><span class="ipa">/ˈdæʃbɔːd/</span></td><td class="pos">n</td><td>bảng điều khiển/theo dõi số liệu</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">The pass rate tells me the overall percentage of tests passing on each run, while the flakiness rate isolates tests that fail intermittently without a real code change, which erodes trust in the suite.</p>
+        <p class="sen-vi">Pass rate cho tôi biết tỷ lệ phần trăm tổng thể các test pass trong mỗi lần chạy, trong khi flakiness rate cô lập những test bị fail không ổn định mà không có thay đổi code thực sự, điều này làm xói mòn niềm tin vào test suite.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">pass rate</span><button class="speak" data-text="pass rate">🔊</button></td><td><span class="reading">(pas rêit)</span><span class="ipa">/pæs reɪt/</span></td><td class="pos">n phr.</td><td>tỷ lệ test pass</td></tr>
+            <tr><td><span class="term">overall percentage</span><button class="speak" data-text="overall percentage">🔊</button></td><td><span class="reading">(ô-vợ-rol pơ-xen-tợj)</span><span class="ipa">/ˌəʊvərˈɔːl pəˈsentɪdʒ/</span></td><td class="pos">n phr.</td><td>tỷ lệ phần trăm tổng thể</td></tr>
+            <tr><td><span class="term">flakiness rate</span><button class="speak" data-text="flakiness rate">🔊</button></td><td><span class="reading">(flây-ki-nợs rêit)</span><span class="ipa">/ˈfleɪkinəs reɪt/</span></td><td class="pos">n phr.</td><td>tỷ lệ test không ổn định (flaky)</td></tr>
+            <tr><td><span class="term">intermittently</span><button class="speak" data-text="intermittently">🔊</button></td><td><span class="reading">(in-tơ-mi-tần-tli)</span><span class="ipa">/ˌɪntəˈmɪtəntli/</span></td><td class="pos">adv</td><td>không liên tục, chập chờn</td></tr>
+            <tr><td><span class="term">erode trust</span><button class="speak" data-text="erode trust">🔊</button></td><td><span class="reading">(i-rôđ trâst)</span><span class="ipa">/ɪˈrəʊd trʌst/</span></td><td class="pos">v phr.</td><td>làm xói mòn niềm tin</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I also watch the execution time trend, because a suite that keeps getting slower will eventually get skipped by developers.</p>
+        <p class="sen-vi">Tôi cũng theo dõi xu hướng thời gian thực thi (execution time trend), vì một suite ngày càng chạy chậm cuối cùng sẽ bị các lập trình viên bỏ qua.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">execution time trend</span><button class="speak" data-text="execution time trend">🔊</button></td><td><span class="reading">(ec-xi-kiu-sần taim trend)</span><span class="ipa">/ˌeksɪˈkjuːʃn taɪm trend/</span></td><td class="pos">n phr.</td><td>xu hướng thời gian thực thi</td></tr>
+            <tr><td><span class="term">keep getting slower</span><button class="speak" data-text="keep getting slower">🔊</button></td><td><span class="reading">(kip ghe-ting slâu-ơ)</span><span class="ipa">/kiːp ˈɡetɪŋ ˈsləʊə/</span></td><td class="pos">v phr.</td><td>ngày càng chạy chậm hơn</td></tr>
+            <tr><td><span class="term">get skipped</span><button class="speak" data-text="get skipped">🔊</button></td><td><span class="reading">(ghét xkíp-t)</span><span class="ipa">/ɡet skɪpt/</span></td><td class="pos">v phr.</td><td>bị bỏ qua</td></tr>
+            <tr><td><span class="term">developer</span><button class="speak" data-text="developer">🔊</button></td><td><span class="reading">(đi-ve-lợ-pợ)</span><span class="ipa">/dɪˈveləpər/</span></td><td class="pos">n</td><td>lập trình viên</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Code coverage and, more importantly, requirement or risk coverage tell me whether we are testing the right things, not just a lot of things.</p>
+        <p class="sen-vi">Độ phủ code (code coverage) và, quan trọng hơn, độ phủ yêu cầu hoặc độ phủ rủi ro cho tôi biết chúng tôi có đang test đúng những thứ quan trọng hay không, chứ không chỉ test thật nhiều.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">code coverage</span><button class="speak" data-text="code coverage">🔊</button></td><td><span class="reading">(côđ cơ-vợ-rợj)</span><span class="ipa">/kəʊd ˈkʌvərɪdʒ/</span></td><td class="pos">n phr.</td><td>độ phủ code</td></tr>
+            <tr><td><span class="term">requirement coverage</span><button class="speak" data-text="requirement coverage">🔊</button></td><td><span class="reading">(ri-quai-mợnt cơ-vợ-rợj)</span><span class="ipa">/rɪˈkwaɪəmənt ˈkʌvərɪdʒ/</span></td><td class="pos">n phr.</td><td>độ phủ yêu cầu</td></tr>
+            <tr><td><span class="term">risk coverage</span><button class="speak" data-text="risk coverage">🔊</button></td><td><span class="reading">(rít-sk cơ-vợ-rợj)</span><span class="ipa">/rɪsk ˈkʌvərɪdʒ/</span></td><td class="pos">n phr.</td><td>độ phủ rủi ro</td></tr>
+            <tr><td><span class="term">more importantly</span><button class="speak" data-text="more importantly">🔊</button></td><td><span class="reading">(mo im-po-tần-tli)</span><span class="ipa">/mɔː ɪmˈpɔːtəntli/</span></td><td class="pos">adv</td><td>quan trọng hơn</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Mean time to detect shows how quickly a regression is caught, and mean time to fix shows how quickly the team resolves it.</p>
+        <p class="sen-vi">Mean time to detect cho thấy một lỗi hồi quy được phát hiện nhanh như thế nào, còn mean time to fix cho thấy đội ngũ sửa lỗi đó nhanh như thế nào.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">mean time to detect</span><button class="speak" data-text="mean time to detect">🔊</button></td><td><span class="reading">(min taim tu đi-téc)</span><span class="ipa">/miːn taɪm tuː dɪˈtekt/</span></td><td class="pos">n phr.</td><td>thời gian trung bình để phát hiện lỗi</td></tr>
+            <tr><td><span class="term">regression</span><button class="speak" data-text="regression">🔊</button></td><td><span class="reading">(ri-gre-sần)</span><span class="ipa">/rɪˈɡreʃn/</span></td><td class="pos">n</td><td>lỗi hồi quy</td></tr>
+            <tr><td><span class="term">mean time to fix</span><button class="speak" data-text="mean time to fix">🔊</button></td><td><span class="reading">(min taim tu fíc-x)</span><span class="ipa">/miːn taɪm tuː fɪks/</span></td><td class="pos">n phr.</td><td>thời gian trung bình để sửa lỗi</td></tr>
+            <tr><td><span class="term">resolve</span><button class="speak" data-text="resolve">🔊</button></td><td><span class="reading">(ri-dôl-v)</span><span class="ipa">/rɪˈzɒlv/</span></td><td class="pos">v</td><td>giải quyết, xử lý xong</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Finally, I track test maintenance cost, meaning how many hours per sprint go into fixing broken tests, since a suite that constantly breaks is not actually saving time.</p>
+        <p class="sen-vi">Cuối cùng, tôi theo dõi chi phí bảo trì test (test maintenance cost), tức là mỗi sprint tốn bao nhiêu giờ để sửa các test bị hỏng, vì một suite liên tục bị hỏng thì thực chất không tiết kiệm được thời gian nào cả.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">test maintenance cost</span><button class="speak" data-text="test maintenance cost">🔊</button></td><td><span class="reading">(test mên-tơ-nợns cost)</span><span class="ipa">/test ˈmeɪntənəns kɒst/</span></td><td class="pos">n phr.</td><td>chi phí bảo trì test</td></tr>
+            <tr><td><span class="term">sprint</span><button class="speak" data-text="sprint">🔊</button></td><td><span class="reading">(sprint)</span><span class="ipa">/sprɪnt/</span></td><td class="pos">n</td><td>chu kỳ phát triển ngắn (sprint)</td></tr>
+            <tr><td><span class="term">broken tests</span><button class="speak" data-text="broken tests">🔊</button></td><td><span class="reading">(brâu-cần tests)</span><span class="ipa">/ˈbrəʊkən tests/</span></td><td class="pos">n phr.</td><td>các test bị hỏng</td></tr>
+            <tr><td><span class="term">constantly</span><button class="speak" data-text="constantly">🔊</button></td><td><span class="reading">(côn-xtần-tli)</span><span class="ipa">/ˈkɒnstəntli/</span></td><td class="pos">adv</td><td>liên tục, thường xuyên</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -485,6 +606,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -504,11 +640,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

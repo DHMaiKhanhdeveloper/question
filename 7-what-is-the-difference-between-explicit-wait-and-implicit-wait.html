@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -227,6 +265,79 @@
         Việc trộn lẫn implicit và explicit wait trong cùng một test có thể gây ra các
         <span class="keyword">thời gian chờ không thể đoán trước</span>, nên tôi thường tránh kết hợp chúng.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">An implicit wait is a global setting on the WebDriver instance that tells it to poll the DOM for a certain amount of time whenever it tries to find any element, before throwing a NoSuchElementException.</p>
+        <p class="sen-vi">Implicit wait là một thiết lập toàn cục (global setting) trên đối tượng WebDriver, yêu cầu nó liên tục kiểm tra DOM (poll the DOM) trong một khoảng thời gian nhất định mỗi khi nó cố tìm bất kỳ phần tử nào, trước khi ném ra ngoại lệ NoSuchElementException.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">implicit wait</span><button class="speak" data-text="implicit wait">🔊</button></td><td><span class="reading">(im-pli-xịt uêit)</span><span class="ipa">/ɪmˈplɪsɪt weɪt/</span></td><td class="pos">n phr.</td><td>chờ ngầm định (toàn cục)</td></tr>
+            <tr><td><span class="term">global setting</span><button class="speak" data-text="global setting">🔊</button></td><td><span class="reading">(glâu-bồl sé-ting)</span><span class="ipa">/ˈɡləʊbl ˈsetɪŋ/</span></td><td class="pos">n phr.</td><td>thiết lập toàn cục</td></tr>
+            <tr><td><span class="term">WebDriver instance</span><button class="speak" data-text="WebDriver instance">🔊</button></td><td><span class="reading">(uếp-đrai-vơ ín-stợns)</span><span class="ipa">/web ˈdraɪvər ˈɪnstəns/</span></td><td class="pos">n phr.</td><td>đối tượng WebDriver</td></tr>
+            <tr><td><span class="term">poll the DOM</span><button class="speak" data-text="poll the DOM">🔊</button></td><td><span class="reading">(pâul thơ đom)</span><span class="ipa">/pəʊl ðə dɒm/</span></td><td class="pos">v phr.</td><td>liên tục kiểm tra DOM</td></tr>
+            <tr><td><span class="term">NoSuchElementException</span><button class="speak" data-text="No Such Element Exception">🔊</button></td><td><span class="reading">(nâu-sợch e-lơ-mợnt ếch-sép-sần)</span><span class="ipa">/nəʊ sʌtʃ ˈelɪmənt ɪkˈsepʃn/</span></td><td class="pos">n phr.</td><td>ngoại lệ không tìm thấy phần tử</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I usually set it once at the start of the test session, and it applies to every findElement call automatically.</p>
+        <p class="sen-vi">Tôi thường thiết lập nó một lần ngay khi bắt đầu phiên test, và nó tự động áp dụng cho mọi lệnh findElement.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">test session</span><button class="speak" data-text="test session">🔊</button></td><td><span class="reading">(test xe-sần)</span><span class="ipa">/test ˈseʃn/</span></td><td class="pos">n phr.</td><td>phiên kiểm thử</td></tr>
+            <tr><td><span class="term">findElement call</span><button class="speak" data-text="findElement call">🔊</button></td><td><span class="reading">(phain-e-lơ-mợnt col)</span><span class="ipa">/faɪnd ˈelɪmənt kɔːl/</span></td><td class="pos">n phr.</td><td>lệnh gọi tìm phần tử</td></tr>
+            <tr><td><span class="term">automatically</span><button class="speak" data-text="automatically">🔊</button></td><td><span class="reading">(o-tô-me-tịc-li)</span><span class="ipa">/ˌɔːtəˈmætɪkli/</span></td><td class="pos">adv</td><td>một cách tự động</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">An explicit wait, on the other hand, is applied to a specific element and a specific condition, using something like WebDriverWait combined with ExpectedConditions, such as waiting until an element becomes clickable or visible.</p>
+        <p class="sen-vi">Ngược lại, explicit wait được áp dụng cho một phần tử cụ thể và một điều kiện (condition) cụ thể, sử dụng thứ như WebDriverWait kết hợp với ExpectedConditions, ví dụ chờ cho đến khi một phần tử trở nên có thể click được (clickable) hoặc hiển thị (visible).</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">explicit wait</span><button class="speak" data-text="explicit wait">🔊</button></td><td><span class="reading">(ếch-plí-xịt uêit)</span><span class="ipa">/ɪkˈsplɪsɪt weɪt/</span></td><td class="pos">n phr.</td><td>chờ tường minh (theo điều kiện)</td></tr>
+            <tr><td><span class="term">condition</span><button class="speak" data-text="condition">🔊</button></td><td><span class="reading">(cợn-đi-sần)</span><span class="ipa">/kənˈdɪʃn/</span></td><td class="pos">n</td><td>điều kiện</td></tr>
+            <tr><td><span class="term">WebDriverWait</span><button class="speak" data-text="WebDriverWait">🔊</button></td><td><span class="reading">(uếp-đrai-vơ uêit)</span><span class="ipa">/web ˈdraɪvər weɪt/</span></td><td class="pos">n</td><td>lớp chờ điều kiện của Selenium</td></tr>
+            <tr><td><span class="term">ExpectedConditions</span><button class="speak" data-text="Expected Conditions">🔊</button></td><td><span class="reading">(ếch-péc-tịt cợn-đi-sần)</span><span class="ipa">/ɪkˈspektɪd kənˈdɪʃnz/</span></td><td class="pos">n</td><td>tập điều kiện chờ có sẵn</td></tr>
+            <tr><td><span class="term">clickable</span><button class="speak" data-text="clickable">🔊</button></td><td><span class="reading">(clic-cợ-bồ)</span><span class="ipa">/ˈklɪkəbl/</span></td><td class="pos">adj</td><td>có thể click được</td></tr>
+            <tr><td><span class="term">visible</span><button class="speak" data-text="visible">🔊</button></td><td><span class="reading">(ví-zơ-bồ)</span><span class="ipa">/ˈvɪzəbl/</span></td><td class="pos">adj</td><td>hiển thị, có thể thấy được</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I prefer explicit waits because they are more precise and give me fine-grained control over dynamic elements, like a spinner or an AJAX-loaded button, without slowing down the whole suite.</p>
+        <p class="sen-vi">Tôi thích dùng explicit wait hơn vì nó chính xác hơn và cho tôi khả năng kiểm soát chi tiết đối với các phần tử động (dynamic elements), như một spinner hay một nút được tải bằng AJAX, mà không làm chậm toàn bộ bộ test (suite).</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">precise</span><button class="speak" data-text="precise">🔊</button></td><td><span class="reading">(pri-xais)</span><span class="ipa">/prɪˈsaɪs/</span></td><td class="pos">adj</td><td>chính xác</td></tr>
+            <tr><td><span class="term">fine-grained control</span><button class="speak" data-text="fine grained control">🔊</button></td><td><span class="reading">(phain-grênd cợn-trâu)</span><span class="ipa">/faɪn ɡreɪnd kənˈtrəʊl/</span></td><td class="pos">n phr.</td><td>khả năng kiểm soát chi tiết</td></tr>
+            <tr><td><span class="term">dynamic element</span><button class="speak" data-text="dynamic element">🔊</button></td><td><span class="reading">(đai-ne-mịc e-lơ-mợnt)</span><span class="ipa">/daɪˈnæmɪk ˈelɪmənt/</span></td><td class="pos">n phr.</td><td>phần tử động</td></tr>
+            <tr><td><span class="term">spinner</span><button class="speak" data-text="spinner">🔊</button></td><td><span class="reading">(spi-nơ)</span><span class="ipa">/ˈspɪnər/</span></td><td class="pos">n</td><td>biểu tượng xoay (loading)</td></tr>
+            <tr><td><span class="term">AJAX-loaded</span><button class="speak" data-text="AJAX loaded">🔊</button></td><td><span class="reading">(ê-jéc lâu-địd)</span><span class="ipa">/ˈeɪdʒæks ˈləʊdɪd/</span></td><td class="pos">adj</td><td>được tải bằng AJAX</td></tr>
+            <tr><td><span class="term">suite</span><button class="speak" data-text="suite">🔊</button></td><td><span class="reading">(suít)</span><span class="ipa">/swiːt/</span></td><td class="pos">n</td><td>bộ test</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Mixing implicit and explicit waits in the same test can cause unpredictable timeouts, so I generally avoid combining them.</p>
+        <p class="sen-vi">Việc trộn lẫn implicit và explicit wait trong cùng một test có thể gây ra các thời gian chờ không thể đoán trước, nên tôi thường tránh kết hợp chúng.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">mix</span><button class="speak" data-text="mix">🔊</button></td><td><span class="reading">(mít-x)</span><span class="ipa">/mɪks/</span></td><td class="pos">v</td><td>trộn lẫn</td></tr>
+            <tr><td><span class="term">unpredictable timeout</span><button class="speak" data-text="unpredictable timeout">🔊</button></td><td><span class="reading">(ăn-pri-đíc-tợ-bồ tai-mao)</span><span class="ipa">/ˌʌnprɪˈdɪktəbl ˈtaɪmaʊt/</span></td><td class="pos">n phr.</td><td>thời gian chờ khó đoán trước</td></tr>
+            <tr><td><span class="term">avoid</span><button class="speak" data-text="avoid">🔊</button></td><td><span class="reading">(ợ-vọid)</span><span class="ipa">/əˈvɔɪd/</span></td><td class="pos">v</td><td>tránh</td></tr>
+            <tr><td><span class="term">combine</span><button class="speak" data-text="combine">🔊</button></td><td><span class="reading">(cợm-bain)</span><span class="ipa">/kəmˈbaɪn/</span></td><td class="pos">v</td><td>kết hợp</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -491,6 +602,21 @@ button.<span class="f">click</span>();
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -510,11 +636,29 @@ button.<span class="f">click</span>();
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

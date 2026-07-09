@@ -155,14 +155,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -209,6 +247,67 @@
         mỗi khi có bản dựng mới. Tôi tập trung vào việc viết những bài kiểm thử ổn định, dễ bảo trì,
         giúp giảm tình trạng chập chờn và mang lại phản hồi nhanh về chất lượng cho cả nhóm.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">I'm a QA engineer with experience in both manual and automated testing.</p>
+        <p class="sen-vi">Tôi là một kỹ sư QA, có kinh nghiệm cả về kiểm thử thủ công lẫn kiểm thử tự động.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">QA engineer</span><button class="speak" data-text="QA engineer">🔊</button></td><td><span class="reading">(kiu ây en-ji-ni-ơ)</span><span class="ipa">/ˌkjuː ˈeɪ ˌendʒɪˈnɪər/</span></td><td class="pos">n phr.</td><td>kỹ sư kiểm thử / đảm bảo chất lượng</td></tr>
+            <tr><td><span class="term">experience</span><button class="speak" data-text="experience">🔊</button></td><td><span class="reading">(ịk-xpia-ri-ợns)</span><span class="ipa">/ɪkˈspɪəriəns/</span></td><td class="pos">n</td><td>kinh nghiệm</td></tr>
+            <tr><td><span class="term">manual testing</span><button class="speak" data-text="manual testing">🔊</button></td><td><span class="reading">(me-niu-ợl tes-tinh)</span><span class="ipa">/ˈmænjuəl ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử thủ công</td></tr>
+            <tr><td><span class="term">automated testing</span><button class="speak" data-text="automated testing">🔊</button></td><td><span class="reading">(o-tô-mây-tịd tes-tinh)</span><span class="ipa">/ˈɔːtəmeɪtɪd ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử tự động</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">For automation, I mainly work with Playwright and Selenium to test web applications.</p>
+        <p class="sen-vi">Về phần tự động hóa, tôi chủ yếu làm việc với Playwright và Selenium để kiểm thử các ứng dụng web.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">automation</span><button class="speak" data-text="automation">🔊</button></td><td><span class="reading">(o-tô-mây-sần)</span><span class="ipa">/ˌɔːtəˈmeɪʃn/</span></td><td class="pos">n</td><td>sự tự động hóa</td></tr>
+            <tr><td><span class="term">work with</span><button class="speak" data-text="work with">🔊</button></td><td><span class="reading">(uợc uíth)</span><span class="ipa">/wɜːk wɪð/</span></td><td class="pos">phr.v</td><td>làm việc với, sử dụng</td></tr>
+            <tr><td><span class="term">web application</span><button class="speak" data-text="web application">🔊</button></td><td><span class="reading">(oép áp-li-kây-sần)</span><span class="ipa">/web ˌæplɪˈkeɪʃn/</span></td><td class="pos">n phr.</td><td>ứng dụng web</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I write end-to-end tests, build reusable frameworks using the Page Object Model, and integrate the tests into CI/CD pipelines so they run automatically on every build.</p>
+        <p class="sen-vi">Tôi viết các bài kiểm thử đầu-cuối, xây dựng những bộ khung tái sử dụng được theo mô hình Page Object Model, và tích hợp các bài kiểm thử vào quy trình CI/CD để chúng tự động chạy mỗi khi có bản dựng mới.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">end-to-end test</span><button class="speak" data-text="end to end test">🔊</button></td><td><span class="reading">(en-tu-en test)</span><span class="ipa">/ˌend tu ˈend test/</span></td><td class="pos">n phr.</td><td>kiểm thử đầu-cuối (toàn luồng)</td></tr>
+            <tr><td><span class="term">reusable framework</span><button class="speak" data-text="reusable framework">🔊</button></td><td><span class="reading">(ri-diu-zợ-bồ frêm-uợc)</span><span class="ipa">/ˌriːˈjuːzəbl ˈfreɪmwɜːk/</span></td><td class="pos">n phr.</td><td>bộ khung tái sử dụng được</td></tr>
+            <tr><td><span class="term">Page Object Model</span><button class="speak" data-text="Page Object Model">🔊</button></td><td><span class="reading">(pếch ọb-jịct mo-đồ)</span><span class="ipa">/peɪdʒ ˈɒbdʒɪkt ˈmɒdl/</span></td><td class="pos">n phr.</td><td>mô hình đối tượng trang</td></tr>
+            <tr><td><span class="term">integrate</span><button class="speak" data-text="integrate">🔊</button></td><td><span class="reading">(in-ti-grêt)</span><span class="ipa">/ˈɪntɪɡreɪt/</span></td><td class="pos">v</td><td>tích hợp</td></tr>
+            <tr><td><span class="term">CI/CD pipeline</span><button class="speak" data-text="C I C D pipeline">🔊</button></td><td><span class="reading">(xi-ai xi-đi pai-plain)</span><span class="ipa">/ˌsiː ˈaɪ ˌsiː ˈdiː ˈpaɪplaɪn/</span></td><td class="pos">n phr.</td><td>quy trình CI/CD</td></tr>
+            <tr><td><span class="term">run automatically</span><button class="speak" data-text="run automatically">🔊</button></td><td><span class="reading">(rần o-tô-me-tịc-li)</span><span class="ipa">/rʌn ˌɔːtəˈmætɪkli/</span></td><td class="pos">v phr.</td><td>chạy tự động</td></tr>
+            <tr><td><span class="term">build</span><button class="speak" data-text="build">🔊</button></td><td><span class="reading">(bil-đờ)</span><span class="ipa">/bɪld/</span></td><td class="pos">n</td><td>bản dựng</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">My focus is on writing stable, maintainable tests that reduce flakiness and give the team fast feedback on quality.</p>
+        <p class="sen-vi">Tôi tập trung vào việc viết những bài kiểm thử ổn định, dễ bảo trì, giúp giảm tình trạng chập chờn và mang lại phản hồi nhanh về chất lượng cho cả nhóm.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">focus on</span><button class="speak" data-text="focus on">🔊</button></td><td><span class="reading">(phâu-cợs on)</span><span class="ipa">/ˈfəʊkəs ɒn/</span></td><td class="pos">phr.v</td><td>tập trung vào</td></tr>
+            <tr><td><span class="term">stable</span><button class="speak" data-text="stable">🔊</button></td><td><span class="reading">(stây-bồ)</span><span class="ipa">/ˈsteɪbl/</span></td><td class="pos">adj</td><td>ổn định</td></tr>
+            <tr><td><span class="term">maintainable</span><button class="speak" data-text="maintainable">🔊</button></td><td><span class="reading">(mên-tên-ợ-bồ)</span><span class="ipa">/meɪnˈteɪnəbl/</span></td><td class="pos">adj</td><td>dễ bảo trì</td></tr>
+            <tr><td><span class="term">reduce</span><button class="speak" data-text="reduce">🔊</button></td><td><span class="reading">(ri-đius)</span><span class="ipa">/rɪˈdjuːs/</span></td><td class="pos">v</td><td>giảm</td></tr>
+            <tr><td><span class="term">flakiness</span><button class="speak" data-text="flakiness">🔊</button></td><td><span class="reading">(phlây-ki-nợs)</span><span class="ipa">/ˈfleɪkinəs/</span></td><td class="pos">n</td><td>tình trạng chập chờn</td></tr>
+            <tr><td><span class="term">fast feedback</span><button class="speak" data-text="fast feedback">🔊</button></td><td><span class="reading">(phast phít-béc)</span><span class="ipa">/fɑːst ˈfiːdbæk/</span></td><td class="pos">n phr.</td><td>phản hồi nhanh</td></tr>
+            <tr><td><span class="term">quality</span><button class="speak" data-text="quality">🔊</button></td><td><span class="reading">(quo-lợ-ti)</span><span class="ipa">/ˈkwɒləti/</span></td><td class="pos">n</td><td>chất lượng</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -520,7 +619,22 @@
     enBq.after(rep);
   })();
 
-  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt (bảng chính) */
   (function(){
     const table = document.querySelector('table.vocab');
     if(!table) return;
@@ -539,11 +653,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

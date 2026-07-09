@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -223,6 +261,79 @@
         trên các <span class="keyword">cloud device farm</span> như BrowserStack hoặc Sauce Labs thay vì tự
         duy trì thiết bị vật lý.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">I split this into two areas.</p>
+        <p class="sen-vi">Tôi chia việc này thành hai hướng.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">split into</span><button class="speak" data-text="split into">🔊</button></td><td><span class="reading">(spờ-lít in-tu)</span><span class="ipa">/splɪt ˈɪntuː/</span></td><td class="pos">v phr.</td><td>chia thành</td></tr>
+            <tr><td><span class="term">area</span><button class="speak" data-text="area">🔊</button></td><td><span class="reading">(e-ri-ợ)</span><span class="ipa">/ˈeəriə/</span></td><td class="pos">n</td><td>khu vực, hướng/mảng (công việc)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">For a responsive web app, I use Playwright's viewport emulation and device descriptors, like devices['iPhone 13'], to simulate different screen sizes, pixel ratios, and touch input without needing a real phone.</p>
+        <p class="sen-vi">Với web responsive, tôi dùng tính năng viewport emulation và device descriptors của Playwright, ví dụ devices['iPhone 13'], để mô phỏng các kích thước màn hình, tỉ lệ pixel và thao tác chạm khác nhau mà không cần điện thoại thật.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">responsive web app</span><button class="speak" data-text="responsive web app">🔊</button></td><td><span class="reading">(ri-spón-siv oép áp)</span><span class="ipa">/rɪˈspɒnsɪv web æp/</span></td><td class="pos">n phr.</td><td>ứng dụng web tự thích ứng</td></tr>
+            <tr><td><span class="term">viewport emulation</span><button class="speak" data-text="viewport emulation">🔊</button></td><td><span class="reading">(viu-pọt e-miu-lây-sần)</span><span class="ipa">/ˈvjuːpɔːt ˌemjuˈleɪʃn/</span></td><td class="pos">n phr.</td><td>mô phỏng khung nhìn màn hình</td></tr>
+            <tr><td><span class="term">device descriptor</span><button class="speak" data-text="device descriptor">🔊</button></td><td><span class="reading">(đi-vais đi-scríp-tơ)</span><span class="ipa">/dɪˈvaɪs dɪˈskrɪptər/</span></td><td class="pos">n phr.</td><td>hồ sơ mô tả thiết bị</td></tr>
+            <tr><td><span class="term">pixel ratio</span><button class="speak" data-text="pixel ratio">🔊</button></td><td><span class="reading">(pích-xồ rây-si-ô)</span><span class="ipa">/ˈpɪksl ˈreɪʃiəʊ/</span></td><td class="pos">n phr.</td><td>tỉ lệ điểm ảnh</td></tr>
+            <tr><td><span class="term">touch input</span><button class="speak" data-text="touch input">🔊</button></td><td><span class="reading">(tấch in-pút)</span><span class="ipa">/tʌtʃ ˈɪnpʊt/</span></td><td class="pos">n phr.</td><td>thao tác chạm (đầu vào cảm ứng)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I check that layout adapts correctly across the common responsive breakpoints, that touch gestures such as tap, swipe, and pinch-zoom work, and that content isn't cut off or overlapping.</p>
+        <p class="sen-vi">Tôi kiểm tra bố cục có thích ứng đúng qua các breakpoint responsive phổ biến không, các cử chỉ chạm (touch gestures) như tap, swipe, pinch-zoom có hoạt động không, và nội dung có bị cắt hoặc chồng lấp không.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">layout</span><button class="speak" data-text="layout">🔊</button></td><td><span class="reading">(lây-áo)</span><span class="ipa">/ˈleɪaʊt/</span></td><td class="pos">n</td><td>bố cục</td></tr>
+            <tr><td><span class="term">adapt</span><button class="speak" data-text="adapt">🔊</button></td><td><span class="reading">(ợ-đép)</span><span class="ipa">/əˈdæpt/</span></td><td class="pos">v</td><td>thích ứng</td></tr>
+            <tr><td><span class="term">responsive breakpoint</span><button class="speak" data-text="responsive breakpoint">🔊</button></td><td><span class="reading">(ri-spón-siv brếch-point)</span><span class="ipa">/rɪˈspɒnsɪv ˈbreɪkpɔɪnt/</span></td><td class="pos">n phr.</td><td>điểm ngắt bố cục responsive</td></tr>
+            <tr><td><span class="term">touch gesture</span><button class="speak" data-text="touch gesture">🔊</button></td><td><span class="reading">(tấch giét-chơ)</span><span class="ipa">/tʌtʃ ˈdʒestʃər/</span></td><td class="pos">n phr.</td><td>cử chỉ chạm (tap, swipe, pinch)</td></tr>
+            <tr><td><span class="term">pinch-zoom</span><button class="speak" data-text="pinch zoom">🔊</button></td><td><span class="reading">(pinh-chờ zum)</span><span class="ipa">/pɪntʃ zuːm/</span></td><td class="pos">n</td><td>thao tác thu/phóng bằng hai ngón</td></tr>
+            <tr><td><span class="term">overlapping</span><button class="speak" data-text="overlapping">🔊</button></td><td><span class="reading">(âu-vơ-lép-ping)</span><span class="ipa">/ˌəʊvəˈlæpɪŋ/</span></td><td class="pos">adj</td><td>chồng lấp lên nhau</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">For a native or hybrid mobile app, viewport emulation isn't enough because I need to interact with real OS-level components, so I use Appium, which drives the app through the actual accessibility tree on a real device or emulator, covering things like permission dialogs, push notifications, and orientation changes.</p>
+        <p class="sen-vi">Với ứng dụng mobile native hoặc hybrid, viewport emulation là chưa đủ vì tôi cần tương tác với các thành phần cấp hệ điều hành thật, nên tôi dùng Appium, công cụ điều khiển ứng dụng thông qua accessibility tree thật trên thiết bị thật hoặc emulator, bao gồm cả hộp thoại xin quyền, thông báo đẩy và thay đổi hướng màn hình.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">native app</span><button class="speak" data-text="native app">🔊</button></td><td><span class="reading">(nây-tiv áp)</span><span class="ipa">/ˈneɪtɪv æp/</span></td><td class="pos">n phr.</td><td>ứng dụng gốc (viết riêng cho iOS/Android)</td></tr>
+            <tr><td><span class="term">hybrid app</span><button class="speak" data-text="hybrid app">🔊</button></td><td><span class="reading">(hai-brít áp)</span><span class="ipa">/ˈhaɪbrɪd æp/</span></td><td class="pos">n phr.</td><td>ứng dụng lai (native + WebView)</td></tr>
+            <tr><td><span class="term">OS-level component</span><button class="speak" data-text="O S level component">🔊</button></td><td><span class="reading">(âu-ét lê-vồ com-pâu-nợnt)</span><span class="ipa">/ˌəʊ ˈes ˈlevl kəmˈpəʊnənt/</span></td><td class="pos">n phr.</td><td>thành phần cấp hệ điều hành</td></tr>
+            <tr><td><span class="term">Appium</span><button class="speak" data-text="Appium">🔊</button></td><td><span class="reading">(áp-pi-ầm)</span><span class="ipa">/ˈæpiəm/</span></td><td class="pos">n</td><td>framework tự động test ứng dụng mobile</td></tr>
+            <tr><td><span class="term">accessibility tree</span><button class="speak" data-text="accessibility tree">🔊</button></td><td><span class="reading">(ắc-xe-sờ-bi-li-ti tri)</span><span class="ipa">/əkˌsesəˈbɪləti triː/</span></td><td class="pos">n phr.</td><td>cây thuộc tính truy cập (OS dùng để xác định phần tử UI)</td></tr>
+            <tr><td><span class="term">permission dialog</span><button class="speak" data-text="permission dialog">🔊</button></td><td><span class="reading">(pơ-mi-sần đai-a-lóg)</span><span class="ipa">/pərˈmɪʃn ˈdaɪəlɒɡ/</span></td><td class="pos">n phr.</td><td>hộp thoại xin quyền</td></tr>
+            <tr><td><span class="term">orientation change</span><button class="speak" data-text="orientation change">🔊</button></td><td><span class="reading">(o-ri-en-tây-sần chên-giơ)</span><span class="ipa">/ˌɔːriənˈteɪʃn tʃeɪndʒ/</span></td><td class="pos">n phr.</td><td>thay đổi hướng màn hình (dọc/ngang)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">To scale coverage across many device and OS combinations, I run these suites on cloud device farms like BrowserStack or Sauce Labs instead of maintaining physical devices myself.</p>
+        <p class="sen-vi">Để mở rộng độ phủ qua nhiều tổ hợp thiết bị và hệ điều hành, tôi chạy các bộ test này trên các cloud device farm như BrowserStack hoặc Sauce Labs thay vì tự duy trì thiết bị vật lý.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">scale coverage</span><button class="speak" data-text="scale coverage">🔊</button></td><td><span class="reading">(xkêiu cấ-vơ-rịch)</span><span class="ipa">/skeɪl ˈkʌvərɪdʒ/</span></td><td class="pos">v phr.</td><td>mở rộng độ phủ kiểm thử</td></tr>
+            <tr><td><span class="term">device and OS combination</span><button class="speak" data-text="device and O S combination">🔊</button></td><td><span class="reading">(đi-vais en âu-ét cóm-bi-nây-sần)</span><span class="ipa">/dɪˈvaɪs ənd ˌəʊ ˈes ˌkɒmbɪˈneɪʃn/</span></td><td class="pos">n phr.</td><td>tổ hợp thiết bị và hệ điều hành</td></tr>
+            <tr><td><span class="term">cloud device farm</span><button class="speak" data-text="cloud device farm">🔊</button></td><td><span class="reading">(cláo đi-vais fam)</span><span class="ipa">/klaʊd dɪˈvaɪs fɑːm/</span></td><td class="pos">n phr.</td><td>trang trại thiết bị đám mây (BrowserStack, Sauce Labs)</td></tr>
+            <tr><td><span class="term">physical device</span><button class="speak" data-text="physical device">🔊</button></td><td><span class="reading">(phi-di-cồl đi-vais)</span><span class="ipa">/ˈfɪzɪkl dɪˈvaɪs/</span></td><td class="pos">n phr.</td><td>thiết bị vật lý</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -489,7 +600,22 @@
     enBq.after(rep);
   })();
 
-  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt (bảng chính) */
   (function(){
     const table = document.querySelector('table.vocab');
     if(!table) return;
@@ -508,11 +634,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

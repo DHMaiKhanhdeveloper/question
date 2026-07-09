@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -220,6 +258,68 @@
         và giữ việc <span class="keyword">bảo trì</span> đơn giản, vì nếu luồng thay đổi tôi chỉ cần cập nhật
         logic ở một chỗ thay vì ở hàng chục test bị sao chép.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">Data-driven testing is an approach where I separate the test logic from the test data, so the same test script runs multiple times with different input values.</p>
+        <p class="sen-vi">Data-driven testing là cách tiếp cận trong đó tôi tách riêng logic kiểm thử khỏi dữ liệu kiểm thử, để cùng một kịch bản test có thể chạy nhiều lần với các giá trị đầu vào khác nhau.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">data-driven testing</span><button class="speak" data-text="data driven testing">🔊</button></td><td><span class="reading">(đây-tơ đri-vần tex-tinh)</span><span class="ipa">/ˈdeɪtə ˈdrɪvn ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử theo dữ liệu</td></tr>
+            <tr><td><span class="term">separate</span><button class="speak" data-text="separate">🔊</button></td><td><span class="reading">(xe-pợ-rêt)</span><span class="ipa">/ˈsepəreɪt/</span></td><td class="pos">v</td><td>tách riêng</td></tr>
+            <tr><td><span class="term">test logic</span><button class="speak" data-text="test logic">🔊</button></td><td><span class="reading">(test lo-dzích)</span><span class="ipa">/test ˈlɒdʒɪk/</span></td><td class="pos">n phr.</td><td>logic kiểm thử</td></tr>
+            <tr><td><span class="term">test data</span><button class="speak" data-text="test data">🔊</button></td><td><span class="reading">(test đây-tơ)</span><span class="ipa">/test ˈdeɪtə/</span></td><td class="pos">n phr.</td><td>dữ liệu kiểm thử</td></tr>
+            <tr><td><span class="term">test script</span><button class="speak" data-text="test script">🔊</button></td><td><span class="reading">(test scríp)</span><span class="ipa">/test skrɪpt/</span></td><td class="pos">n phr.</td><td>kịch bản kiểm thử</td></tr>
+            <tr><td><span class="term">input values</span><button class="speak" data-text="input values">🔊</button></td><td><span class="reading">(in-pút va-liuz)</span><span class="ipa">/ˈɪnpʊt ˈvæljuːz/</span></td><td class="pos">n phr.</td><td>giá trị đầu vào</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Instead of writing a new test for every scenario, I store the data in a CSV file, a JSON file, or an array of objects, and then I loop over that dataset, feeding each record into a parameterized test function.</p>
+        <p class="sen-vi">Thay vì viết một test mới cho từng kịch bản, tôi lưu dữ liệu trong file CSV, file JSON, hoặc một mảng các object, sau đó lặp qua tập dữ liệu đó, đưa từng bản ghi vào một hàm test tham số hóa.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">scenario</span><button class="speak" data-text="scenario">🔊</button></td><td><span class="reading">(xi-na-ri-âu)</span><span class="ipa">/sɪˈnɑːriəʊ/</span></td><td class="pos">n</td><td>kịch bản, tình huống</td></tr>
+            <tr><td><span class="term">CSV file</span><button class="speak" data-text="C S V file">🔊</button></td><td><span class="reading">(xi-ét-vi phai-ồ)</span><span class="ipa">/ˌsiːˌesˈviː faɪl/</span></td><td class="pos">n phr.</td><td>tệp CSV (dữ liệu dạng bảng)</td></tr>
+            <tr><td><span class="term">array of objects</span><button class="speak" data-text="array of objects">🔊</button></td><td><span class="reading">(ơ-rây ợv ốp-dzécts)</span><span class="ipa">/əˈreɪ əv ˈɒbdʒɪkts/</span></td><td class="pos">n phr.</td><td>mảng các đối tượng</td></tr>
+            <tr><td><span class="term">loop over</span><button class="speak" data-text="loop over">🔊</button></td><td><span class="reading">(lúp âu-vơ)</span><span class="ipa">/luːp ˈəʊvər/</span></td><td class="pos">phr. v</td><td>lặp qua (một tập dữ liệu)</td></tr>
+            <tr><td><span class="term">dataset</span><button class="speak" data-text="dataset">🔊</button></td><td><span class="reading">(đây-tơ-sét)</span><span class="ipa">/ˈdeɪtəset/</span></td><td class="pos">n</td><td>tập dữ liệu</td></tr>
+            <tr><td><span class="term">parameterized test</span><button class="speak" data-text="parameterized test">🔊</button></td><td><span class="reading">(pơ-ram-ợ-tơ-raizd test)</span><span class="ipa">/pəˈræmɪtəraɪzd test/</span></td><td class="pos">n phr.</td><td>test tham số hóa</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">For example, a login test can run once for valid credentials, once for an invalid password, and once for an empty username, all using the same underlying test steps.</p>
+        <p class="sen-vi">Ví dụ, một test đăng nhập có thể chạy một lần với thông tin hợp lệ, một lần với mật khẩu sai, và một lần với tên đăng nhập rỗng, tất cả đều dùng chung các bước test bên dưới.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">login test</span><button class="speak" data-text="login test">🔊</button></td><td><span class="reading">(lóc-in test)</span><span class="ipa">/ˈlɒɡɪn test/</span></td><td class="pos">n phr.</td><td>bài kiểm thử đăng nhập</td></tr>
+            <tr><td><span class="term">valid credentials</span><button class="speak" data-text="valid credentials">🔊</button></td><td><span class="reading">(ve-lịd cri-đen-sồs)</span><span class="ipa">/ˈvælɪd krɪˈdenʃlz/</span></td><td class="pos">n phr.</td><td>thông tin đăng nhập hợp lệ</td></tr>
+            <tr><td><span class="term">invalid password</span><button class="speak" data-text="invalid password">🔊</button></td><td><span class="reading">(in-ve-lịd pas-uợd)</span><span class="ipa">/ɪnˈvælɪd ˈpɑːswɜːd/</span></td><td class="pos">n phr.</td><td>mật khẩu không hợp lệ</td></tr>
+            <tr><td><span class="term">empty username</span><button class="speak" data-text="empty username">🔊</button></td><td><span class="reading">(em-ti diu-dơ-nêm)</span><span class="ipa">/ˈempti ˈjuːzəneɪm/</span></td><td class="pos">n phr.</td><td>tên đăng nhập rỗng</td></tr>
+            <tr><td><span class="term">underlying</span><button class="speak" data-text="underlying">🔊</button></td><td><span class="reading">(ân-đơ-lai-inh)</span><span class="ipa">/ˌʌndərˈlaɪɪŋ/</span></td><td class="pos">adj</td><td>bên dưới, nền tảng</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">This reduces duplicate test code, makes it very easy to extend coverage by just adding a new row of data, and keeps maintenance simple, because if the flow changes I only update the logic in one place instead of in dozens of copy-pasted tests.</p>
+        <p class="sen-vi">Cách này giúp giảm mã test trùng lặp, giúp việc mở rộng phạm vi kiểm thử rất dễ dàng chỉ bằng cách thêm một dòng dữ liệu mới, và giữ việc bảo trì đơn giản, vì nếu luồng thay đổi tôi chỉ cần cập nhật logic ở một chỗ thay vì ở hàng chục test bị sao chép.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">duplicate test code</span><button class="speak" data-text="duplicate test code">🔊</button></td><td><span class="reading">(diu-pli-cợt test cốt)</span><span class="ipa">/ˈdjuːplɪkət test kəʊd/</span></td><td class="pos">n phr.</td><td>mã test bị trùng lặp</td></tr>
+            <tr><td><span class="term">extend coverage</span><button class="speak" data-text="extend coverage">🔊</button></td><td><span class="reading">(ích-stend cơ-vợ-rịt)</span><span class="ipa">/ɪkˈstend ˈkʌvərɪdʒ/</span></td><td class="pos">v phr.</td><td>mở rộng phạm vi kiểm thử</td></tr>
+            <tr><td><span class="term">maintenance</span><button class="speak" data-text="maintenance">🔊</button></td><td><span class="reading">(mên-tơ-nợns)</span><span class="ipa">/ˈmeɪntənəns/</span></td><td class="pos">n</td><td>việc bảo trì</td></tr>
+            <tr><td><span class="term">flow</span><button class="speak" data-text="flow">🔊</button></td><td><span class="reading">(phlâu)</span><span class="ipa">/fləʊ/</span></td><td class="pos">n</td><td>luồng (quy trình)</td></tr>
+            <tr><td><span class="term">copy-pasted</span><button class="speak" data-text="copy pasted">🔊</button></td><td><span class="reading">(cóp-pi pây-stịd)</span><span class="ipa">/ˈkɒpi ˈpeɪstɪd/</span></td><td class="pos">adj</td><td>bị sao chép (copy-paste)</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -481,6 +581,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -500,11 +615,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

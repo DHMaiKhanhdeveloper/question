@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -226,6 +264,78 @@
         Tôi cũng cân nhắc <span class="keyword">chi phí so với lợi ích</span>: nếu viết và bảo trì một script
         tốn nhiều hơn thời gian nó tiết kiệm được, tôi sẽ test thủ công thay vào đó.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">I decide based on repetition, stability, and risk.</p>
+        <p class="sen-vi">Tôi quyết định dựa trên mức độ lặp lại, sự ổn định và rủi ro.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">decide based on</span><button class="speak" data-text="decide based on">🔊</button></td><td><span class="reading">(đi-xai-đờ bêst on)</span><span class="ipa">/dɪˈsaɪd beɪst ɒn/</span></td><td class="pos">v phr.</td><td>quyết định dựa trên</td></tr>
+            <tr><td><span class="term">repetition</span><button class="speak" data-text="repetition">🔊</button></td><td><span class="reading">(re-pi-ti-sần)</span><span class="ipa">/ˌrepɪˈtɪʃn/</span></td><td class="pos">n</td><td>sự lặp lại</td></tr>
+            <tr><td><span class="term">stability</span><button class="speak" data-text="stability">🔊</button></td><td><span class="reading">(sờ-tơ-bi-lơ-ti)</span><span class="ipa">/stəˈbɪləti/</span></td><td class="pos">n</td><td>sự ổn định</td></tr>
+            <tr><td><span class="term">risk</span><button class="speak" data-text="risk">🔊</button></td><td><span class="reading">(rist)</span><span class="ipa">/rɪsk/</span></td><td class="pos">n</td><td>rủi ro</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">If a test case is repetitive, runs on every regression cycle, and covers a stable, high-priority flow like login or checkout, it is a strong automation candidate because it saves time and catches regressions consistently.</p>
+        <p class="sen-vi">Nếu một test case lặp đi lặp lại, chạy trong mỗi chu kỳ regression, và bao phủ một luồng ổn định, ưu tiên cao như đăng nhập hay thanh toán, thì đó là một ứng viên automation mạnh vì nó tiết kiệm thời gian và phát hiện lỗi hồi quy một cách nhất quán.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">test case</span><button class="speak" data-text="test case">🔊</button></td><td><span class="reading">(test kêis)</span><span class="ipa">/test keɪs/</span></td><td class="pos">n phr.</td><td>trường hợp kiểm thử</td></tr>
+            <tr><td><span class="term">regression cycle</span><button class="speak" data-text="regression cycle">🔊</button></td><td><span class="reading">(ri-gre-sần sai-cồ)</span><span class="ipa">/rɪˈɡreʃn ˈsaɪkl/</span></td><td class="pos">n phr.</td><td>chu kỳ kiểm thử hồi quy</td></tr>
+            <tr><td><span class="term">high-priority</span><button class="speak" data-text="high priority">🔊</button></td><td><span class="reading">(hai prai-o-rơ-ti)</span><span class="ipa">/haɪ praɪˈɒrəti/</span></td><td class="pos">adj</td><td>ưu tiên cao</td></tr>
+            <tr><td><span class="term">automation candidate</span><button class="speak" data-text="automation candidate">🔊</button></td><td><span class="reading">(o-tơ-mây-sần cen-đi-đợt)</span><span class="ipa">/ˌɔːtəˈmeɪʃn ˈkændɪdət/</span></td><td class="pos">n phr.</td><td>ứng viên phù hợp để automation</td></tr>
+            <tr><td><span class="term">catch regressions</span><button class="speak" data-text="catch regressions">🔊</button></td><td><span class="reading">(kétch ri-gre-sần)</span><span class="ipa">/kætʃ rɪˈɡreʃnz/</span></td><td class="pos">v phr.</td><td>phát hiện lỗi hồi quy</td></tr>
+            <tr><td><span class="term">consistently</span><button class="speak" data-text="consistently">🔊</button></td><td><span class="reading">(cợn-sis-tần-tli)</span><span class="ipa">/kənˈsɪstəntli/</span></td><td class="pos">adv</td><td>một cách nhất quán</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I also automate data-driven scenarios, where the same steps run with many input combinations, since a script handles that far more reliably than a human.</p>
+        <p class="sen-vi">Tôi cũng automation các kịch bản data-driven, nơi cùng các bước chạy với nhiều tổ hợp dữ liệu đầu vào, vì script xử lý việc đó đáng tin cậy hơn nhiều so với con người.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">data-driven scenario</span><button class="speak" data-text="data driven scenario">🔊</button></td><td><span class="reading">(đây-tơ đri-vần si-ne-ri-ô)</span><span class="ipa">/ˈdeɪtə ˈdrɪvn səˈnɑːriəʊ/</span></td><td class="pos">n phr.</td><td>kịch bản dựa trên dữ liệu</td></tr>
+            <tr><td><span class="term">input combination</span><button class="speak" data-text="input combination">🔊</button></td><td><span class="reading">(in-pút com-bi-nây-sần)</span><span class="ipa">/ˈɪnpʊt ˌkɒmbɪˈneɪʃn/</span></td><td class="pos">n phr.</td><td>tổ hợp dữ liệu đầu vào</td></tr>
+            <tr><td><span class="term">script</span><button class="speak" data-text="script">🔊</button></td><td><span class="reading">(scríp-tơ)</span><span class="ipa">/skrɪpt/</span></td><td class="pos">n</td><td>đoạn mã/kịch bản kiểm thử</td></tr>
+            <tr><td><span class="term">reliably</span><button class="speak" data-text="reliably">🔊</button></td><td><span class="reading">(ri-lai-ợ-bli)</span><span class="ipa">/rɪˈlaɪəbli/</span></td><td class="pos">adv</td><td>một cách đáng tin cậy</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">On the other hand, I keep exploratory testing, usability checks, and one-off or rapidly changing features manual, because human judgment is needed to evaluate look and feel, and automating a UI that changes constantly wastes maintenance effort.</p>
+        <p class="sen-vi">Ngược lại, tôi giữ exploratory testing, kiểm tra usability, và các tính năng một lần hoặc thay đổi liên tục ở dạng thủ công, vì cần đến đánh giá của con người để nhận xét về giao diện và cảm nhận, và automation một UI thay đổi liên tục sẽ lãng phí công sức bảo trì.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">exploratory testing</span><button class="speak" data-text="exploratory testing">🔊</button></td><td><span class="reading">(ex-plo-rơ-to-ri tes-ting)</span><span class="ipa">/ɪkˈsplɒrətri ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử khám phá</td></tr>
+            <tr><td><span class="term">usability check</span><button class="speak" data-text="usability check">🔊</button></td><td><span class="reading">(diu-zơ-bi-lơ-ti chéc)</span><span class="ipa">/ˌjuːzəˈbɪləti tʃek/</span></td><td class="pos">n phr.</td><td>kiểm tra khả năng sử dụng</td></tr>
+            <tr><td><span class="term">one-off</span><button class="speak" data-text="one off">🔊</button></td><td><span class="reading">(oăn of)</span><span class="ipa">/wʌn ɒf/</span></td><td class="pos">adj</td><td>chỉ diễn ra một lần</td></tr>
+            <tr><td><span class="term">manual</span><button class="speak" data-text="manual">🔊</button></td><td><span class="reading">(me-niu-ồ)</span><span class="ipa">/ˈmænjuəl/</span></td><td class="pos">adj</td><td>thủ công</td></tr>
+            <tr><td><span class="term">human judgment</span><button class="speak" data-text="human judgment">🔊</button></td><td><span class="reading">(hiu-mần jăj-mợnt)</span><span class="ipa">/ˈhjuːmən ˈdʒʌdʒmənt/</span></td><td class="pos">n phr.</td><td>sự đánh giá/phán đoán của con người</td></tr>
+            <tr><td><span class="term">maintenance effort</span><button class="speak" data-text="maintenance effort">🔊</button></td><td><span class="reading">(mên-tơ-nợns e-phợt)</span><span class="ipa">/ˈmeɪntənəns ˈefət/</span></td><td class="pos">n phr.</td><td>công sức bảo trì</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I also weigh the cost versus the benefit: if writing and maintaining a script costs more than the time it saves, I test it manually instead.</p>
+        <p class="sen-vi">Tôi cũng cân nhắc chi phí so với lợi ích: nếu viết và bảo trì một script tốn nhiều hơn thời gian nó tiết kiệm được, tôi sẽ test thủ công thay vào đó.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">weigh</span><button class="speak" data-text="weigh">🔊</button></td><td><span class="reading">(uê)</span><span class="ipa">/weɪ/</span></td><td class="pos">v</td><td>cân nhắc</td></tr>
+            <tr><td><span class="term">cost versus benefit</span><button class="speak" data-text="cost versus benefit">🔊</button></td><td><span class="reading">(cost vơ-sợs be-nơ-phit)</span><span class="ipa">/kɒst ˈvɜːsəs ˈbenɪfɪt/</span></td><td class="pos">n phr.</td><td>so sánh chi phí và lợi ích</td></tr>
+            <tr><td><span class="term">maintain</span><button class="speak" data-text="maintain">🔊</button></td><td><span class="reading">(mên-tên)</span><span class="ipa">/meɪnˈteɪn/</span></td><td class="pos">v</td><td>bảo trì, duy trì</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -481,6 +591,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -500,11 +625,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

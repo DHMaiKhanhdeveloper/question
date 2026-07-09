@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -223,6 +261,76 @@
         xuống dưới hai phần trăm. Cả team bắt đầu tin tưởng lại vào pipeline và bật lại nó làm
         điều kiện <span class="keyword">chặn merge</span>.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">On my last project, our regression suite had grown to over six hundred tests, and it was taking almost three hours to run, with a flakiness rate around fifteen percent, so the team stopped trusting the results.</p>
+        <p class="sen-vi">Trong dự án gần đây nhất của tôi, bộ regression suite đã tăng lên hơn sáu trăm test, và mất gần ba tiếng để chạy, với tỷ lệ flaky khoảng mười lăm phần trăm, nên cả team không còn tin vào kết quả nữa.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">regression suite</span><button class="speak" data-text="regression suite">🔊</button></td><td><span class="reading">(ri-grê-sần suýt)</span><span class="ipa">/rɪˈɡreʃn swiːt/</span></td><td class="pos">n phr.</td><td>bộ test hồi quy</td></tr>
+            <tr><td><span class="term">grown to</span><button class="speak" data-text="grown to">🔊</button></td><td><span class="reading">(grôn tu)</span><span class="ipa">/ɡrəʊn tuː/</span></td><td class="pos">v phr.</td><td>tăng lên đến</td></tr>
+            <tr><td><span class="term">flakiness rate</span><button class="speak" data-text="flakiness rate">🔊</button></td><td><span class="reading">(phlê-ki-nợs rêit)</span><span class="ipa">/ˈfleɪkinəs reɪt/</span></td><td class="pos">n phr.</td><td>tỷ lệ test không ổn định</td></tr>
+            <tr><td><span class="term">trust the results</span><button class="speak" data-text="trust the results">🔊</button></td><td><span class="reading">(trấst thờ ri-zần-tx)</span><span class="ipa">/trʌst ðə rɪˈzʌlts/</span></td><td class="pos">v phr.</td><td>tin vào kết quả</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">My task was to make the suite faster and more reliable so it could actually gate our releases.</p>
+        <p class="sen-vi">Nhiệm vụ của tôi là làm cho bộ test nhanh hơn và đáng tin cậy hơn để nó thực sự có thể chặn các bản release.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">task</span><button class="speak" data-text="task">🔊</button></td><td><span class="reading">(te-sk)</span><span class="ipa">/tæsk/</span></td><td class="pos">n</td><td>nhiệm vụ</td></tr>
+            <tr><td><span class="term">reliable</span><button class="speak" data-text="reliable">🔊</button></td><td><span class="reading">(ri-lai-ợ-bồ)</span><span class="ipa">/rɪˈlaɪəbl/</span></td><td class="pos">adj</td><td>đáng tin cậy</td></tr>
+            <tr><td><span class="term">gate releases</span><button class="speak" data-text="gate releases">🔊</button></td><td><span class="reading">(ghêit ri-li-sợs)</span><span class="ipa">/ɡeɪt rɪˈliːsɪz/</span></td><td class="pos">v phr.</td><td>kiểm soát/chặn việc phát hành</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I introduced parallel execution across multiple workers, added a smart retry mechanism only for known flaky categories instead of masking real bugs, replaced brittle locators with stable data-test-id attributes, and built a clearer reporting dashboard with screenshots and video on failure.</p>
+        <p class="sen-vi">Tôi đã triển khai chạy song song (parallel execution) trên nhiều worker, thêm cơ chế retry thông minh chỉ áp dụng cho các nhóm test flaky đã biết thay vì che giấu lỗi thật, thay các locator dễ vỡ (brittle) bằng thuộc tính data-test-id ổn định, và xây dựng một dashboard báo cáo rõ ràng hơn với ảnh chụp màn hình và video khi test thất bại.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">parallel execution</span><button class="speak" data-text="parallel execution">🔊</button></td><td><span class="reading">(pe-rợ-lồ éc-si-kiu-sần)</span><span class="ipa">/ˈpærəlel ˌeksɪˈkjuːʃn/</span></td><td class="pos">n phr.</td><td>thực thi song song</td></tr>
+            <tr><td><span class="term">retry mechanism</span><button class="speak" data-text="retry mechanism">🔊</button></td><td><span class="reading">(ri-trai me-kợ-ni-zầm)</span><span class="ipa">/riːˈtraɪ ˈmekənɪzəm/</span></td><td class="pos">n phr.</td><td>cơ chế thử lại</td></tr>
+            <tr><td><span class="term">flaky category</span><button class="speak" data-text="flaky category">🔊</button></td><td><span class="reading">(phlê-ki ke-tơ-go-ri)</span><span class="ipa">/ˈfleɪki ˈkætəɡəri/</span></td><td class="pos">n phr.</td><td>nhóm/danh mục test không ổn định</td></tr>
+            <tr><td><span class="term">mask</span><button class="speak" data-text="mask">🔊</button></td><td><span class="reading">(mát-sk)</span><span class="ipa">/mɑːsk/</span></td><td class="pos">v</td><td>che giấu (lỗi thật)</td></tr>
+            <tr><td><span class="term">brittle locator</span><button class="speak" data-text="brittle locator">🔊</button></td><td><span class="reading">(brít-tồ lâu-kêi-tơ)</span><span class="ipa">/ˈbrɪtl ləʊˈkeɪtər/</span></td><td class="pos">n phr.</td><td>locator dễ vỡ, dễ hỏng</td></tr>
+            <tr><td><span class="term">data-test-id attribute</span><button class="speak" data-text="data test id attribute">🔊</button></td><td><span class="reading">(đây-tơ test ai-đi ợ-tri-biu-t)</span><span class="ipa">/ˈdeɪtə test aɪ diː ˈætrɪbjuːt/</span></td><td class="pos">n phr.</td><td>thuộc tính định danh phần tử cho test</td></tr>
+            <tr><td><span class="term">reporting dashboard</span><button class="speak" data-text="reporting dashboard">🔊</button></td><td><span class="reading">(ri-po-tinh đát-bo-đờ)</span><span class="ipa">/rɪˈpɔːtɪŋ ˈdæʃbɔːd/</span></td><td class="pos">n phr.</td><td>bảng điều khiển báo cáo</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">As a result, the runtime dropped from three hours to about forty minutes, and flakiness fell from fifteen percent to under two percent.</p>
+        <p class="sen-vi">Kết quả là thời gian chạy giảm từ ba tiếng xuống còn khoảng bốn mươi phút, và độ flaky giảm từ mười lăm phần trăm xuống dưới hai phần trăm.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">runtime</span><button class="speak" data-text="runtime">🔊</button></td><td><span class="reading">(rân-taim)</span><span class="ipa">/ˈrʌntaɪm/</span></td><td class="pos">n</td><td>thời gian chạy</td></tr>
+            <tr><td><span class="term">drop</span><button class="speak" data-text="drop">🔊</button></td><td><span class="reading">(đrop)</span><span class="ipa">/drɒp/</span></td><td class="pos">v</td><td>giảm xuống</td></tr>
+            <tr><td><span class="term">flakiness</span><button class="speak" data-text="flakiness">🔊</button></td><td><span class="reading">(phlê-ki-nợs)</span><span class="ipa">/ˈfleɪkinəs/</span></td><td class="pos">n</td><td>tính không ổn định (của test)</td></tr>
+            <tr><td><span class="term">percent</span><button class="speak" data-text="percent">🔊</button></td><td><span class="reading">(pơ-sent)</span><span class="ipa">/pərˈsent/</span></td><td class="pos">n</td><td>phần trăm</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">The team started trusting the pipeline again and re-enabled it as a merge gate.</p>
+        <p class="sen-vi">Cả team bắt đầu tin tưởng lại vào pipeline và bật lại nó làm điều kiện chặn merge.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">pipeline</span><button class="speak" data-text="pipeline">🔊</button></td><td><span class="reading">(pai-plain)</span><span class="ipa">/ˈpaɪplaɪn/</span></td><td class="pos">n</td><td>quy trình CI/CD tự động</td></tr>
+            <tr><td><span class="term">re-enable</span><button class="speak" data-text="re enable">🔊</button></td><td><span class="reading">(ri-i-nê-bồ)</span><span class="ipa">/ˌriːɪˈneɪbl/</span></td><td class="pos">v</td><td>bật lại, kích hoạt lại</td></tr>
+            <tr><td><span class="term">merge gate</span><button class="speak" data-text="merge gate">🔊</button></td><td><span class="reading">(mơ-giơ ghêit)</span><span class="ipa">/mɜːdʒ ɡeɪt/</span></td><td class="pos">n phr.</td><td>điều kiện chặn để cho phép merge code</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -485,6 +593,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -504,11 +627,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

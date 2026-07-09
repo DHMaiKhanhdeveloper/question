@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -221,6 +259,69 @@
         <span class="keyword">đã xác nhận</span> trước khi đóng, và tôi tiếp tục theo dõi trạng thái của
         bug xuyên suốt <span class="keyword">quy trình</span> để đảm bảo không có gì bị bỏ quên âm thầm.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">Whenever I find a defect, I log it in a tracking tool like Jira with a clear title and detailed reproduction steps, so anyone can reproduce the issue without asking me questions.</p>
+        <p class="sen-vi">Mỗi khi phát hiện một lỗi (defect), tôi ghi nhận nó trong một công cụ theo dõi như Jira với tiêu đề rõ ràng và các bước tái hiện lỗi chi tiết, để bất kỳ ai cũng có thể tái hiện lỗi mà không cần hỏi lại tôi.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">defect</span><button class="speak" data-text="defect">🔊</button></td><td><span class="reading">(đi-fect)</span><span class="ipa">/ˈdiːfekt/</span></td><td class="pos">n</td><td>lỗi, khiếm khuyết</td></tr>
+            <tr><td><span class="term">tracking tool</span><button class="speak" data-text="tracking tool">🔊</button></td><td><span class="reading">(trác-king tul)</span><span class="ipa">/ˈtrækɪŋ tuːl/</span></td><td class="pos">n phr.</td><td>công cụ theo dõi</td></tr>
+            <tr><td><span class="term">clear title</span><button class="speak" data-text="clear title">🔊</button></td><td><span class="reading">(cli-ơ tai-tồl)</span><span class="ipa">/klɪər ˈtaɪtl/</span></td><td class="pos">n phr.</td><td>tiêu đề rõ ràng</td></tr>
+            <tr><td><span class="term">reproduction steps</span><button class="speak" data-text="reproduction steps">🔊</button></td><td><span class="reading">(ri-prợ-đấc-sần steps)</span><span class="ipa">/ˌriːprəˈdʌkʃn steps/</span></td><td class="pos">n phr.</td><td>các bước tái hiện lỗi</td></tr>
+            <tr><td><span class="term">reproduce</span><button class="speak" data-text="reproduce">🔊</button></td><td><span class="reading">(ri-prợ-đius)</span><span class="ipa">/ˌriːprəˈdjuːs/</span></td><td class="pos">v</td><td>tái hiện (lỗi)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I always include the expected result versus the actual result, the environment, like browser, OS, and build version, plus screenshots, logs, or a trace file as attachments to give developers full context.</p>
+        <p class="sen-vi">Tôi luôn nêu rõ kết quả mong đợi so với kết quả thực tế, môi trường như trình duyệt, hệ điều hành và phiên bản build, cùng với ảnh chụp màn hình, log, hoặc file trace đính kèm để cung cấp đầy đủ ngữ cảnh cho lập trình viên.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">expected result</span><button class="speak" data-text="expected result">🔊</button></td><td><span class="reading">(ích-spéc-tịt ri-zấlt)</span><span class="ipa">/ɪkˈspektɪd rɪˈzʌlt/</span></td><td class="pos">n phr.</td><td>kết quả mong đợi</td></tr>
+            <tr><td><span class="term">actual result</span><button class="speak" data-text="actual result">🔊</button></td><td><span class="reading">(éc-chu-ồl ri-zấlt)</span><span class="ipa">/ˈæktʃuəl rɪˈzʌlt/</span></td><td class="pos">n phr.</td><td>kết quả thực tế</td></tr>
+            <tr><td><span class="term">environment</span><button class="speak" data-text="environment">🔊</button></td><td><span class="reading">(in-vai-rợn-mợnt)</span><span class="ipa">/ɪnˈvaɪrənmənt/</span></td><td class="pos">n</td><td>môi trường</td></tr>
+            <tr><td><span class="term">screenshot</span><button class="speak" data-text="screenshot">🔊</button></td><td><span class="reading">(scrin-shát)</span><span class="ipa">/ˈskriːnʃɒt/</span></td><td class="pos">n</td><td>ảnh chụp màn hình</td></tr>
+            <tr><td><span class="term">logs</span><button class="speak" data-text="logs">🔊</button></td><td><span class="reading">(lógs)</span><span class="ipa">/lɒɡz/</span></td><td class="pos">n</td><td>nhật ký hệ thống</td></tr>
+            <tr><td><span class="term">trace file</span><button class="speak" data-text="trace file">🔊</button></td><td><span class="reading">(trếis fail)</span><span class="ipa">/treɪs faɪl/</span></td><td class="pos">n phr.</td><td>tệp ghi vết thực thi test</td></tr>
+            <tr><td><span class="term">attachment</span><button class="speak" data-text="attachment">🔊</button></td><td><span class="reading">(ợ-tách-mợnt)</span><span class="ipa">/əˈtætʃmənt/</span></td><td class="pos">n</td><td>tệp đính kèm</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I assign a severity, based on impact, and a priority, based on urgency, and link the bug to the related test case or user story.</p>
+        <p class="sen-vi">Tôi gán mức độ nghiêm trọng dựa trên tác động, và độ ưu tiên dựa trên mức độ khẩn cấp, đồng thời liên kết bug với test case hoặc user story liên quan.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">severity</span><button class="speak" data-text="severity">🔊</button></td><td><span class="reading">(si-vé-rợ-ti)</span><span class="ipa">/sɪˈverəti/</span></td><td class="pos">n</td><td>mức độ nghiêm trọng</td></tr>
+            <tr><td><span class="term">impact</span><button class="speak" data-text="impact">🔊</button></td><td><span class="reading">(im-péct)</span><span class="ipa">/ˈɪmpækt/</span></td><td class="pos">n</td><td>tác động, ảnh hưởng</td></tr>
+            <tr><td><span class="term">priority</span><button class="speak" data-text="priority">🔊</button></td><td><span class="reading">(prai-o-rợ-ti)</span><span class="ipa">/praɪˈɒrəti/</span></td><td class="pos">n</td><td>độ ưu tiên</td></tr>
+            <tr><td><span class="term">urgency</span><button class="speak" data-text="urgency">🔊</button></td><td><span class="reading">(ơ-jần-si)</span><span class="ipa">/ˈɜːdʒənsi/</span></td><td class="pos">n</td><td>mức độ khẩn cấp</td></tr>
+            <tr><td><span class="term">link to</span><button class="speak" data-text="link to">🔊</button></td><td><span class="reading">(linh tu)</span><span class="ipa">/lɪŋk tuː/</span></td><td class="pos">phr.v</td><td>liên kết với</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">After a fix is delivered, I retest it and move the status to verified before closing, and I keep monitoring the bug's status through the workflow to make sure nothing gets silently forgotten.</p>
+        <p class="sen-vi">Sau khi bản sửa lỗi được bàn giao, tôi kiểm thử lại và chuyển trạng thái sang đã xác nhận trước khi đóng, và tôi tiếp tục theo dõi trạng thái của bug xuyên suốt quy trình để đảm bảo không có gì bị bỏ quên âm thầm.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">deliver a fix</span><button class="speak" data-text="deliver a fix">🔊</button></td><td><span class="reading">(đi-li-vơ ợ phix)</span><span class="ipa">/dɪˈlɪvər ə fɪks/</span></td><td class="pos">v phr.</td><td>bàn giao bản sửa lỗi</td></tr>
+            <tr><td><span class="term">retest</span><button class="speak" data-text="retest">🔊</button></td><td><span class="reading">(ri-test)</span><span class="ipa">/ˌriːˈtest/</span></td><td class="pos">v</td><td>kiểm thử lại</td></tr>
+            <tr><td><span class="term">status</span><button class="speak" data-text="status">🔊</button></td><td><span class="reading">(sờ-tây-tợs)</span><span class="ipa">/ˈsteɪtəs/</span></td><td class="pos">n</td><td>trạng thái</td></tr>
+            <tr><td><span class="term">verified</span><button class="speak" data-text="verified">🔊</button></td><td><span class="reading">(vé-rợ-phaid)</span><span class="ipa">/ˈverɪfaɪd/</span></td><td class="pos">adj</td><td>đã xác nhận</td></tr>
+            <tr><td><span class="term">workflow</span><button class="speak" data-text="workflow">🔊</button></td><td><span class="reading">(guốc-flâu)</span><span class="ipa">/ˈwɜːkfləʊ/</span></td><td class="pos">n</td><td>quy trình làm việc</td></tr>
+            <tr><td><span class="term">monitor</span><button class="speak" data-text="monitor">🔊</button></td><td><span class="reading">(mo-ni-tơ)</span><span class="ipa">/ˈmɒnɪtər/</span></td><td class="pos">v</td><td>theo dõi, giám sát</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -498,6 +599,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -517,11 +633,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

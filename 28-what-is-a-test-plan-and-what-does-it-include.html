@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -226,6 +264,92 @@
         Nhìn chung, test plan giúp cả nhóm <span class="keyword">thống nhất (align)</span> về việc kiểm thử
         cái gì, như thế nào, và khi nào.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">A test plan is a formal document that describes the strategy and approach for testing a software product.</p>
+        <p class="sen-vi">Test plan là một tài liệu chính thức mô tả chiến lược và cách tiếp cận để kiểm thử một sản phẩm phần mềm.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">test plan</span><button class="speak" data-text="test plan">🔊</button></td><td><span class="reading">(test plan)</span><span class="ipa">/test plæn/</span></td><td class="pos">n phr.</td><td>kế hoạch kiểm thử</td></tr>
+            <tr><td><span class="term">formal document</span><button class="speak" data-text="formal document">🔊</button></td><td><span class="reading">(fo-mồl đọc-kiu-mợnt)</span><span class="ipa">/ˈfɔːml ˈdɒkjumənt/</span></td><td class="pos">n phr.</td><td>tài liệu chính thức</td></tr>
+            <tr><td><span class="term">describe</span><button class="speak" data-text="describe">🔊</button></td><td><span class="reading">(đis-cra-ib)</span><span class="ipa">/dɪˈskraɪb/</span></td><td class="pos">v</td><td>mô tả</td></tr>
+            <tr><td><span class="term">strategy</span><button class="speak" data-text="strategy">🔊</button></td><td><span class="reading">(stra-tơ-ji)</span><span class="ipa">/ˈstrætədʒi/</span></td><td class="pos">n</td><td>chiến lược</td></tr>
+            <tr><td><span class="term">approach</span><button class="speak" data-text="approach">🔊</button></td><td><span class="reading">(ợ-prâuch)</span><span class="ipa">/əˈprəʊtʃ/</span></td><td class="pos">n</td><td>cách tiếp cận</td></tr>
+            <tr><td><span class="term">software product</span><button class="speak" data-text="software product">🔊</button></td><td><span class="reading">(sóp-ueo prá-đợct)</span><span class="ipa">/ˈsɒftweər ˈprɒdʌkt/</span></td><td class="pos">n phr.</td><td>sản phẩm phần mềm</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">It typically starts by defining the scope, meaning which features or modules are in scope and which are out of scope, along with the objectives we want to achieve.</p>
+        <p class="sen-vi">Nó thường bắt đầu bằng việc xác định phạm vi, nghĩa là những tính năng hoặc module nào nằm trong phạm vi và những cái nào không, cùng với các mục tiêu mà chúng ta muốn đạt được.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">scope</span><button class="speak" data-text="scope">🔊</button></td><td><span class="reading">(scâu-p)</span><span class="ipa">/skəʊp/</span></td><td class="pos">n</td><td>phạm vi</td></tr>
+            <tr><td><span class="term">feature</span><button class="speak" data-text="feature">🔊</button></td><td><span class="reading">(phi-chờ)</span><span class="ipa">/ˈfiːtʃər/</span></td><td class="pos">n</td><td>tính năng</td></tr>
+            <tr><td><span class="term">module</span><button class="speak" data-text="module">🔊</button></td><td><span class="reading">(mo-diul)</span><span class="ipa">/ˈmɒdjuːl/</span></td><td class="pos">n</td><td>mô-đun</td></tr>
+            <tr><td><span class="term">out of scope</span><button class="speak" data-text="out of scope">🔊</button></td><td><span class="reading">(aut ợp scâu-p)</span><span class="ipa">/aʊt əv skəʊp/</span></td><td class="pos">adj phr.</td><td>nằm ngoài phạm vi</td></tr>
+            <tr><td><span class="term">objectives</span><button class="speak" data-text="objectives">🔊</button></td><td><span class="reading">(ợp-jéc-tivs)</span><span class="ipa">/əbˈdʒektɪvz/</span></td><td class="pos">n</td><td>mục tiêu</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">It also outlines the test strategy, describing the types of testing we'll perform, like functional, regression, and performance testing, and the tools or environments we'll use.</p>
+        <p class="sen-vi">Nó cũng phác thảo chiến lược kiểm thử, mô tả các loại kiểm thử sẽ thực hiện, như kiểm thử chức năng, kiểm thử hồi quy và kiểm thử hiệu năng, cùng các công cụ hoặc môi trường sẽ sử dụng.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">outline</span><button class="speak" data-text="outline">🔊</button></td><td><span class="reading">(aut-lain)</span><span class="ipa">/ˈaʊtlaɪn/</span></td><td class="pos">v</td><td>phác thảo</td></tr>
+            <tr><td><span class="term">functional testing</span><button class="speak" data-text="functional testing">🔊</button></td><td><span class="reading">(phăng-sần-nồl tes-tinh)</span><span class="ipa">/ˈfʌŋkʃənl ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử chức năng</td></tr>
+            <tr><td><span class="term">regression testing</span><button class="speak" data-text="regression testing">🔊</button></td><td><span class="reading">(ri-gre-sần tes-tinh)</span><span class="ipa">/rɪˈɡreʃn ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử hồi quy</td></tr>
+            <tr><td><span class="term">performance testing</span><button class="speak" data-text="performance testing">🔊</button></td><td><span class="reading">(pờ-pho-mợns tes-tinh)</span><span class="ipa">/pəˈfɔːməns ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử hiệu năng</td></tr>
+            <tr><td><span class="term">environment</span><button class="speak" data-text="environment">🔊</button></td><td><span class="reading">(en-vai-rợn-mợnt)</span><span class="ipa">/ɪnˈvaɪrənmənt/</span></td><td class="pos">n</td><td>môi trường</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">A good test plan defines entry and exit criteria, so everyone knows when testing can start and when it's considered complete.</p>
+        <p class="sen-vi">Một test plan tốt xác định tiêu chí bắt đầu và tiêu chí kết thúc, để mọi người biết khi nào có thể bắt đầu kiểm thử và khi nào được coi là hoàn thành.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">entry criteria</span><button class="speak" data-text="entry criteria">🔊</button></td><td><span class="reading">(en-tri crai-ti-ri-ợ)</span><span class="ipa">/ˈentri kraɪˈtɪəriə/</span></td><td class="pos">n phr.</td><td>tiêu chí bắt đầu</td></tr>
+            <tr><td><span class="term">exit criteria</span><button class="speak" data-text="exit criteria">🔊</button></td><td><span class="reading">(éc-xịt crai-ti-ri-ợ)</span><span class="ipa">/ˈeksɪt kraɪˈtɪəriə/</span></td><td class="pos">n phr.</td><td>tiêu chí kết thúc</td></tr>
+            <tr><td><span class="term">complete</span><button class="speak" data-text="complete">🔊</button></td><td><span class="reading">(côm-plit)</span><span class="ipa">/kəmˈpliːt/</span></td><td class="pos">adj</td><td>hoàn thành</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">It lists the resources and timeline, including team roles and the schedule.</p>
+        <p class="sen-vi">Nó liệt kê nguồn lực và thời gian biểu, bao gồm vai trò của từng thành viên và lịch trình.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">resources</span><button class="speak" data-text="resources">🔊</button></td><td><span class="reading">(ri-sọ-xịs)</span><span class="ipa">/rɪˈsɔːsɪz/</span></td><td class="pos">n</td><td>nguồn lực</td></tr>
+            <tr><td><span class="term">timeline</span><button class="speak" data-text="timeline">🔊</button></td><td><span class="reading">(tai-mlain)</span><span class="ipa">/ˈtaɪmlaɪn/</span></td><td class="pos">n</td><td>thời gian biểu</td></tr>
+            <tr><td><span class="term">team roles</span><button class="speak" data-text="team roles">🔊</button></td><td><span class="reading">(tim rôls)</span><span class="ipa">/tiːm rəʊlz/</span></td><td class="pos">n phr.</td><td>vai trò của các thành viên</td></tr>
+            <tr><td><span class="term">schedule</span><button class="speak" data-text="schedule">🔊</button></td><td><span class="reading">(ské-diul)</span><span class="ipa">/ˈʃedjuːl/</span></td><td class="pos">n</td><td>lịch trình</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Finally, it includes a risk assessment, identifying potential risks and mitigation plans. Overall, the test plan aligns the whole team on what, how, and when we're testing.</p>
+        <p class="sen-vi">Cuối cùng, nó bao gồm phần đánh giá rủi ro, xác định các rủi ro tiềm ẩn và kế hoạch giảm thiểu. Nhìn chung, test plan giúp cả nhóm thống nhất về việc kiểm thử cái gì, như thế nào, và khi nào.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">risk assessment</span><button class="speak" data-text="risk assessment">🔊</button></td><td><span class="reading">(rít xợ-xét-mợnt)</span><span class="ipa">/rɪsk əˈsesmənt/</span></td><td class="pos">n phr.</td><td>đánh giá rủi ro</td></tr>
+            <tr><td><span class="term">identify</span><button class="speak" data-text="identify">🔊</button></td><td><span class="reading">(ai-đen-ti-phai)</span><span class="ipa">/aɪˈdentɪfaɪ/</span></td><td class="pos">v</td><td>xác định</td></tr>
+            <tr><td><span class="term">potential risk</span><button class="speak" data-text="potential risk">🔊</button></td><td><span class="reading">(pợ-ten-sồl rít)</span><span class="ipa">/pəˈtenʃl rɪsk/</span></td><td class="pos">n phr.</td><td>rủi ro tiềm ẩn</td></tr>
+            <tr><td><span class="term">mitigation plan</span><button class="speak" data-text="mitigation plan">🔊</button></td><td><span class="reading">(mi-ti-gây-sần plan)</span><span class="ipa">/ˌmɪtɪˈɡeɪʃn plæn/</span></td><td class="pos">n phr.</td><td>kế hoạch giảm thiểu rủi ro</td></tr>
+            <tr><td><span class="term">align</span><button class="speak" data-text="align">🔊</button></td><td><span class="reading">(ợ-lain)</span><span class="ipa">/əˈlaɪn/</span></td><td class="pos">v</td><td>thống nhất, đồng bộ</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -491,7 +615,22 @@
     enBq.after(rep);
   })();
 
-  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt (bảng chính) */
   (function(){
     const table = document.querySelector('table.vocab');
     if(!table) return;
@@ -510,11 +649,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

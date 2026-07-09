@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -222,6 +260,92 @@
         hoặc <span class="keyword">tự động hóa (automated)</span> để chạy trong các lần
         <span class="keyword">hồi quy (regression)</span> sau, thay vì test tay ngay lúc đó.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">When time is limited, I use risk-based prioritization to decide which test cases matter most.</p>
+        <p class="sen-vi">Khi thời gian có hạn, tôi dùng phương pháp ưu tiên dựa trên rủi ro để quyết định test case nào quan trọng nhất.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">time is limited</span><button class="speak" data-text="time is limited">🔊</button></td><td><span class="reading">(taim ịz li-mi-tịd)</span><span class="ipa">/taɪm ɪz ˈlɪmɪtɪd/</span></td><td class="pos">phr.</td><td>thời gian có hạn</td></tr>
+            <tr><td><span class="term">risk-based prioritization</span><button class="speak" data-text="risk based prioritization">🔊</button></td><td><span class="reading">(rít-bêis prai-o-ri-tai-zây-sần)</span><span class="ipa">/rɪsk beɪst praɪˌɒrɪtaɪˈzeɪʃn/</span></td><td class="pos">n phr.</td><td>ưu tiên dựa trên rủi ro</td></tr>
+            <tr><td><span class="term">test case</span><button class="speak" data-text="test case">🔊</button></td><td><span class="reading">(test kêis)</span><span class="ipa">/test keɪs/</span></td><td class="pos">n phr.</td><td>trường hợp kiểm thử</td></tr>
+            <tr><td><span class="term">matter most</span><button class="speak" data-text="matter most">🔊</button></td><td><span class="reading">(me-tơ mâust)</span><span class="ipa">/ˈmætər məʊst/</span></td><td class="pos">v phr.</td><td>quan trọng nhất</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">First, I always run smoke tests to confirm the build is stable and the critical user paths, like login, checkout, and payment, actually work.</p>
+        <p class="sen-vi">Đầu tiên, tôi luôn chạy smoke test để xác nhận bản build ổn định và các luồng người dùng quan trọng, như đăng nhập, thanh toán, hoạt động bình thường.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">smoke test</span><button class="speak" data-text="smoke test">🔊</button></td><td><span class="reading">(sờ-mâuk test)</span><span class="ipa">/sməʊk test/</span></td><td class="pos">n phr.</td><td>kiểm thử khói</td></tr>
+            <tr><td><span class="term">confirm</span><button class="speak" data-text="confirm">🔊</button></td><td><span class="reading">(cần-phơm)</span><span class="ipa">/kənˈfɜːm/</span></td><td class="pos">v</td><td>xác nhận</td></tr>
+            <tr><td><span class="term">build</span><button class="speak" data-text="build">🔊</button></td><td><span class="reading">(bil-đờ)</span><span class="ipa">/bɪld/</span></td><td class="pos">n</td><td>bản dựng</td></tr>
+            <tr><td><span class="term">critical user path</span><button class="speak" data-text="critical user path">🔊</button></td><td><span class="reading">(cri-ti-cồ diu-zơ path)</span><span class="ipa">/ˈkrɪtɪkl ˈjuːzər pɑːθ/</span></td><td class="pos">n phr.</td><td>luồng người dùng quan trọng</td></tr>
+            <tr><td><span class="term">checkout</span><button class="speak" data-text="checkout">🔊</button></td><td><span class="reading">(chéc-aoờt)</span><span class="ipa">/ˈtʃekaʊt/</span></td><td class="pos">n</td><td>thanh toán, kết toán đơn hàng</td></tr>
+            <tr><td><span class="term">payment</span><button class="speak" data-text="payment">🔊</button></td><td><span class="reading">(pây-mợnt)</span><span class="ipa">/ˈpeɪmənt/</span></td><td class="pos">n</td><td>thanh toán</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">After that, I focus on high-impact and high-probability areas, meaning features that would cause serious damage if they broke and features that are more likely to have bugs.</p>
+        <p class="sen-vi">Sau đó, tôi tập trung vào những khu vực có tác động cao và xác suất lỗi cao, nghĩa là những tính năng nếu hỏng sẽ gây thiệt hại nghiêm trọng và những tính năng dễ có bug hơn.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">focus on</span><button class="speak" data-text="focus on">🔊</button></td><td><span class="reading">(phâu-cợs on)</span><span class="ipa">/ˈfəʊkəs ɒn/</span></td><td class="pos">phr.v</td><td>tập trung vào</td></tr>
+            <tr><td><span class="term">high-impact</span><button class="speak" data-text="high impact">🔊</button></td><td><span class="reading">(hai im-pác)</span><span class="ipa">/haɪ ˈɪmpækt/</span></td><td class="pos">adj</td><td>tác động cao</td></tr>
+            <tr><td><span class="term">high-probability</span><button class="speak" data-text="high probability">🔊</button></td><td><span class="reading">(hai pro-bợ-bi-lợ-ti)</span><span class="ipa">/haɪ ˌprɒbəˈbɪləti/</span></td><td class="pos">adj phr.</td><td>xác suất cao</td></tr>
+            <tr><td><span class="term">serious damage</span><button class="speak" data-text="serious damage">🔊</button></td><td><span class="reading">(xi-ri-ợs đe-mịch)</span><span class="ipa">/ˈsɪəriəs ˈdæmɪdʒ/</span></td><td class="pos">n phr.</td><td>thiệt hại nghiêm trọng</td></tr>
+            <tr><td><span class="term">bug</span><button class="speak" data-text="bug">🔊</button></td><td><span class="reading">(bấc)</span><span class="ipa">/bʌg/</span></td><td class="pos">n</td><td>lỗi phần mềm</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I pay special attention to recently changed code, since new or modified logic is the most fragile.</p>
+        <p class="sen-vi">Tôi đặc biệt chú ý đến đoạn code vừa thay đổi gần đây, vì logic mới hoặc vừa sửa thường dễ vỡ nhất.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">pay attention to</span><button class="speak" data-text="pay attention to">🔊</button></td><td><span class="reading">(pây ợ-ten-sần tu)</span><span class="ipa">/peɪ əˈtenʃn tu/</span></td><td class="pos">v phr.</td><td>chú ý đến</td></tr>
+            <tr><td><span class="term">recently changed code</span><button class="speak" data-text="recently changed code">🔊</button></td><td><span class="reading">(ri-sần-tli chên-chd côd)</span><span class="ipa">/ˈriːsntli tʃeɪndʒd kəʊd/</span></td><td class="pos">n phr.</td><td>đoạn code vừa thay đổi gần đây</td></tr>
+            <tr><td><span class="term">modified</span><button class="speak" data-text="modified">🔊</button></td><td><span class="reading">(mo-đi-phaid)</span><span class="ipa">/ˈmɒdɪfaɪd/</span></td><td class="pos">adj</td><td>đã được sửa đổi</td></tr>
+            <tr><td><span class="term">fragile</span><button class="speak" data-text="fragile">🔊</button></td><td><span class="reading">(fre-chồ)</span><span class="ipa">/ˈfrædʒaɪl/</span></td><td class="pos">adj</td><td>dễ vỡ, dễ lỗi</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I also consider business priority, talking with the product owner about which features matter most to customers right now.</p>
+        <p class="sen-vi">Tôi cũng cân nhắc mức độ ưu tiên kinh doanh, trao đổi với product owner để biết tính năng nào đang quan trọng nhất với khách hàng lúc này.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">consider</span><button class="speak" data-text="consider">🔊</button></td><td><span class="reading">(cần-xi-đơ)</span><span class="ipa">/kənˈsɪdər/</span></td><td class="pos">v</td><td>cân nhắc, xem xét</td></tr>
+            <tr><td><span class="term">business priority</span><button class="speak" data-text="business priority">🔊</button></td><td><span class="reading">(bít-nợs prai-o-ri-ti)</span><span class="ipa">/ˈbɪznəs praɪˈɒrəti/</span></td><td class="pos">n phr.</td><td>mức độ ưu tiên kinh doanh</td></tr>
+            <tr><td><span class="term">product owner</span><button class="speak" data-text="product owner">🔊</button></td><td><span class="reading">(pró-đợct âu-nơ)</span><span class="ipa">/ˈprɒdʌkt ˈəʊnər/</span></td><td class="pos">n phr.</td><td>chủ sản phẩm</td></tr>
+            <tr><td><span class="term">customer</span><button class="speak" data-text="customer">🔊</button></td><td><span class="reading">(cấs-tơ-mơ)</span><span class="ipa">/ˈkʌstəmər/</span></td><td class="pos">n</td><td>khách hàng</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Low-risk, rarely used, or already stable areas get deprioritized or automated for later regression runs instead of manual execution.</p>
+        <p class="sen-vi">Những khu vực rủi ro thấp, ít dùng, hoặc đã ổn định thì được hạ ưu tiên hoặc chuyển sang tự động hóa để chạy trong các lần hồi quy sau, thay vì test tay ngay lúc đó.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">low-risk</span><button class="speak" data-text="low risk">🔊</button></td><td><span class="reading">(lâu rít)</span><span class="ipa">/ləʊ rɪsk/</span></td><td class="pos">adj</td><td>rủi ro thấp</td></tr>
+            <tr><td><span class="term">deprioritized</span><button class="speak" data-text="deprioritized">🔊</button></td><td><span class="reading">(đi-prai-o-ri-taizd)</span><span class="ipa">/diːˈpraɪɒrɪtaɪzd/</span></td><td class="pos">adj</td><td>bị hạ mức ưu tiên</td></tr>
+            <tr><td><span class="term">automated</span><button class="speak" data-text="automated">🔊</button></td><td><span class="reading">(o-tợ-mây-tịd)</span><span class="ipa">/ˈɔːtəmeɪtɪd/</span></td><td class="pos">adj</td><td>được tự động hóa</td></tr>
+            <tr><td><span class="term">regression</span><button class="speak" data-text="regression">🔊</button></td><td><span class="reading">(ri-gre-sần)</span><span class="ipa">/rɪˈgreʃn/</span></td><td class="pos">n</td><td>hồi quy</td></tr>
+            <tr><td><span class="term">manual execution</span><button class="speak" data-text="manual execution">🔊</button></td><td><span class="reading">(me-niu-ợl ec-xi-kiu-sần)</span><span class="ipa">/ˈmænjuəl ˌeksɪˈkjuːʃn/</span></td><td class="pos">n phr.</td><td>thực thi bằng tay (test tay)</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -479,6 +603,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -498,11 +637,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

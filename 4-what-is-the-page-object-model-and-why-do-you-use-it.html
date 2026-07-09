@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -219,6 +257,64 @@
         cùng các phương thức của trang qua nhiều <span class="keyword">test case</span>, giúp mã nguồn tuân
         theo nguyên tắc <span class="keyword">DRY</span> và giảm <span class="keyword">trùng lặp</span>.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">The Page Object Model, or POM, is a design pattern where I create a separate class for each page or major component of the application.</p>
+        <p class="sen-vi">Page Object Model, hay POM, là một mẫu thiết kế trong đó tôi tạo một lớp riêng cho mỗi trang hoặc mỗi thành phần chính của ứng dụng.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">Page Object Model</span><button class="speak" data-text="Page Object Model">🔊</button></td><td><span class="reading">(pếch ọb-jịct mo-đồ)</span><span class="ipa">/peɪdʒ ˈɒbdʒɪkt ˈmɒdl/</span></td><td class="pos">n phr.</td><td>mô hình đối tượng trang</td></tr>
+            <tr><td><span class="term">design pattern</span><button class="speak" data-text="design pattern">🔊</button></td><td><span class="reading">(đi-zain pát-tơn)</span><span class="ipa">/dɪˈzaɪn ˈpætn/</span></td><td class="pos">n phr.</td><td>mẫu thiết kế</td></tr>
+            <tr><td><span class="term">separate class</span><button class="speak" data-text="separate class">🔊</button></td><td><span class="reading">(se-prợt clas)</span><span class="ipa">/ˈseprət klɑːs/</span></td><td class="pos">n phr.</td><td>lớp (class) riêng biệt</td></tr>
+            <tr><td><span class="term">component</span><button class="speak" data-text="component">🔊</button></td><td><span class="reading">(cợm-pâu-nợnt)</span><span class="ipa">/kəmˈpəʊnənt/</span></td><td class="pos">n</td><td>thành phần</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Each class holds the locators and the actions for that page, so my test scripts only call high-level methods, like loginPage.login(username, password), instead of dealing with raw selectors.</p>
+        <p class="sen-vi">Mỗi lớp chứa các locator và các hành động của trang đó, nhờ vậy các kịch bản test chỉ gọi những phương thức cấp cao, ví dụ loginPage.login(username, password), thay vì phải làm việc trực tiếp với các selector thô.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">locator</span><button class="speak" data-text="locator">🔊</button></td><td><span class="reading">(lâu-kêi-tơ)</span><span class="ipa">/ləʊˈkeɪtər/</span></td><td class="pos">n</td><td>bộ định vị element</td></tr>
+            <tr><td><span class="term">action</span><button class="speak" data-text="action">🔊</button></td><td><span class="reading">(ác-sần)</span><span class="ipa">/ˈækʃn/</span></td><td class="pos">n</td><td>hành động (click, fill...)</td></tr>
+            <tr><td><span class="term">test script</span><button class="speak" data-text="test script">🔊</button></td><td><span class="reading">(test scrípt)</span><span class="ipa">/test skrɪpt/</span></td><td class="pos">n phr.</td><td>kịch bản test</td></tr>
+            <tr><td><span class="term">high-level method</span><button class="speak" data-text="high level method">🔊</button></td><td><span class="reading">(hai-le-vồ me-thợd)</span><span class="ipa">/haɪ ˈlevl ˈmeθəd/</span></td><td class="pos">n phr.</td><td>phương thức cấp cao</td></tr>
+            <tr><td><span class="term">raw selector</span><button class="speak" data-text="raw selector">🔊</button></td><td><span class="reading">(ro si-léc-tơ)</span><span class="ipa">/rɔː sɪˈlektər/</span></td><td class="pos">n phr.</td><td>selector thô</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">The main benefit is maintainability: when the UI changes, I only update the locator in one place instead of fixing it in every test.</p>
+        <p class="sen-vi">Lợi ích chính là khả năng bảo trì: khi giao diện thay đổi, tôi chỉ cập nhật locator ở một chỗ thay vì phải sửa trong từng test.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">benefit</span><button class="speak" data-text="benefit">🔊</button></td><td><span class="reading">(bê-nợ-phịt)</span><span class="ipa">/ˈbenɪfɪt/</span></td><td class="pos">n</td><td>lợi ích</td></tr>
+            <tr><td><span class="term">maintainability</span><button class="speak" data-text="maintainability">🔊</button></td><td><span class="reading">(mên-tên-ợ-bi-lợ-ti)</span><span class="ipa">/meɪnˌteɪnəˈbɪləti/</span></td><td class="pos">n</td><td>khả năng bảo trì</td></tr>
+            <tr><td><span class="term">UI (user interface)</span><button class="speak" data-text="user interface">🔊</button></td><td><span class="reading">(diu-dơ in-tơ-phêis)</span><span class="ipa">/ˌjuːzər ˈɪntəfeɪs/</span></td><td class="pos">n phr.</td><td>giao diện người dùng</td></tr>
+            <tr><td><span class="term">update</span><button class="speak" data-text="update">🔊</button></td><td><span class="reading">(ợp-đêt)</span><span class="ipa">/ʌpˈdeɪt/</span></td><td class="pos">v</td><td>cập nhật</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">It also makes the tests much more readable, and it lets me reuse the same page methods across many test cases, which keeps the code DRY and reduces duplication.</p>
+        <p class="sen-vi">Nó cũng giúp test dễ đọc hơn nhiều, và cho phép tôi tái sử dụng cùng các phương thức của trang qua nhiều test case, giúp mã nguồn tuân theo nguyên tắc DRY và giảm trùng lặp.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">readable</span><button class="speak" data-text="readable">🔊</button></td><td><span class="reading">(ri-đợ-bồ)</span><span class="ipa">/ˈriːdəbl/</span></td><td class="pos">adj</td><td>dễ đọc</td></tr>
+            <tr><td><span class="term">reuse</span><button class="speak" data-text="reuse">🔊</button></td><td><span class="reading">(ri-diuz)</span><span class="ipa">/ˌriːˈjuːz/</span></td><td class="pos">v</td><td>tái sử dụng</td></tr>
+            <tr><td><span class="term">test case</span><button class="speak" data-text="test case">🔊</button></td><td><span class="reading">(test kêis)</span><span class="ipa">/test keɪs/</span></td><td class="pos">n phr.</td><td>trường hợp kiểm thử</td></tr>
+            <tr><td><span class="term">DRY (Don't Repeat Yourself)</span><button class="speak" data-text="Don't Repeat Yourself">🔊</button></td><td><span class="reading">(đrai)</span><span class="ipa">/draɪ/</span></td><td class="pos">idiom</td><td>nguyên tắc "đừng lặp lại code"</td></tr>
+            <tr><td><span class="term">duplication</span><button class="speak" data-text="duplication">🔊</button></td><td><span class="reading">(điu-pli-kây-sần)</span><span class="ipa">/ˌdjuːplɪˈkeɪʃn/</span></td><td class="pos">n</td><td>sự trùng lặp</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -487,7 +583,22 @@
     enBq.after(rep);
   })();
 
-  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt (bảng chính) */
   (function(){
     const table = document.querySelector('table.vocab');
     if(!table) return;
@@ -506,11 +617,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

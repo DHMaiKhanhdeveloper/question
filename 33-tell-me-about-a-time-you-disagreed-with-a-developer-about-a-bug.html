@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -227,6 +265,103 @@
         lý do không phải bug đều nên có giải thích ngắn gọn, điều này đã cải thiện
         <span class="keyword">quy trình giao tiếp</span> của chúng tôi về sau.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">I once reported a bug where the checkout page allowed a coupon code to be applied twice if the user clicked submit rapidly.</p>
+        <p class="sen-vi">Có lần tôi báo cáo một bug là trang thanh toán cho phép áp dụng mã giảm giá hai lần nếu người dùng bấm nút gửi rất nhanh.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">bug</span><button class="speak" data-text="bug">🔊</button></td><td><span class="reading">(băg)</span><span class="ipa">/bʌɡ/</span></td><td class="pos">n</td><td>lỗi phần mềm</td></tr>
+            <tr><td><span class="term">checkout page</span><button class="speak" data-text="checkout page">🔊</button></td><td><span class="reading">(chéc-aot pếch)</span><span class="ipa">/ˈtʃekaʊt peɪdʒ/</span></td><td class="pos">n phr.</td><td>trang thanh toán</td></tr>
+            <tr><td><span class="term">coupon code</span><button class="speak" data-text="coupon code">🔊</button></td><td><span class="reading">(cu-pon côd)</span><span class="ipa">/ˈkuːpɒn kəʊd/</span></td><td class="pos">n phr.</td><td>mã giảm giá</td></tr>
+            <tr><td><span class="term">apply twice</span><button class="speak" data-text="apply twice">🔊</button></td><td><span class="reading">(ợ-plai twais)</span><span class="ipa">/əˈplaɪ twaɪs/</span></td><td class="pos">v phr.</td><td>áp dụng hai lần</td></tr>
+            <tr><td><span class="term">rapidly</span><button class="speak" data-text="rapidly">🔊</button></td><td><span class="reading">(re-pịd-li)</span><span class="ipa">/ˈræpɪdli/</span></td><td class="pos">adv</td><td>nhanh chóng, liên tục</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">The developer closed it as not a bug, saying it was working as intended because the backend eventually rejected the second request.</p>
+        <p class="sen-vi">Developer đã đóng bug đó và ghi là không phải bug, vì cho rằng nó hoạt động đúng như thiết kế do backend cuối cùng cũng từ chối request thứ hai.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">not a bug</span><button class="speak" data-text="not a bug">🔊</button></td><td><span class="reading">(nót ợ băg)</span><span class="ipa">/nɒt ə bʌɡ/</span></td><td class="pos">phr.</td><td>không phải lỗi</td></tr>
+            <tr><td><span class="term">working as intended</span><button class="speak" data-text="working as intended">🔊</button></td><td><span class="reading">(oơ-kinh ợz in-ten-đợd)</span><span class="ipa">/ˈwɜːkɪŋ æz ɪnˈtendɪd/</span></td><td class="pos">phr.</td><td>hoạt động đúng như thiết kế</td></tr>
+            <tr><td><span class="term">backend</span><button class="speak" data-text="backend">🔊</button></td><td><span class="reading">(băc-en-đ)</span><span class="ipa">/ˈbækend/</span></td><td class="pos">n</td><td>phần hệ thống phía sau (server)</td></tr>
+            <tr><td><span class="term">reject</span><button class="speak" data-text="reject">🔊</button></td><td><span class="reading">(ri-chéct)</span><span class="ipa">/rɪˈdʒekt/</span></td><td class="pos">v</td><td>từ chối</td></tr>
+            <tr><td><span class="term">request</span><button class="speak" data-text="request">🔊</button></td><td><span class="reading">(ri-quést)</span><span class="ipa">/rɪˈkwest/</span></td><td class="pos">n</td><td>yêu cầu (gửi lên server)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">My task was to prove there was real user impact before pushing back further.</p>
+        <p class="sen-vi">Nhiệm vụ của tôi là chứng minh có tác động thật đến người dùng trước khi tiếp tục tranh luận.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">prove</span><button class="speak" data-text="prove">🔊</button></td><td><span class="reading">(pruv)</span><span class="ipa">/pruːv/</span></td><td class="pos">v</td><td>chứng minh</td></tr>
+            <tr><td><span class="term">user impact</span><button class="speak" data-text="user impact">🔊</button></td><td><span class="reading">(diu-dơ im-pắct)</span><span class="ipa">/ˈjuːzər ˈɪmpækt/</span></td><td class="pos">n phr.</td><td>tác động đến người dùng</td></tr>
+            <tr><td><span class="term">push back</span><button class="speak" data-text="push back">🔊</button></td><td><span class="reading">(puush béc)</span><span class="ipa">/pʊʃ bæk/</span></td><td class="pos">phr.v</td><td>phản đối, tiếp tục tranh luận</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I reproduced the issue reliably, recorded a short video, and pulled data showing several real customers had gotten duplicate discounts in production.</p>
+        <p class="sen-vi">Tôi tái hiện lỗi một cách ổn định, quay lại một video ngắn, và lấy dữ liệu cho thấy nhiều khách hàng thật đã nhận được giảm giá trùng lặp trên môi trường production.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">reproduce</span><button class="speak" data-text="reproduce">🔊</button></td><td><span class="reading">(ri-prợ-điuz)</span><span class="ipa">/ˌriːprəˈdjuːs/</span></td><td class="pos">v</td><td>tái hiện lỗi</td></tr>
+            <tr><td><span class="term">reliably</span><button class="speak" data-text="reliably">🔊</button></td><td><span class="reading">(ri-lai-ợ-bli)</span><span class="ipa">/rɪˈlaɪəbli/</span></td><td class="pos">adv</td><td>một cách ổn định, đáng tin cậy</td></tr>
+            <tr><td><span class="term">pull data</span><button class="speak" data-text="pull data">🔊</button></td><td><span class="reading">(pul đây-tợ)</span><span class="ipa">/pʊl ˈdeɪtə/</span></td><td class="pos">v phr.</td><td>lấy/truy xuất dữ liệu</td></tr>
+            <tr><td><span class="term">duplicate discount</span><button class="speak" data-text="duplicate discount">🔊</button></td><td><span class="reading">(điu-pli-cợt đis-caont)</span><span class="ipa">/ˈdjuːplɪkət ˈdɪskaʊnt/</span></td><td class="pos">n phr.</td><td>giảm giá trùng lặp</td></tr>
+            <tr><td><span class="term">production</span><button class="speak" data-text="production">🔊</button></td><td><span class="reading">(prợ-đấc-sần)</span><span class="ipa">/prəˈdʌkʃn/</span></td><td class="pos">n</td><td>môi trường sản phẩm thật (production)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I shared the evidence calmly in a quick call instead of arguing in comments, framed it around the business impact rather than being right, and proposed adding a debounce on the button as a simple fix.</p>
+        <p class="sen-vi">Tôi chia sẻ bằng chứng một cách bình tĩnh trong một cuộc gọi ngắn thay vì tranh cãi trong phần bình luận, tập trung vào tác động kinh doanh thay vì việc ai đúng ai sai, và đề xuất thêm cơ chế debounce cho nút bấm như một giải pháp đơn giản.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">evidence</span><button class="speak" data-text="evidence">🔊</button></td><td><span class="reading">(ê-vi-đợns)</span><span class="ipa">/ˈevɪdəns/</span></td><td class="pos">n</td><td>bằng chứng</td></tr>
+            <tr><td><span class="term">calmly</span><button class="speak" data-text="calmly">🔊</button></td><td><span class="reading">(cam-li)</span><span class="ipa">/ˈkɑːmli/</span></td><td class="pos">adv</td><td>một cách bình tĩnh</td></tr>
+            <tr><td><span class="term">frame (around)</span><button class="speak" data-text="frame it around">🔊</button></td><td><span class="reading">(phrêim ợ-raond)</span><span class="ipa">/freɪm ɪt əˈraʊnd/</span></td><td class="pos">v phr.</td><td>đặt trọng tâm/khuôn vào</td></tr>
+            <tr><td><span class="term">business impact</span><button class="speak" data-text="business impact">🔊</button></td><td><span class="reading">(bíz-nợs im-pắct)</span><span class="ipa">/ˈbɪznəs ˈɪmpækt/</span></td><td class="pos">n phr.</td><td>tác động kinh doanh</td></tr>
+            <tr><td><span class="term">debounce</span><button class="speak" data-text="debounce">🔊</button></td><td><span class="reading">(đi-bao-ns)</span><span class="ipa">/diːˈbaʊns/</span></td><td class="pos">n/v</td><td>kỹ thuật chống bấm/gọi lặp liên tục</td></tr>
+            <tr><td><span class="term">simple fix</span><button class="speak" data-text="simple fix">🔊</button></td><td><span class="reading">(xim-pồ phíc)</span><span class="ipa">/ˈsɪmpl fɪks/</span></td><td class="pos">n phr.</td><td>giải pháp đơn giản</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">He agreed once he saw the reproduction steps and the data.</p>
+        <p class="sen-vi">Anh ấy đồng ý ngay khi thấy các bước tái hiện lỗi và dữ liệu.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">agree</span><button class="speak" data-text="agree">🔊</button></td><td><span class="reading">(ợ-gri)</span><span class="ipa">/əˈɡriː/</span></td><td class="pos">v</td><td>đồng ý</td></tr>
+            <tr><td><span class="term">reproduction steps</span><button class="speak" data-text="reproduction steps">🔊</button></td><td><span class="reading">(ri-prợ-đấc-sần steps)</span><span class="ipa">/ˌriːprəˈdʌkʃn steps/</span></td><td class="pos">n phr.</td><td>các bước tái hiện lỗi</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">We fixed it together, and afterward we agreed that any bug closed as not a bug should include a short justification, which improved our communication process going forward.</p>
+        <p class="sen-vi">Chúng tôi cùng nhau sửa lỗi, và sau đó chúng tôi thống nhất rằng bất kỳ bug nào bị đóng với lý do không phải bug đều nên có giải thích ngắn gọn, điều này đã cải thiện quy trình giao tiếp của chúng tôi về sau.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">fix together</span><button class="speak" data-text="fix it together">🔊</button></td><td><span class="reading">(phíc tu-ghé-thợ)</span><span class="ipa">/fɪks tə'ɡeðər/</span></td><td class="pos">v phr.</td><td>cùng nhau sửa lỗi</td></tr>
+            <tr><td><span class="term">justification</span><button class="speak" data-text="justification">🔊</button></td><td><span class="reading">(chấs-ti-phi-kây-sần)</span><span class="ipa">/ˌdʒʌstɪfɪˈkeɪʃn/</span></td><td class="pos">n</td><td>sự giải thích/biện minh hợp lý</td></tr>
+            <tr><td><span class="term">communication process</span><button class="speak" data-text="communication process">🔊</button></td><td><span class="reading">(cợ-miu-ni-kây-sần prá-ses)</span><span class="ipa">/kəˌmjuːnɪˈkeɪʃn ˈprəʊses/</span></td><td class="pos">n phr.</td><td>quy trình giao tiếp</td></tr>
+            <tr><td><span class="term">going forward</span><button class="speak" data-text="going forward">🔊</button></td><td><span class="reading">(gô-inh fo-uợd)</span><span class="ipa">/ˈɡəʊɪŋ ˈfɔːwəd/</span></td><td class="pos">adv phr.</td><td>từ giờ trở về sau</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -487,6 +622,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -506,11 +656,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

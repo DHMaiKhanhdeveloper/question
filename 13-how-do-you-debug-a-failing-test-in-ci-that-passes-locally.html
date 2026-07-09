@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -227,6 +265,94 @@
         <span class="keyword">chạy song song (parallelism)</span> và giới hạn băng thông mạng để giống với CI
         nhất có thể.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">First, I check the CI logs and any artifacts, like screenshots, videos, or traces, that the pipeline captured on failure.</p>
+        <p class="sen-vi">Đầu tiên, tôi kiểm tra log của CI và các artifact mà pipeline đã lưu lại khi fail, như screenshot, video hoặc trace.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">CI logs</span><button class="speak" data-text="CI logs">🔊</button></td><td><span class="reading">(si-ai lógs)</span><span class="ipa">/ˌsiːˈaɪ lɒɡz/</span></td><td class="pos">n phr.</td><td>nhật ký của CI</td></tr>
+            <tr><td><span class="term">artifact</span><button class="speak" data-text="artifact">🔊</button></td><td><span class="reading">(a-tơ-phéc)</span><span class="ipa">/ˈɑːtɪfækt/</span></td><td class="pos">n</td><td>tệp kết quả do pipeline sinh ra</td></tr>
+            <tr><td><span class="term">screenshot</span><button class="speak" data-text="screenshot">🔊</button></td><td><span class="reading">(scrin-sốt)</span><span class="ipa">/ˈskriːnʃɒt/</span></td><td class="pos">n</td><td>ảnh chụp màn hình</td></tr>
+            <tr><td><span class="term">trace</span><button class="speak" data-text="trace">🔊</button></td><td><span class="reading">(trêis)</span><span class="ipa">/treɪs/</span></td><td class="pos">n</td><td>bản ghi chi tiết quá trình chạy test</td></tr>
+            <tr><td><span class="term">pipeline</span><button class="speak" data-text="pipeline">🔊</button></td><td><span class="reading">(pai-plain)</span><span class="ipa">/ˈpaɪplaɪn/</span></td><td class="pos">n</td><td>quy trình CI/CD</td></tr>
+            <tr><td><span class="term">failure</span><button class="speak" data-text="failure">🔊</button></td><td><span class="reading">(phêi-liơ)</span><span class="ipa">/ˈfeɪljər/</span></td><td class="pos">n</td><td>sự thất bại, lỗi</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Those usually show exactly what the page looked like at the moment of failure.</p>
+        <p class="sen-vi">Những thứ đó thường cho thấy chính xác giao diện trông như thế nào tại thời điểm test fail.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">exactly</span><button class="speak" data-text="exactly">🔊</button></td><td><span class="reading">(íc-zéc-li)</span><span class="ipa">/ɪɡˈzæktli/</span></td><td class="pos">adv</td><td>chính xác</td></tr>
+            <tr><td><span class="term">the moment of</span><button class="speak" data-text="the moment of">🔊</button></td><td><span class="reading">(thơ mô-mợnt ợv)</span><span class="ipa">/ðə ˈməʊmənt əv/</span></td><td class="pos">n phr.</td><td>thời điểm của</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Next, I look for environment differences between CI and my local machine, such as different environment variables, base URLs, browser versions, or missing test data and seeded state.</p>
+        <p class="sen-vi">Tiếp theo, tôi tìm sự khác biệt môi trường giữa CI và máy local của mình, chẳng hạn như biến môi trường khác nhau, base URL, phiên bản trình duyệt, hoặc thiếu dữ liệu test và trạng thái đã được seed sẵn.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">environment differences</span><button class="speak" data-text="environment differences">🔊</button></td><td><span class="reading">(en-vai-rợn-mợnt đíp-phợ-rợn-sịz)</span><span class="ipa">/ɪnˈvaɪərənmənt ˈdɪfrənsɪz/</span></td><td class="pos">n phr.</td><td>sự khác biệt môi trường</td></tr>
+            <tr><td><span class="term">environment variables</span><button class="speak" data-text="environment variables">🔊</button></td><td><span class="reading">(en-vai-rợn-mợnt ve-ri-ợ-bồs)</span><span class="ipa">/ɪnˈvaɪərənmənt ˈveəriəbəlz/</span></td><td class="pos">n phr.</td><td>biến môi trường</td></tr>
+            <tr><td><span class="term">base URL</span><button class="speak" data-text="base URL">🔊</button></td><td><span class="reading">(bês iu-a-eo)</span><span class="ipa">/beɪs ˌjuː ɑːr ˈel/</span></td><td class="pos">n phr.</td><td>địa chỉ gốc</td></tr>
+            <tr><td><span class="term">test data</span><button class="speak" data-text="test data">🔊</button></td><td><span class="reading">(test đây-tợ)</span><span class="ipa">/test ˈdeɪtə/</span></td><td class="pos">n phr.</td><td>dữ liệu kiểm thử</td></tr>
+            <tr><td><span class="term">seeded state</span><button class="speak" data-text="seeded state">🔊</button></td><td><span class="reading">(sí-đợd stết)</span><span class="ipa">/ˈsiːdɪd steɪt/</span></td><td class="pos">n phr.</td><td>trạng thái dữ liệu đã được nạp sẵn</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">A common culprit is timing and flakiness, since CI runners are often slower and more resource constrained, so a race condition that never shows up locally can surface under load.</p>
+        <p class="sen-vi">Một nguyên nhân phổ biến là vấn đề timing và flakiness, vì các máy chạy CI thường chậm hơn và bị giới hạn tài nguyên hơn, nên một race condition không bao giờ xuất hiện ở local có thể lộ ra khi chịu tải.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">common culprit</span><button class="speak" data-text="common culprit">🔊</button></td><td><span class="reading">(cọ-mợn cơl-prịt)</span><span class="ipa">/ˈkɒmən ˈkʌlprɪt/</span></td><td class="pos">n phr.</td><td>nguyên nhân phổ biến</td></tr>
+            <tr><td><span class="term">flakiness</span><button class="speak" data-text="flakiness">🔊</button></td><td><span class="reading">(phlêi-ki-nợs)</span><span class="ipa">/ˈfleɪkinəs/</span></td><td class="pos">n</td><td>tính không ổn định</td></tr>
+            <tr><td><span class="term">CI runner</span><button class="speak" data-text="CI runner">🔊</button></td><td><span class="reading">(si-ai rơ-nơ)</span><span class="ipa">/ˌsiːˈaɪ ˈrʌnər/</span></td><td class="pos">n phr.</td><td>máy/worker chạy pipeline CI</td></tr>
+            <tr><td><span class="term">resource constrained</span><button class="speak" data-text="resource constrained">🔊</button></td><td><span class="reading">(ri-sọc cợn-strênđ)</span><span class="ipa">/ˈriːsɔːs kənˈstreɪnd/</span></td><td class="pos">adj</td><td>bị giới hạn tài nguyên</td></tr>
+            <tr><td><span class="term">race condition</span><button class="speak" data-text="race condition">🔊</button></td><td><span class="reading">(rêis cợn-đi-sần)</span><span class="ipa">/reɪs kənˈdɪʃn/</span></td><td class="pos">n phr.</td><td>tình huống tranh chấp do thứ tự thực thi không xác định</td></tr>
+            <tr><td><span class="term">surface</span><button class="speak" data-text="surface">🔊</button></td><td><span class="reading">(sơ-phợs)</span><span class="ipa">/ˈsɜːfɪs/</span></td><td class="pos">v</td><td>lộ ra, xuất hiện</td></tr>
+            <tr><td><span class="term">under load</span><button class="speak" data-text="under load">🔊</button></td><td><span class="reading">(ăn-đơ lôđ)</span><span class="ipa">/ˈʌndər ləʊd/</span></td><td class="pos">adv phr.</td><td>khi chịu tải</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I also consider headless versus headed rendering, since some elements behave differently without a real display, and network conditions, since CI may have higher latency.</p>
+        <p class="sen-vi">Tôi cũng xem xét chế độ headless so với headed rendering, vì một số phần tử hoạt động khác khi không có màn hình thật, và điều kiện mạng, vì CI có thể có độ trễ cao hơn.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">headless</span><button class="speak" data-text="headless">🔊</button></td><td><span class="reading">(héd-lợs)</span><span class="ipa">/ˈhedləs/</span></td><td class="pos">adj</td><td>chạy trình duyệt không giao diện</td></tr>
+            <tr><td><span class="term">headed rendering</span><button class="speak" data-text="headed rendering">🔊</button></td><td><span class="reading">(héd-đợd ren-đơ-ring)</span><span class="ipa">/ˈhedɪd ˈrendərɪŋ/</span></td><td class="pos">n phr.</td><td>hiển thị có giao diện trình duyệt thật</td></tr>
+            <tr><td><span class="term">behave differently</span><button class="speak" data-text="behave differently">🔊</button></td><td><span class="reading">(bi-hêiv đíp-phợ-rợnt-li)</span><span class="ipa">/bɪˈheɪv ˈdɪfrəntli/</span></td><td class="pos">v phr.</td><td>hoạt động khác đi</td></tr>
+            <tr><td><span class="term">network conditions</span><button class="speak" data-text="network conditions">🔊</button></td><td><span class="reading">(nét-uơc cợn-đi-sần)</span><span class="ipa">/ˈnetwɜːk kənˈdɪʃnz/</span></td><td class="pos">n phr.</td><td>điều kiện mạng</td></tr>
+            <tr><td><span class="term">latency</span><button class="speak" data-text="latency">🔊</button></td><td><span class="reading">(lêi-tợn-si)</span><span class="ipa">/ˈleɪtənsi/</span></td><td class="pos">n</td><td>độ trễ</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">If I can't reproduce it, I try running the suite locally in headless mode with the same parallelism and throttled network to match CI as closely as possible.</p>
+        <p class="sen-vi">Nếu không thể tái hiện lỗi, tôi thử chạy bộ test ở local với chế độ headless, cùng mức độ chạy song song và giới hạn băng thông mạng để giống với CI nhất có thể.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">reproduce</span><button class="speak" data-text="reproduce">🔊</button></td><td><span class="reading">(ri-prợ-đius)</span><span class="ipa">/ˌriːprəˈdjuːs/</span></td><td class="pos">v</td><td>tái hiện (lỗi)</td></tr>
+            <tr><td><span class="term">test suite</span><button class="speak" data-text="test suite">🔊</button></td><td><span class="reading">(test suýt)</span><span class="ipa">/test swiːt/</span></td><td class="pos">n phr.</td><td>bộ test</td></tr>
+            <tr><td><span class="term">parallelism</span><button class="speak" data-text="parallelism">🔊</button></td><td><span class="reading">(pe-rợ-le-li-zợm)</span><span class="ipa">/ˈpærəlelɪzəm/</span></td><td class="pos">n</td><td>chạy song song</td></tr>
+            <tr><td><span class="term">throttled network</span><button class="speak" data-text="throttled network">🔊</button></td><td><span class="reading">(thrọ-tồd nét-uơc)</span><span class="ipa">/ˈθrɒtld ˈnetwɜːk/</span></td><td class="pos">n phr.</td><td>mạng bị giới hạn băng thông</td></tr>
+            <tr><td><span class="term">as closely as possible</span><button class="speak" data-text="as closely as possible">🔊</button></td><td><span class="reading">(ợs cllôs-li ợs pọ-sợ-bồ)</span><span class="ipa">/əz ˈkləʊsli əz ˈpɒsəbl/</span></td><td class="pos">adv phr.</td><td>càng giống càng tốt</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -492,6 +618,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -511,11 +652,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

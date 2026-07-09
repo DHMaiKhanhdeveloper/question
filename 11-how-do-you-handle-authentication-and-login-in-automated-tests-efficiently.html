@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -222,6 +260,92 @@
         giúp bộ test <span class="keyword">nhanh</span>, <span class="keyword">đáng tin cậy</span>, và tập
         trung vào tính năng thực sự đang được kiểm thử thay vì lặp lại các bước đăng nhập.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">I try to avoid logging in through the UI for every single test, because it is slow and adds unnecessary flakiness.</p>
+        <p class="sen-vi">Tôi cố gắng tránh việc đăng nhập qua giao diện người dùng cho mỗi test, vì nó chậm và gây ra sự không ổn định không cần thiết.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">log in through the UI</span><button class="speak" data-text="log in through the UI">🔊</button></td><td><span class="reading">(lóc in thru đờ iu-ai)</span><span class="ipa">/lɒɡ ɪn θruː ðə ˌjuː ˈaɪ/</span></td><td class="pos">v phr.</td><td>đăng nhập qua giao diện người dùng</td></tr>
+            <tr><td><span class="term">every single test</span><button class="speak" data-text="every single test">🔊</button></td><td><span class="reading">(ép-ri xin-gồl test)</span><span class="ipa">/ˈevri ˈsɪŋɡl test/</span></td><td class="pos">n phr.</td><td>mỗi/từng bài test</td></tr>
+            <tr><td><span class="term">slow</span><button class="speak" data-text="slow">🔊</button></td><td><span class="reading">(slâu)</span><span class="ipa">/sləʊ/</span></td><td class="pos">adj</td><td>chậm</td></tr>
+            <tr><td><span class="term">unnecessary</span><button class="speak" data-text="unnecessary">🔊</button></td><td><span class="reading">(ần-ne-xợ-xe-ri)</span><span class="ipa">/ˌʌnˈnesəsəri/</span></td><td class="pos">adj</td><td>không cần thiết</td></tr>
+            <tr><td><span class="term">flakiness</span><button class="speak" data-text="flakiness">🔊</button></td><td><span class="reading">(fley-ki-nợs)</span><span class="ipa">/ˈfleɪkinəs/</span></td><td class="pos">n</td><td>tính không ổn định</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">In Playwright, my preferred approach is to log in once in a global setup script, then save the authenticated session as a storageState.json file, including cookies and local storage.</p>
+        <p class="sen-vi">Trong Playwright, cách tiếp cận tôi ưa thích là đăng nhập một lần trong một script thiết lập toàn cục, sau đó lưu phiên đã xác thực thành một file storageState.json, bao gồm cookie và local storage.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">Playwright</span><button class="speak" data-text="Playwright">🔊</button></td><td><span class="reading">(plếy-rai)</span><span class="ipa">/ˈpleɪraɪt/</span></td><td class="pos">n</td><td>tên công cụ kiểm thử tự động</td></tr>
+            <tr><td><span class="term">preferred approach</span><button class="speak" data-text="preferred approach">🔊</button></td><td><span class="reading">(pri-phợ-rịd ợ-prâuch)</span><span class="ipa">/prɪˈfɜːrd əˈprəʊtʃ/</span></td><td class="pos">n phr.</td><td>cách tiếp cận ưa thích</td></tr>
+            <tr><td><span class="term">global setup script</span><button class="speak" data-text="global setup script">🔊</button></td><td><span class="reading">(glâu-bồl sét-âp scríp)</span><span class="ipa">/ˈɡləʊbl ˈsetʌp skrɪpt/</span></td><td class="pos">n phr.</td><td>script thiết lập toàn cục</td></tr>
+            <tr><td><span class="term">storageState.json</span><button class="speak" data-text="storage state dot json">🔊</button></td><td><span class="reading">(stô-rịt sờ-tết chây-sơn)</span><span class="ipa">/ˈstɔːrɪdʒ steɪt dʒeɪsɒn/</span></td><td class="pos">n</td><td>file lưu trạng thái phiên</td></tr>
+            <tr><td><span class="term">cookies</span><button class="speak" data-text="cookies">🔊</button></td><td><span class="reading">(cúc-kis)</span><span class="ipa">/ˈkʊkiz/</span></td><td class="pos">n</td><td>cookie</td></tr>
+            <tr><td><span class="term">local storage</span><button class="speak" data-text="local storage">🔊</button></td><td><span class="reading">(lâu-cồl stô-rịt)</span><span class="ipa">/ˈləʊkl ˈstɔːrɪdʒ/</span></td><td class="pos">n phr.</td><td>bộ nhớ lưu trữ cục bộ</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Every test that needs to be logged in simply reuses that storage state, so it starts already authenticated, skipping the login form entirely.</p>
+        <p class="sen-vi">Mỗi test cần đăng nhập chỉ đơn giản tái sử dụng storage state đó, nên nó bắt đầu ở trạng thái đã được xác thực sẵn, bỏ qua hoàn toàn form đăng nhập.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">reuse storage state</span><button class="speak" data-text="reuse storage state">🔊</button></td><td><span class="reading">(ri-diuz stô-rịt sờ-tết)</span><span class="ipa">/riːˈjuːz ˈstɔːrɪdʒ steɪt/</span></td><td class="pos">v phr.</td><td>tái sử dụng trạng thái lưu trữ</td></tr>
+            <tr><td><span class="term">authenticated</span><button class="speak" data-text="authenticated">🔊</button></td><td><span class="reading">(ơ-then-ti-kê-tịd)</span><span class="ipa">/ɔːˈθentɪkeɪtɪd/</span></td><td class="pos">adj</td><td>đã được xác thực</td></tr>
+            <tr><td><span class="term">skip</span><button class="speak" data-text="skip">🔊</button></td><td><span class="reading">(xkíp)</span><span class="ipa">/skɪp/</span></td><td class="pos">v</td><td>bỏ qua</td></tr>
+            <tr><td><span class="term">login form</span><button class="speak" data-text="login form">🔊</button></td><td><span class="reading">(lóc-in fom)</span><span class="ipa">/ˈlɒɡɪn fɔːm/</span></td><td class="pos">n phr.</td><td>biểu mẫu đăng nhập</td></tr>
+            <tr><td><span class="term">entirely</span><button class="speak" data-text="entirely">🔊</button></td><td><span class="reading">(ịn-tai-ợ-li)</span><span class="ipa">/ɪnˈtaɪəli/</span></td><td class="pos">adv</td><td>hoàn toàn</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">When UI login truly needs to be tested, I keep that as a small, separate suite.</p>
+        <p class="sen-vi">Khi thực sự cần kiểm thử việc đăng nhập qua UI, tôi giữ nó như một bộ test nhỏ, riêng biệt.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">UI login</span><button class="speak" data-text="UI login">🔊</button></td><td><span class="reading">(iu-ai lóc-in)</span><span class="ipa">/ˌjuː ˈaɪ ˈlɒɡɪn/</span></td><td class="pos">n phr.</td><td>đăng nhập qua giao diện</td></tr>
+            <tr><td><span class="term">truly</span><button class="speak" data-text="truly">🔊</button></td><td><span class="reading">(chru-li)</span><span class="ipa">/ˈtruːli/</span></td><td class="pos">adv</td><td>thực sự</td></tr>
+            <tr><td><span class="term">separate suite</span><button class="speak" data-text="separate suite">🔊</button></td><td><span class="reading">(se-prợt suýt)</span><span class="ipa">/ˈseprət swiːt/</span></td><td class="pos">n phr.</td><td>bộ test riêng biệt</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">For other cases, I sometimes call the login API directly to grab a token and inject it into the browser context.</p>
+        <p class="sen-vi">Với các trường hợp khác, đôi khi tôi gọi trực tiếp API đăng nhập để lấy token và tiêm nó vào browser context.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">login API</span><button class="speak" data-text="login API">🔊</button></td><td><span class="reading">(lóc-in ây-pi-ai)</span><span class="ipa">/ˈlɒɡɪn eɪ piː aɪ/</span></td><td class="pos">n phr.</td><td>API đăng nhập</td></tr>
+            <tr><td><span class="term">grab a token</span><button class="speak" data-text="grab a token">🔊</button></td><td><span class="reading">(gráp ợ tâu-cần)</span><span class="ipa">/ɡræb ə ˈtəʊkən/</span></td><td class="pos">v phr.</td><td>lấy một token</td></tr>
+            <tr><td><span class="term">inject</span><button class="speak" data-text="inject">🔊</button></td><td><span class="reading">(in-chéc)</span><span class="ipa">/ɪnˈdʒekt/</span></td><td class="pos">v</td><td>tiêm/đưa vào</td></tr>
+            <tr><td><span class="term">browser context</span><button class="speak" data-text="browser context">🔊</button></td><td><span class="reading">(brâu-dơ con-téc)</span><span class="ipa">/ˈbraʊzər ˈkɒntekst/</span></td><td class="pos">n phr.</td><td>ngữ cảnh trình duyệt</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">This keeps the test suite fast, reliable, and focused on the actual feature being tested instead of repeating the same login steps.</p>
+        <p class="sen-vi">Điều này giúp bộ test nhanh, đáng tin cậy, và tập trung vào tính năng thực sự đang được kiểm thử thay vì lặp lại các bước đăng nhập.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">fast</span><button class="speak" data-text="fast">🔊</button></td><td><span class="reading">(phast)</span><span class="ipa">/fɑːst/</span></td><td class="pos">adj</td><td>nhanh</td></tr>
+            <tr><td><span class="term">reliable</span><button class="speak" data-text="reliable">🔊</button></td><td><span class="reading">(ri-lai-ợ-bồl)</span><span class="ipa">/rɪˈlaɪəbl/</span></td><td class="pos">adj</td><td>đáng tin cậy</td></tr>
+            <tr><td><span class="term">actual feature</span><button class="speak" data-text="actual feature">🔊</button></td><td><span class="reading">(ác-chu-ợl phi-chợ)</span><span class="ipa">/ˈæktʃuəl ˈfiːtʃər/</span></td><td class="pos">n phr.</td><td>tính năng thực sự</td></tr>
+            <tr><td><span class="term">repeat</span><button class="speak" data-text="repeat">🔊</button></td><td><span class="reading">(ri-pít)</span><span class="ipa">/rɪˈpiːt/</span></td><td class="pos">v</td><td>lặp lại</td></tr>
+            <tr><td><span class="term">login steps</span><button class="speak" data-text="login steps">🔊</button></td><td><span class="reading">(lóc-in xtép)</span><span class="ipa">/ˈlɒɡɪn steps/</span></td><td class="pos">n phr.</td><td>các bước đăng nhập</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -513,6 +637,21 @@ test(<span class="s">'shows welcome banner'</span>, <span class="k">async</span>
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -532,11 +671,29 @@ test(<span class="s">'shows welcome banner'</span>, <span class="k">async</span>
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

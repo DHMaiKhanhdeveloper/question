@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -224,6 +262,92 @@
         đồng thời <span class="keyword">test report</span> được upload dưới dạng <span class="keyword">artifact</span>
         để cả team nhanh chóng biết chỗ nào bị lỗi.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">CI/CD stands for Continuous Integration and Continuous Deployment.</p>
+        <p class="sen-vi">CI/CD là viết tắt của Continuous Integration và Continuous Deployment.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">stand for</span><button class="speak" data-text="stand for">🔊</button></td><td><span class="reading">(xtend fo)</span><span class="ipa">/stænd fɔːr/</span></td><td class="pos">phr.v</td><td>là viết tắt của</td></tr>
+            <tr><td><span class="term">continuous integration</span><button class="speak" data-text="continuous integration">🔊</button></td><td><span class="reading">(cợn-tin-diu-ợs in-tơ-grây-sần)</span><span class="ipa">/kənˈtɪnjuəs ˌɪntɪˈɡreɪʃn/</span></td><td class="pos">n phr.</td><td>tích hợp liên tục</td></tr>
+            <tr><td><span class="term">continuous deployment</span><button class="speak" data-text="continuous deployment">🔊</button></td><td><span class="reading">(cợn-tin-diu-ợs đi-plói-mợnt)</span><span class="ipa">/kənˈtɪnjuəs dɪˈplɔɪmənt/</span></td><td class="pos">n phr.</td><td>triển khai liên tục</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Continuous Integration means every code change is automatically built and tested as soon as it's pushed, so bugs are caught early instead of piling up.</p>
+        <p class="sen-vi">Continuous Integration nghĩa là mỗi thay đổi code đều được tự động build và test ngay khi được push lên, nhờ vậy lỗi được phát hiện sớm thay vì dồn lại.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">code change</span><button class="speak" data-text="code change">🔊</button></td><td><span class="reading">(cốt chên-giơ)</span><span class="ipa">/kəʊd tʃeɪndʒ/</span></td><td class="pos">n phr.</td><td>thay đổi mã nguồn</td></tr>
+            <tr><td><span class="term">automatically</span><button class="speak" data-text="automatically">🔊</button></td><td><span class="reading">(o-tô-me-tịc-li)</span><span class="ipa">/ˌɔːtəˈmætɪkli/</span></td><td class="pos">adv</td><td>một cách tự động</td></tr>
+            <tr><td><span class="term">push</span><button class="speak" data-text="push">🔊</button></td><td><span class="reading">(pút-sơ)</span><span class="ipa">/pʊʃ/</span></td><td class="pos">v</td><td>đẩy code lên repository</td></tr>
+            <tr><td><span class="term">caught early</span><button class="speak" data-text="caught early">🔊</button></td><td><span class="reading">(cot ơ-li)</span><span class="ipa">/kɔːt ˈɜːli/</span></td><td class="pos">adj phr.</td><td>được phát hiện sớm</td></tr>
+            <tr><td><span class="term">pile up</span><button class="speak" data-text="pile up">🔊</button></td><td><span class="reading">(pai-ồ ấp)</span><span class="ipa">/paɪl ʌp/</span></td><td class="pos">phr.v</td><td>dồn lại, chồng chất</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Continuous Deployment means that if those tests pass, the code can move automatically toward staging or production.</p>
+        <p class="sen-vi">Continuous Deployment nghĩa là nếu các test đó pass, code có thể tự động được đưa tới môi trường staging hoặc production.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">pass</span><button class="speak" data-text="pass">🔊</button></td><td><span class="reading">(pát-sơ)</span><span class="ipa">/pæs/</span></td><td class="pos">v</td><td>đạt, pass (test)</td></tr>
+            <tr><td><span class="term">move toward</span><button class="speak" data-text="move toward">🔊</button></td><td><span class="reading">(múv tơ-uốt)</span><span class="ipa">/muːv təˈwɔːd/</span></td><td class="pos">v phr.</td><td>di chuyển/tiến tới</td></tr>
+            <tr><td><span class="term">staging</span><button class="speak" data-text="staging">🔊</button></td><td><span class="reading">(xtây-gin)</span><span class="ipa">/ˈsteɪdʒɪŋ/</span></td><td class="pos">n</td><td>môi trường thử nghiệm trước production</td></tr>
+            <tr><td><span class="term">production</span><button class="speak" data-text="production">🔊</button></td><td><span class="reading">(prợ-đấc-sần)</span><span class="ipa">/prəˈdʌkʃn/</span></td><td class="pos">n</td><td>môi trường thực tế</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">To integrate automated tests, I add a test stage in the pipeline configuration, for example a GitHub Actions workflow, that installs dependencies, then runs my Playwright or Selenium test suite on every pull request.</p>
+        <p class="sen-vi">Để tích hợp automated test, tôi thêm một test stage vào cấu hình pipeline, ví dụ một GitHub Actions workflow, để cài đặt các dependency rồi chạy bộ test suite Playwright hoặc Selenium của tôi trên mỗi pull request.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">test stage</span><button class="speak" data-text="test stage">🔊</button></td><td><span class="reading">(test xtây-giơ)</span><span class="ipa">/test steɪdʒ/</span></td><td class="pos">n phr.</td><td>giai đoạn kiểm thử trong pipeline</td></tr>
+            <tr><td><span class="term">pipeline configuration</span><button class="speak" data-text="pipeline configuration">🔊</button></td><td><span class="reading">(pai-plain cợn-phi-giu-rây-sần)</span><span class="ipa">/ˈpaɪplaɪn kənˌfɪɡjəˈreɪʃn/</span></td><td class="pos">n phr.</td><td>cấu hình pipeline</td></tr>
+            <tr><td><span class="term">GitHub Actions workflow</span><button class="speak" data-text="GitHub Actions workflow">🔊</button></td><td><span class="reading">(git-hớp éc-sần uốc-flâu)</span><span class="ipa">/ɡɪthʌb ˈækʃnz ˈwɜːkfləʊ/</span></td><td class="pos">n phr.</td><td>quy trình tự động trên GitHub Actions</td></tr>
+            <tr><td><span class="term">install dependencies</span><button class="speak" data-text="install dependencies">🔊</button></td><td><span class="reading">(in-xtôl đi-pen-đờn-si)</span><span class="ipa">/ɪnˈstɒl dɪˈpendənsiz/</span></td><td class="pos">v phr.</td><td>cài đặt các thư viện phụ thuộc</td></tr>
+            <tr><td><span class="term">test suite</span><button class="speak" data-text="test suite">🔊</button></td><td><span class="reading">(test xuýt)</span><span class="ipa">/test swiːt/</span></td><td class="pos">n phr.</td><td>bộ các test case</td></tr>
+            <tr><td><span class="term">pull request</span><button class="speak" data-text="pull request">🔊</button></td><td><span class="reading">(pun ri-quét)</span><span class="ipa">/pʊl rɪˈkwest/</span></td><td class="pos">n phr.</td><td>yêu cầu hợp nhất mã nguồn (PR)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I usually split tests into fast smoke tests that run first, and a fuller regression suite that runs in parallel to save time.</p>
+        <p class="sen-vi">Tôi thường chia test thành các smoke test nhanh chạy trước, và một regression suite đầy đủ hơn chạy song song (parallel) để tiết kiệm thời gian.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">split</span><button class="speak" data-text="split">🔊</button></td><td><span class="reading">(xplít)</span><span class="ipa">/splɪt/</span></td><td class="pos">v</td><td>chia, tách</td></tr>
+            <tr><td><span class="term">smoke test</span><button class="speak" data-text="smoke test">🔊</button></td><td><span class="reading">(xmâuk test)</span><span class="ipa">/sməʊk test/</span></td><td class="pos">n phr.</td><td>kiểm thử nhanh các chức năng cơ bản</td></tr>
+            <tr><td><span class="term">regression suite</span><button class="speak" data-text="regression suite">🔊</button></td><td><span class="reading">(ri-gres-sần xuýt)</span><span class="ipa">/rɪˈɡreʃn swiːt/</span></td><td class="pos">n phr.</td><td>bộ test hồi quy</td></tr>
+            <tr><td><span class="term">parallel</span><button class="speak" data-text="parallel">🔊</button></td><td><span class="reading">(pe-rợ-lồ)</span><span class="ipa">/ˈpærəlel/</span></td><td class="pos">adj</td><td>song song</td></tr>
+            <tr><td><span class="term">save time</span><button class="speak" data-text="save time">🔊</button></td><td><span class="reading">(xây-vơ tham)</span><span class="ipa">/seɪv taɪm/</span></td><td class="pos">v phr.</td><td>tiết kiệm thời gian</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">If any test fails, the pipeline fails fast and blocks the merge, and the test report is uploaded as an artifact so the team can quickly see what broke.</p>
+        <p class="sen-vi">Nếu có test nào fail, pipeline sẽ fail fast và chặn việc merge, đồng thời test report được upload dưới dạng artifact để cả team nhanh chóng biết chỗ nào bị lỗi.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">fail fast</span><button class="speak" data-text="fail fast">🔊</button></td><td><span class="reading">(phêiu phát)</span><span class="ipa">/feɪl fɑːst/</span></td><td class="pos">idiom</td><td>báo lỗi/dừng sớm ngay khi phát hiện lỗi</td></tr>
+            <tr><td><span class="term">block</span><button class="speak" data-text="block">🔊</button></td><td><span class="reading">(blốc)</span><span class="ipa">/blɒk/</span></td><td class="pos">v</td><td>chặn, ngăn</td></tr>
+            <tr><td><span class="term">merge</span><button class="speak" data-text="merge">🔊</button></td><td><span class="reading">(mơ-giơ)</span><span class="ipa">/mɜːdʒ/</span></td><td class="pos">v/n</td><td>hợp nhất nhánh code</td></tr>
+            <tr><td><span class="term">upload</span><button class="speak" data-text="upload">🔊</button></td><td><span class="reading">(ấp-lâuđ)</span><span class="ipa">/ʌpˈləʊd/</span></td><td class="pos">v</td><td>tải lên</td></tr>
+            <tr><td><span class="term">test report artifact</span><button class="speak" data-text="test report artifact">🔊</button></td><td><span class="reading">(test ri-pót a-ti-phéct)</span><span class="ipa">/test rɪˈpɔːt ˈɑːtɪfækt/</span></td><td class="pos">n phr.</td><td>tệp báo cáo kết quả test được lưu lại</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -528,6 +652,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -547,11 +686,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

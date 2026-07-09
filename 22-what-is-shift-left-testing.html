@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -227,6 +265,74 @@
         <span class="keyword">vòng phản hồi</span>, và xây dựng <span class="keyword">chất lượng</span> vào
         sản phẩm ngay từ đầu thay vì kiểm tra nó sau đó.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">Shift-left testing means moving testing activities earlier in the SDLC instead of leaving them until the end, right before release.</p>
+        <p class="sen-vi">Shift-left testing nghĩa là đưa các hoạt động kiểm thử lên sớm hơn trong vòng đời phát triển phần mềm, thay vì để đến cuối, ngay trước khi release.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">shift-left testing</span><button class="speak" data-text="shift-left testing">🔊</button></td><td><span class="reading">(síp-lép tés-tinh)</span><span class="ipa">/ʃɪft left ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử dịch chuyển sang trái (sớm hơn trong SDLC)</td></tr>
+            <tr><td><span class="term">SDLC</span><button class="speak" data-text="Software Development Life Cycle">🔊</button></td><td><span class="reading">(sốp-goe đi-vé-lợp-mợnt lai xai-cồ)</span><span class="ipa">/ˈsɒftweər dɪˈveləpmənt laɪf ˈsaɪkl/</span></td><td class="pos">n phr.</td><td>vòng đời phát triển phần mềm</td></tr>
+            <tr><td><span class="term">release</span><button class="speak" data-text="release">🔊</button></td><td><span class="reading">(ri-lis)</span><span class="ipa">/rɪˈliːs/</span></td><td class="pos">n</td><td>bản phát hành, lần release</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">In practice, I get QA involved during the requirements and design review, so we can catch ambiguous or untestable requirements before any code is written.</p>
+        <p class="sen-vi">Trong thực tế, tôi để QA tham gia ngay từ giai đoạn review yêu cầu và thiết kế, để có thể phát hiện những yêu cầu mơ hồ hoặc không thể kiểm thử trước khi bất kỳ dòng code nào được viết.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">QA involved</span><button class="speak" data-text="QA involved">🔊</button></td><td><span class="reading">(kiu-ây in-vôl-vd)</span><span class="ipa">/ˌkjuː ˈeɪ ɪnˈvɒlvd/</span></td><td class="pos">adj phr.</td><td>QA tham gia (vào)</td></tr>
+            <tr><td><span class="term">requirements review</span><button class="speak" data-text="requirements review">🔊</button></td><td><span class="reading">(ri-quai-mợnts ri-viu)</span><span class="ipa">/rɪˈkwaɪəmənts rɪˈvjuː/</span></td><td class="pos">n phr.</td><td>xem xét/duyệt yêu cầu</td></tr>
+            <tr><td><span class="term">design review</span><button class="speak" data-text="design review">🔊</button></td><td><span class="reading">(đi-zain ri-viu)</span><span class="ipa">/dɪˈzaɪn rɪˈvjuː/</span></td><td class="pos">n phr.</td><td>xem xét/duyệt thiết kế</td></tr>
+            <tr><td><span class="term">untestable</span><button class="speak" data-text="untestable">🔊</button></td><td><span class="reading">(ần-tes-tợ-bồ)</span><span class="ipa">/ʌnˈtestəbl/</span></td><td class="pos">adj</td><td>không thể kiểm thử được</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I also write automated tests alongside development, often using a test-driven or behavior-driven approach, so unit and integration tests run on every commit through the CI pipeline.</p>
+        <p class="sen-vi">Tôi cũng viết các test tự động song song với quá trình phát triển, thường theo hướng test-driven hoặc behavior-driven, để các unit test và integration test chạy trên mỗi commit thông qua pipeline CI.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">test-driven approach</span><button class="speak" data-text="test driven approach">🔊</button></td><td><span class="reading">(test đri-vần ợ-prâuch)</span><span class="ipa">/test ˈdrɪvn əˈprəʊtʃ/</span></td><td class="pos">n phr.</td><td>cách tiếp cận dựa trên test (TDD)</td></tr>
+            <tr><td><span class="term">behavior-driven</span><button class="speak" data-text="behavior driven">🔊</button></td><td><span class="reading">(bi-hây-vi-ơ đri-vần)</span><span class="ipa">/bɪˈheɪvjər ˈdrɪvn/</span></td><td class="pos">adj</td><td>hướng theo hành vi (BDD)</td></tr>
+            <tr><td><span class="term">unit test</span><button class="speak" data-text="unit test">🔊</button></td><td><span class="reading">(diu-nợt test)</span><span class="ipa">/ˈjuːnɪt test/</span></td><td class="pos">n phr.</td><td>kiểm thử đơn vị</td></tr>
+            <tr><td><span class="term">integration test</span><button class="speak" data-text="integration test">🔊</button></td><td><span class="reading">(in-ti-grây-sần test)</span><span class="ipa">/ˌɪntɪˈɡreɪʃn test/</span></td><td class="pos">n phr.</td><td>kiểm thử tích hợp</td></tr>
+            <tr><td><span class="term">CI pipeline</span><button class="speak" data-text="C I pipeline">🔊</button></td><td><span class="reading">(xi-ai pai-plain)</span><span class="ipa">/ˌsiːˈaɪ ˈpaɪplaɪn/</span></td><td class="pos">n phr.</td><td>quy trình tích hợp liên tục</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">This tight collaboration with developers means bugs are caught and fixed while the code is still fresh in everyone's mind, which is far cheaper than finding them in a full regression cycle later.</p>
+        <p class="sen-vi">Sự hợp tác chặt chẽ với các lập trình viên này giúp lỗi được phát hiện và sửa sớm hơn khi code vẫn còn mới trong đầu mọi người, điều này rẻ hơn rất nhiều so với việc tìm ra lỗi trong một chu kỳ regression đầy đủ sau này.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">collaboration</span><button class="speak" data-text="collaboration">🔊</button></td><td><span class="reading">(cợ-le-bợ-rây-sần)</span><span class="ipa">/kəˌlæbəˈreɪʃn/</span></td><td class="pos">n</td><td>sự hợp tác</td></tr>
+            <tr><td><span class="term">caught earlier</span><button class="speak" data-text="caught earlier">🔊</button></td><td><span class="reading">(cot ơ-li-ơ)</span><span class="ipa">/kɔːt ˈɜːliər/</span></td><td class="pos">v phr.</td><td>được phát hiện sớm hơn</td></tr>
+            <tr><td><span class="term">cheaper</span><button class="speak" data-text="cheaper">🔊</button></td><td><span class="reading">(chi-pơ)</span><span class="ipa">/ˈtʃiːpər/</span></td><td class="pos">adj</td><td>rẻ hơn</td></tr>
+            <tr><td><span class="term">regression cycle</span><button class="speak" data-text="regression cycle">🔊</button></td><td><span class="reading">(ri-gre-sần xai-cồ)</span><span class="ipa">/rɪˈɡreʃn ˈsaɪkl/</span></td><td class="pos">n phr.</td><td>chu kỳ kiểm thử hồi quy</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Overall, shifting left reduces the cost of fixing defects, shortens the feedback loop, and builds quality into the product from the start rather than inspecting it in afterward.</p>
+        <p class="sen-vi">Nhìn chung, việc dịch chuyển sang trái giúp giảm chi phí sửa lỗi, rút ngắn vòng phản hồi, và xây dựng chất lượng vào sản phẩm ngay từ đầu thay vì kiểm tra nó sau đó.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">cost of fixing defects</span><button class="speak" data-text="cost of fixing defects">🔊</button></td><td><span class="reading">(cost ợv phích-xinh đi-phéc-ts)</span><span class="ipa">/kɒst əv ˈfɪksɪŋ ˈdiːfekts/</span></td><td class="pos">n phr.</td><td>chi phí sửa lỗi</td></tr>
+            <tr><td><span class="term">feedback loop</span><button class="speak" data-text="feedback loop">🔊</button></td><td><span class="reading">(phít-béc lup)</span><span class="ipa">/ˈfiːdbæk luːp/</span></td><td class="pos">n phr.</td><td>vòng phản hồi</td></tr>
+            <tr><td><span class="term">build quality in</span><button class="speak" data-text="build quality in">🔊</button></td><td><span class="reading">(bild qua-lợ-ti in)</span><span class="ipa">/bɪld ˈkwɒləti ɪn/</span></td><td class="pos">v phr.</td><td>xây dựng chất lượng ngay từ đầu</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -495,7 +601,22 @@ Development  <span class="c">// viết test song song với code</span>
     enBq.after(rep);
   })();
 
-  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
+  /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt (bảng chính) */
   (function(){
     const table = document.querySelector('table.vocab');
     if(!table) return;
@@ -514,11 +635,29 @@ Development  <span class="c">// viết test song song với code</span>
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

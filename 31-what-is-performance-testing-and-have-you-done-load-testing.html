@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -225,6 +263,81 @@
         giám sát server để xác định các <span class="keyword">điểm nghẽn</span>, ví dụ truy vấn database
         chậm hoặc CPU bị bão hòa, rồi báo cáo cho đội phát triển.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">Performance testing is the process of checking how a system behaves under a given workload, focusing on metrics like response time, throughput, and resource usage instead of functional correctness.</p>
+        <p class="sen-vi">Performance testing là quá trình kiểm tra xem hệ thống hoạt động ra sao dưới một mức tải (workload) nhất định, tập trung vào các chỉ số như thời gian phản hồi, thông lượng và mức sử dụng tài nguyên thay vì tính đúng đắn về chức năng.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">performance testing</span><button class="speak" data-text="performance testing">🔊</button></td><td><span class="reading">(pơ-fóm-mợns tés-ting)</span><span class="ipa">/pərˈfɔːrməns ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử hiệu năng</td></tr>
+            <tr><td><span class="term">workload</span><button class="speak" data-text="workload">🔊</button></td><td><span class="reading">(guốc-lâuđ)</span><span class="ipa">/ˈwɜːrkloʊd/</span></td><td class="pos">n</td><td>khối lượng công việc/tải</td></tr>
+            <tr><td><span class="term">response time</span><button class="speak" data-text="response time">🔊</button></td><td><span class="reading">(ri-spons tai-m)</span><span class="ipa">/rɪˈspɒns taɪm/</span></td><td class="pos">n phr.</td><td>thời gian phản hồi</td></tr>
+            <tr><td><span class="term">throughput</span><button class="speak" data-text="throughput">🔊</button></td><td><span class="reading">(thru-put)</span><span class="ipa">/ˈθruːpʊt/</span></td><td class="pos">n</td><td>thông lượng</td></tr>
+            <tr><td><span class="term">resource usage</span><button class="speak" data-text="resource usage">🔊</button></td><td><span class="reading">(ri-sos diu-sịt)</span><span class="ipa">/ˈriːsɔːrs ˈjuːsɪdʒ/</span></td><td class="pos">n phr.</td><td>mức sử dụng tài nguyên</td></tr>
+            <tr><td><span class="term">functional correctness</span><button class="speak" data-text="functional correctness">🔊</button></td><td><span class="reading">(phăng-sần-nồl cợ-réct-nợs)</span><span class="ipa">/ˈfʌŋkʃənl kəˈrektnəs/</span></td><td class="pos">n phr.</td><td>tính đúng đắn về chức năng</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Load testing is one type of performance testing where I simulate expected or peak numbers of concurrent users to see if the system meets its performance requirements.</p>
+        <p class="sen-vi">Load testing là một loại performance testing, trong đó tôi mô phỏng số lượng người dùng đồng thời dự kiến hoặc cao điểm để xem hệ thống có đáp ứng được yêu cầu hiệu năng hay không.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">load testing</span><button class="speak" data-text="load testing">🔊</button></td><td><span class="reading">(lâuđ tés-ting)</span><span class="ipa">/loʊd ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử tải</td></tr>
+            <tr><td><span class="term">simulate</span><button class="speak" data-text="simulate">🔊</button></td><td><span class="reading">(xim-diu-lêt)</span><span class="ipa">/ˈsɪmjuleɪt/</span></td><td class="pos">v</td><td>mô phỏng</td></tr>
+            <tr><td><span class="term">concurrent users</span><button class="speak" data-text="concurrent users">🔊</button></td><td><span class="reading">(cợn-cơ-rợnt diu-dơs)</span><span class="ipa">/kənˈkʌrənt ˈjuːzərz/</span></td><td class="pos">n phr.</td><td>người dùng đồng thời</td></tr>
+            <tr><td><span class="term">performance requirements</span><button class="speak" data-text="performance requirements">🔊</button></td><td><span class="reading">(pơ-fóm-mợns ri-quai-mợnts)</span><span class="ipa">/pərˈfɔːrməns rɪˈkwaɪərmənts/</span></td><td class="pos">n phr.</td><td>yêu cầu hiệu năng</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I have also done stress testing, pushing traffic beyond normal limits to find the breaking point, and spike testing, to see how the system reacts to a sudden surge.</p>
+        <p class="sen-vi">Tôi cũng đã làm stress testing, đẩy lưu lượng vượt quá giới hạn bình thường để tìm điểm gãy của hệ thống, và spike testing, để xem hệ thống phản ứng thế nào khi lưu lượng tăng đột biến.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">stress testing</span><button class="speak" data-text="stress testing">🔊</button></td><td><span class="reading">(strés tés-ting)</span><span class="ipa">/stres ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử chịu tải cực hạn</td></tr>
+            <tr><td><span class="term">breaking point</span><button class="speak" data-text="breaking point">🔊</button></td><td><span class="reading">(brây-king point)</span><span class="ipa">/ˈbreɪkɪŋ pɔɪnt/</span></td><td class="pos">n phr.</td><td>điểm gãy/giới hạn chịu đựng</td></tr>
+            <tr><td><span class="term">spike testing</span><button class="speak" data-text="spike testing">🔊</button></td><td><span class="reading">(spai-k tés-ting)</span><span class="ipa">/spaɪk ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>kiểm thử tăng đột biến</td></tr>
+            <tr><td><span class="term">surge</span><button class="speak" data-text="surge">🔊</button></td><td><span class="reading">(xơ-ch)</span><span class="ipa">/sɜːrdʒ/</span></td><td class="pos">n</td><td>sự tăng đột biến</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">In my projects, I used k6 and JMeter to write load test scripts, ramp virtual users gradually, and collect metrics such as response time percentiles, error rate, and requests per second.</p>
+        <p class="sen-vi">Trong các dự án của mình, tôi dùng k6 và JMeter để viết script load test, tăng dần số lượng virtual user, và thu thập các chỉ số như phân vị thời gian phản hồi, tỷ lệ lỗi và số request mỗi giây.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">load test script</span><button class="speak" data-text="load test script">🔊</button></td><td><span class="reading">(lâuđ test xcript)</span><span class="ipa">/loʊd test skrɪpt/</span></td><td class="pos">n phr.</td><td>script kiểm thử tải</td></tr>
+            <tr><td><span class="term">ramp up</span><button class="speak" data-text="ramp up">🔊</button></td><td><span class="reading">(rem ấp)</span><span class="ipa">/ræmp ʌp/</span></td><td class="pos">phr.v</td><td>tăng dần</td></tr>
+            <tr><td><span class="term">virtual users</span><button class="speak" data-text="virtual users">🔊</button></td><td><span class="reading">(vơ-chu-ợl diu-dơs)</span><span class="ipa">/ˈvɜːrtʃuəl ˈjuːzərz/</span></td><td class="pos">n phr.</td><td>người dùng ảo (VU)</td></tr>
+            <tr><td><span class="term">response time percentile</span><button class="speak" data-text="response time percentile">🔊</button></td><td><span class="reading">(ri-spons taim pơ-sen-tai-ồ)</span><span class="ipa">/rɪˈspɒns taɪm pərˈsentaɪl/</span></td><td class="pos">n phr.</td><td>phân vị thời gian phản hồi</td></tr>
+            <tr><td><span class="term">error rate</span><button class="speak" data-text="error rate">🔊</button></td><td><span class="reading">(e-rơ rây-t)</span><span class="ipa">/ˈerər reɪt/</span></td><td class="pos">n phr.</td><td>tỷ lệ lỗi</td></tr>
+            <tr><td><span class="term">requests per second</span><button class="speak" data-text="requests per second">🔊</button></td><td><span class="reading">(ri-quest pơ sê-cợnd)</span><span class="ipa">/rɪˈkwests pər ˈsekənd/</span></td><td class="pos">n phr.</td><td>số yêu cầu mỗi giây (RPS)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Then I analyze the results together with server monitoring dashboards to identify bottlenecks, like slow database queries or CPU saturation, and report them to the development team.</p>
+        <p class="sen-vi">Sau đó tôi phân tích kết quả cùng với các dashboard giám sát server để xác định các điểm nghẽn, ví dụ truy vấn database chậm hoặc CPU bị bão hòa, rồi báo cáo cho đội phát triển.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">analyze</span><button class="speak" data-text="analyze">🔊</button></td><td><span class="reading">(en-ơ-lai-z)</span><span class="ipa">/ˈænəlaɪz/</span></td><td class="pos">v</td><td>phân tích</td></tr>
+            <tr><td><span class="term">monitoring dashboard</span><button class="speak" data-text="monitoring dashboard">🔊</button></td><td><span class="reading">(mo-ni-tơ-rinh đash-bọt)</span><span class="ipa">/ˈmɒnɪtərɪŋ ˈdæʃbɔːrd/</span></td><td class="pos">n phr.</td><td>bảng giám sát</td></tr>
+            <tr><td><span class="term">bottleneck</span><button class="speak" data-text="bottleneck">🔊</button></td><td><span class="reading">(bó-tồ-nếch)</span><span class="ipa">/ˈbɒtlnek/</span></td><td class="pos">n</td><td>điểm nghẽn</td></tr>
+            <tr><td><span class="term">database query</span><button class="speak" data-text="database query">🔊</button></td><td><span class="reading">(đây-tơ-bây-x quia-ri)</span><span class="ipa">/ˈdeɪtəbeɪs ˈkwɪəri/</span></td><td class="pos">n phr.</td><td>truy vấn cơ sở dữ liệu</td></tr>
+            <tr><td><span class="term">CPU saturation</span><button class="speak" data-text="CPU saturation">🔊</button></td><td><span class="reading">(xi-pi-diu xa-chơ-rây-sần)</span><span class="ipa">/ˌsiː piː ˈjuː ˌsætʃəˈreɪʃn/</span></td><td class="pos">n phr.</td><td>CPU bị bão hòa</td></tr>
+            <tr><td><span class="term">development team</span><button class="speak" data-text="development team">🔊</button></td><td><span class="reading">(đi-vê-lợp-mợnt tim)</span><span class="ipa">/dɪˈveləpmənt tiːm/</span></td><td class="pos">n phr.</td><td>đội phát triển</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -495,6 +608,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -514,11 +642,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -226,6 +264,90 @@
         khác. Nếu thiếu sự <span class="keyword">cô lập</span> đó, các lần chạy song song sẽ trở nên
         <span class="keyword">chập chờn (flaky)</span> và không đáng tin cậy.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">To run tests in parallel, I rely on Playwright's built-in worker processes and, in CI, its sharding feature.</p>
+        <p class="sen-vi">Để chạy test song song, tôi dựa vào cơ chế worker process có sẵn của Playwright và, trên CI, tính năng sharding của nó.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">rely on</span><button class="speak" data-text="rely on">🔊</button></td><td><span class="reading">(ri-lai on)</span><span class="ipa">/rɪˈlaɪ ɒn/</span></td><td class="pos">phr.v</td><td>dựa vào</td></tr>
+            <tr><td><span class="term">built-in</span><button class="speak" data-text="built in">🔊</button></td><td><span class="reading">(bilt-in)</span><span class="ipa">/ˌbɪltˈɪn/</span></td><td class="pos">adj</td><td>có sẵn, tích hợp sẵn</td></tr>
+            <tr><td><span class="term">worker process</span><button class="speak" data-text="worker process">🔊</button></td><td><span class="reading">(gơ-cơ prô-sét)</span><span class="ipa">/ˈwɜːkər ˈprəʊses/</span></td><td class="pos">n phr.</td><td>tiến trình worker chạy test</td></tr>
+            <tr><td><span class="term">sharding</span><button class="speak" data-text="sharding">🔊</button></td><td><span class="reading">(sa-đinh)</span><span class="ipa">/ˈʃɑːdɪŋ/</span></td><td class="pos">n</td><td>chia nhỏ bộ test thành các phần</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Locally, Playwright spins up multiple workers, each running test files in its own isolated browser context, so several suites execute at the same time instead of one after another.</p>
+        <p class="sen-vi">Ở máy local, Playwright khởi tạo nhiều worker, mỗi worker chạy các file test trong browser context riêng biệt và cô lập, nhờ vậy nhiều bộ test chạy cùng lúc thay vì tuần tự.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">spin up</span><button class="speak" data-text="spin up">🔊</button></td><td><span class="reading">(xpin ấp)</span><span class="ipa">/spɪn ʌp/</span></td><td class="pos">phr.v</td><td>khởi tạo, dựng lên (tiến trình)</td></tr>
+            <tr><td><span class="term">isolated</span><button class="speak" data-text="isolated">🔊</button></td><td><span class="reading">(ai-sợ-lây-tịd)</span><span class="ipa">/ˈaɪsəleɪtɪd/</span></td><td class="pos">adj</td><td>cô lập, riêng biệt</td></tr>
+            <tr><td><span class="term">browser context</span><button class="speak" data-text="browser context">🔊</button></td><td><span class="reading">(brao-dơ con-téc-xtờ)</span><span class="ipa">/ˈbraʊzər ˈkɒntekst/</span></td><td class="pos">n phr.</td><td>phiên trình duyệt cô lập</td></tr>
+            <tr><td><span class="term">execute</span><button class="speak" data-text="execute">🔊</button></td><td><span class="reading">(ếch-xi-kiút)</span><span class="ipa">/ˈeksɪkjuːt/</span></td><td class="pos">v</td><td>thực thi, chạy</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">On CI, I split the full suite into shards across multiple machines using the shard flag, and each shard reports its results back so they can be merged into one report.</p>
+        <p class="sen-vi">Trên CI, tôi chia toàn bộ bộ test thành các shard trên nhiều máy bằng cờ shard, và mỗi shard trả kết quả về để gộp lại thành một báo cáo.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">split into</span><button class="speak" data-text="split into">🔊</button></td><td><span class="reading">(xplit in-tu)</span><span class="ipa">/splɪt ˈɪntuː/</span></td><td class="pos">phr.v</td><td>chia thành</td></tr>
+            <tr><td><span class="term">shard</span><button class="speak" data-text="shard">🔊</button></td><td><span class="reading">(sát)</span><span class="ipa">/ʃɑːd/</span></td><td class="pos">n</td><td>một phần được chia của bộ test</td></tr>
+            <tr><td><span class="term">flag</span><button class="speak" data-text="flag">🔊</button></td><td><span class="reading">(phléc)</span><span class="ipa">/flæɡ/</span></td><td class="pos">n</td><td>cờ (tham số dòng lệnh)</td></tr>
+            <tr><td><span class="term">merge</span><button class="speak" data-text="merge">🔊</button></td><td><span class="reading">(mợ-chờ)</span><span class="ipa">/mɜːdʒ/</span></td><td class="pos">v</td><td>gộp, hợp nhất</td></tr>
+            <tr><td><span class="term">report</span><button class="speak" data-text="report">🔊</button></td><td><span class="reading">(ri-pọt)</span><span class="ipa">/rɪˈpɔːt/</span></td><td class="pos">n</td><td>báo cáo</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Parallel execution matters mainly for faster feedback: a suite that takes forty minutes serially might finish in five minutes across eight workers, which keeps the CI pipeline fast and developers unblocked.</p>
+        <p class="sen-vi">Việc chạy song song quan trọng chủ yếu vì phản hồi nhanh hơn: một bộ test chạy tuần tự mất bốn mươi phút có thể chỉ mất năm phút khi chạy trên tám worker, giúp pipeline CI nhanh và không làm chậm developer.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">parallel execution</span><button class="speak" data-text="parallel execution">🔊</button></td><td><span class="reading">(pe-rợ-lồ ếch-xi-kiu-sần)</span><span class="ipa">/ˈpærəlel ˌeksɪˈkjuːʃn/</span></td><td class="pos">n phr.</td><td>việc thực thi song song</td></tr>
+            <tr><td><span class="term">faster feedback</span><button class="speak" data-text="faster feedback">🔊</button></td><td><span class="reading">(fát-tơ phít-béc)</span><span class="ipa">/ˈfɑːstər ˈfiːdbæk/</span></td><td class="pos">n phr.</td><td>phản hồi nhanh hơn</td></tr>
+            <tr><td><span class="term">serially</span><button class="speak" data-text="serially">🔊</button></td><td><span class="reading">(xi-ri-ợ-li)</span><span class="ipa">/ˈsɪəriəli/</span></td><td class="pos">adv</td><td>tuần tự, lần lượt</td></tr>
+            <tr><td><span class="term">CI pipeline</span><button class="speak" data-text="CI pipeline">🔊</button></td><td><span class="reading">(si-ai pai-lain)</span><span class="ipa">/ˌsiːˈaɪ ˈpaɪplaɪn/</span></td><td class="pos">n phr.</td><td>quy trình tích hợp liên tục</td></tr>
+            <tr><td><span class="term">unblocked</span><button class="speak" data-text="unblocked">🔊</button></td><td><span class="reading">(ơn-bló-kợt)</span><span class="ipa">/ʌnˈblɒkt/</span></td><td class="pos">adj</td><td>không bị chặn/nghẽn</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">The tricky part is that parallel tests must be fully independent, so I make sure each test creates its own test data, avoids shared state like global variables or shared files, and never depends on execution order or on another test's side effects.</p>
+        <p class="sen-vi">Điểm khó là các test chạy song song phải hoàn toàn độc lập, nên tôi đảm bảo mỗi test tự tạo dữ liệu test riêng, tránh trạng thái dùng chung như biến toàn cục hay file dùng chung, và không phụ thuộc vào thứ tự chạy hay tác động phụ của test khác.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">independent</span><button class="speak" data-text="independent">🔊</button></td><td><span class="reading">(in-đi-pen-đợnt)</span><span class="ipa">/ˌɪndɪˈpendənt/</span></td><td class="pos">adj</td><td>độc lập</td></tr>
+            <tr><td><span class="term">test data</span><button class="speak" data-text="test data">🔊</button></td><td><span class="reading">(test đây-tơ)</span><span class="ipa">/test ˈdeɪtə/</span></td><td class="pos">n phr.</td><td>dữ liệu test</td></tr>
+            <tr><td><span class="term">shared state</span><button class="speak" data-text="shared state">🔊</button></td><td><span class="reading">(se-đờ stêit)</span><span class="ipa">/ʃeəd steɪt/</span></td><td class="pos">n phr.</td><td>trạng thái dùng chung</td></tr>
+            <tr><td><span class="term">execution order</span><button class="speak" data-text="execution order">🔊</button></td><td><span class="reading">(ếch-xi-kiu-sần o-đờ)</span><span class="ipa">/ˌeksɪˈkjuːʃn ˈɔːdər/</span></td><td class="pos">n phr.</td><td>thứ tự thực thi</td></tr>
+            <tr><td><span class="term">side effect</span><button class="speak" data-text="side effect">🔊</button></td><td><span class="reading">(sai-đờ ơ-phéct)</span><span class="ipa">/saɪd ɪˈfekt/</span></td><td class="pos">n phr.</td><td>tác động phụ</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Without that isolation, parallel runs become flaky and unreliable.</p>
+        <p class="sen-vi">Nếu thiếu sự cô lập đó, các lần chạy song song sẽ trở nên chập chờn và không đáng tin cậy.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">isolation</span><button class="speak" data-text="isolation">🔊</button></td><td><span class="reading">(ai-sợ-lây-sần)</span><span class="ipa">/ˌaɪsəˈleɪʃn/</span></td><td class="pos">n</td><td>sự cô lập</td></tr>
+            <tr><td><span class="term">flaky</span><button class="speak" data-text="flaky">🔊</button></td><td><span class="reading">(phlây-ki)</span><span class="ipa">/ˈfleɪki/</span></td><td class="pos">adj</td><td>chập chờn, không ổn định</td></tr>
+            <tr><td><span class="term">unreliable</span><button class="speak" data-text="unreliable">🔊</button></td><td><span class="reading">(ơn-ri-lai-ợ-bồ)</span><span class="ipa">/ˌʌnrɪˈlaɪəbl/</span></td><td class="pos">adj</td><td>không đáng tin cậy</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -499,6 +621,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -518,11 +655,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -232,6 +270,77 @@
         các hệ thống, và việc <span class="keyword">over-mocking</span> ở đó sẽ che giấu
         các lỗi thật và tạo ra <span class="keyword">sự tự tin giả tạo</span>.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">Mocking means replacing a real dependency, like a network call, a database, or a third-party service, with a fake implementation that returns controlled, predictable responses.</p>
+        <p class="sen-vi">Mocking nghĩa là thay thế một dependency thật, chẳng hạn như một network call, một database, hoặc một dịch vụ bên thứ ba, bằng một cài đặt giả trả về các phản hồi có kiểm soát và có thể dự đoán được.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">mocking</span><button class="speak" data-text="mocking">🔊</button></td><td><span class="reading">(mọ-king)</span><span class="ipa">/ˈmɒkɪŋ/</span></td><td class="pos">n</td><td>kỹ thuật giả lập dependency</td></tr>
+            <tr><td><span class="term">dependency</span><button class="speak" data-text="dependency">🔊</button></td><td><span class="reading">(đi-pen-đần-si)</span><span class="ipa">/dɪˈpendənsi/</span></td><td class="pos">n</td><td>thành phần phụ thuộc</td></tr>
+            <tr><td><span class="term">third-party service</span><button class="speak" data-text="third party service">🔊</button></td><td><span class="reading">(thơd pa-ti xơ-vis)</span><span class="ipa">/θɜːd ˈpɑːti ˈsɜːvɪs/</span></td><td class="pos">n phr.</td><td>dịch vụ bên thứ ba</td></tr>
+            <tr><td><span class="term">fake implementation</span><button class="speak" data-text="fake implementation">🔊</button></td><td><span class="reading">(phêk im-plợ-men-tây-sần)</span><span class="ipa">/feɪk ˌɪmplɪmenˈteɪʃn/</span></td><td class="pos">n phr.</td><td>cài đặt giả</td></tr>
+            <tr><td><span class="term">predictable response</span><button class="speak" data-text="predictable response">🔊</button></td><td><span class="reading">(pri-đíc-tơ-bồ ri-xponx)</span><span class="ipa">/prɪˈdɪktəbl rɪˈspɒns/</span></td><td class="pos">n phr.</td><td>phản hồi có thể dự đoán</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">In Playwright, I often use route interception with page.route() to intercept an API request and return a fixed mock response, without ever hitting the real backend.</p>
+        <p class="sen-vi">Trong Playwright, tôi thường dùng route interception với page.route() để chặn một API request và trả về một mock response cố định, mà không bao giờ chạm vào backend thật.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">route interception</span><button class="speak" data-text="route interception">🔊</button></td><td><span class="reading">(rut in-tơ-xép-sần)</span><span class="ipa">/ruːt ˌɪntəˈsepʃn/</span></td><td class="pos">n phr.</td><td>chặn/bắt request mạng</td></tr>
+            <tr><td><span class="term">intercept</span><button class="speak" data-text="intercept">🔊</button></td><td><span class="reading">(in-tơ-xépt)</span><span class="ipa">/ˌɪntəˈsept/</span></td><td class="pos">v</td><td>chặn lại (request)</td></tr>
+            <tr><td><span class="term">mock response</span><button class="speak" data-text="mock response">🔊</button></td><td><span class="reading">(mọc ri-xponx)</span><span class="ipa">/mɒk rɪˈspɒns/</span></td><td class="pos">n phr.</td><td>phản hồi giả</td></tr>
+            <tr><td><span class="term">backend</span><button class="speak" data-text="backend">🔊</button></td><td><span class="reading">(béc-en)</span><span class="ipa">/ˈbækend/</span></td><td class="pos">n</td><td>hệ thống phía sau (máy chủ)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I mock whenever I want to isolate the unit under test, speed up execution, or avoid flaky third-party dependencies such as payment gateways or external APIs that are slow or unreliable.</p>
+        <p class="sen-vi">Tôi mock bất cứ khi nào tôi muốn cô lập unit đang được kiểm thử, tăng tốc độ chạy test, hoặc tránh các flaky third-party dependency như cổng thanh toán hoặc các API bên ngoài chậm và không ổn định.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">isolate the unit under test</span><button class="speak" data-text="isolate the unit under test">🔊</button></td><td><span class="reading">(ai-xợ-lêit thi diu-nít an-đơ test)</span><span class="ipa">/ˈaɪsəleɪt ðə ˈjuːnɪt ˈʌndər test/</span></td><td class="pos">v phr.</td><td>cô lập đơn vị đang kiểm thử</td></tr>
+            <tr><td><span class="term">speed up execution</span><button class="speak" data-text="speed up execution">🔊</button></td><td><span class="reading">(xpit ập ec-xi-kiu-sần)</span><span class="ipa">/spiːd ʌp ˌeksɪˈkjuːʃn/</span></td><td class="pos">v phr.</td><td>tăng tốc độ thực thi</td></tr>
+            <tr><td><span class="term">flaky</span><button class="speak" data-text="flaky">🔊</button></td><td><span class="reading">(phlêi-ki)</span><span class="ipa">/ˈfleɪki/</span></td><td class="pos">adj</td><td>không ổn định, lúc pass lúc fail</td></tr>
+            <tr><td><span class="term">payment gateway</span><button class="speak" data-text="payment gateway">🔊</button></td><td><span class="reading">(pêi-mần gết-uê)</span><span class="ipa">/ˈpeɪmənt ˈɡeɪtweɪ/</span></td><td class="pos">n phr.</td><td>cổng thanh toán</td></tr>
+            <tr><td><span class="term">unreliable</span><button class="speak" data-text="unreliable">🔊</button></td><td><span class="reading">(an-ri-lai-ợ-bồ)</span><span class="ipa">/ˌʌnrɪˈlaɪəbl/</span></td><td class="pos">adj</td><td>không đáng tin cậy</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">Mocking also lets me simulate edge cases, like server errors or empty states, that are hard to trigger for real.</p>
+        <p class="sen-vi">Mocking cũng cho phép tôi mô phỏng các edge case, như lỗi server hoặc trạng thái rỗng, những thứ khó tạo ra thật ngoài đời.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">simulate edge cases</span><button class="speak" data-text="simulate edge cases">🔊</button></td><td><span class="reading">(xim-diu-lêit ej kêi-xịz)</span><span class="ipa">/ˈsɪmjuleɪt edʒ ˈkeɪsɪz/</span></td><td class="pos">v phr.</td><td>mô phỏng trường hợp biên</td></tr>
+            <tr><td><span class="term">server error</span><button class="speak" data-text="server error">🔊</button></td><td><span class="reading">(xơ-vơ e-rơ)</span><span class="ipa">/ˈsɜːvər ˈerər/</span></td><td class="pos">n phr.</td><td>lỗi máy chủ</td></tr>
+            <tr><td><span class="term">empty state</span><button class="speak" data-text="empty state">🔊</button></td><td><span class="reading">(em-ti xtêit)</span><span class="ipa">/ˈempti steɪt/</span></td><td class="pos">n phr.</td><td>trạng thái rỗng (không có dữ liệu)</td></tr>
+            <tr><td><span class="term">trigger</span><button class="speak" data-text="trigger">🔊</button></td><td><span class="reading">(tri-gơ)</span><span class="ipa">/ˈtrɪɡər/</span></td><td class="pos">v</td><td>kích hoạt, gây ra</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">However, I avoid mocking in true end-to-end tests, because those are meant to verify the real integration between systems, and over-mocking there would hide real bugs and give false confidence.</p>
+        <p class="sen-vi">Tuy nhiên, tôi tránh mocking trong các true end-to-end test, vì những test đó được thiết kế để xác minh sự tích hợp thật giữa các hệ thống, và việc over-mocking ở đó sẽ che giấu các lỗi thật và tạo ra sự tự tin giả tạo.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">end-to-end test</span><button class="speak" data-text="end to end test">🔊</button></td><td><span class="reading">(en tu en test)</span><span class="ipa">/end tuː end test/</span></td><td class="pos">n phr.</td><td>kiểm thử toàn trình</td></tr>
+            <tr><td><span class="term">integration</span><button class="speak" data-text="integration">🔊</button></td><td><span class="reading">(in-tơ-grây-sần)</span><span class="ipa">/ˌɪntɪˈɡreɪʃn/</span></td><td class="pos">n</td><td>sự tích hợp</td></tr>
+            <tr><td><span class="term">over-mocking</span><button class="speak" data-text="over mocking">🔊</button></td><td><span class="reading">(âu-vơ mọ-king)</span><span class="ipa">/ˈəʊvər ˈmɒkɪŋ/</span></td><td class="pos">n</td><td>lạm dụng mock quá mức</td></tr>
+            <tr><td><span class="term">false confidence</span><button class="speak" data-text="false confidence">🔊</button></td><td><span class="reading">(phon con-phi-đần)</span><span class="ipa">/fɔːls ˈkɒnfɪdəns/</span></td><td class="pos">n phr.</td><td>sự tự tin giả tạo, sai lệch</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -504,6 +613,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -523,11 +647,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });

@@ -157,14 +157,52 @@
     .replabel:hover { background: #c4b5fd; }
     .replabel.looping { background: #f472b6; animation: pulse .8s infinite; }
     @keyframes pulse { 50% { opacity: .5; } }
+
+    /* Luyện từng câu */
+    .card.sentence-loop { border-left-color: #a78bfa; }
+    .card.sentence-loop h2 { color: #a78bfa; }
+    .sentpair {
+      background: rgba(167,139,250,.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .sentpair:last-child { margin-bottom: 0; }
+    .sen-en, .sen-vi { font-size: 15px; margin-bottom: 4px; }
+    .sen-vi { color: var(--muted); font-style: italic; }
+    .sentpair .replabel { margin: 8px 0 0; padding: 5px 11px; font-size: 12px; }
+
+    /* Từ vựng riêng theo mỗi câu */
+    table.vocab-mini { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    table.vocab-mini th, table.vocab-mini td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid rgba(148,163,184,.15); vertical-align: top;
+    }
+    table.vocab-mini th {
+      background: rgba(167,139,250,.14); color: #a78bfa;
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    table.vocab-mini tr:last-child td { border-bottom: none; }
+    table.vocab-mini .term { font-weight: 700; color: var(--text); }
+    table.vocab-mini .reading { color: var(--accent2); display: block; font-size: 12.5px; }
+    table.vocab-mini .ipa { color: var(--accent); display: block; opacity: .9; font-size: 12.5px; }
+    table.vocab-mini .pos { color: #fbbf24; font-style: italic; white-space: nowrap; }
+    table.vocab-mini .speak { width: 22px; height: 19px; margin-left: 6px; font-size: 11px; }
   </style>
 </head>
 <body>
   <div class="ratebar">
-    <b>🔊 Tốc độ:</b>
-    <button data-rate="0.7">Chậm</button>
-    <button data-rate="0.85" class="on">Vừa</button>
-    <button data-rate="1">Thường</button>
+    <b>🐢 Chậm:</b>
+    <button data-rate="0.5">x0.5</button>
+    <button data-rate="0.75">x0.75</button>
+    <button data-rate="1" class="on">x1</button>
+    <button data-rate="2">x2</button>
+    <span class="sep"></span>
+    <b>🐇 Nhanh:</b>
+    <button data-rate="1" class="fastgrp">x1</button>
+    <button data-rate="2" class="fastgrp">x2</button>
+    <button data-rate="3" class="fastgrp">x3</button>
+    <span class="sep"></span>
     <button class="test" onclick="try{speechSynthesis.cancel();var vs=speechSynthesis.getVoices();var lv=vs.find(function(v){return v.localService&&/^en/i.test(v.lang)})||vs.find(function(v){return /^en/i.test(v.lang)});var u=new SpeechSynthesisUtterance('Testing one two three. Hello!');u.rate=0.9;if(lv)u.voice=lv;speechSynthesis.speak(u);document.getElementById('spkStatus').textContent='Giọng: '+(lv?lv.name:'mặc định')+' ('+vs.length+')';}catch(e){document.getElementById('spkStatus').textContent='LỖI: '+e.message;}">Test 🔊</button>
     <span class="sep"></span>
     <b>🔁 Lặp:</b>
@@ -224,6 +262,65 @@
         đưa các test API này vào <span class="keyword">CI pipeline</span> để chúng chạy tự động trước mỗi lần
         triển khai, giúp phát hiện sớm các vấn đề ở backend trước khi chúng ảnh hưởng tới giao diện người dùng.
       </blockquote>
+    </div>
+
+    <div class="card sentence-loop">
+      <h2>🔁 Luyện từng câu (Anh → Việt)</h2>
+      <div class="sentpair">
+        <p class="sen-en">When I test APIs, I usually work at two levels: exploratory testing with Postman during development, and automated regression tests in the framework, using REST Assured for Java projects or Playwright's APIRequestContext for JavaScript projects.</p>
+        <p class="sen-vi">Khi test API, tôi thường làm việc ở hai mức độ: test thăm dò bằng Postman trong lúc phát triển, và các bài test hồi quy tự động trong framework, dùng REST Assured cho dự án Java hoặc APIRequestContext của Playwright cho dự án JavaScript.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">exploratory testing</span><button class="speak" data-text="exploratory testing">🔊</button></td><td><span class="reading">(ich-plo-rợ-tô-ri tex-tinh)</span><span class="ipa">/ɪkˈsplɔːrətəri ˈtestɪŋ/</span></td><td class="pos">n phr.</td><td>test thăm dò, khám phá</td></tr>
+            <tr><td><span class="term">automated regression test</span><button class="speak" data-text="automated regression test">🔊</button></td><td><span class="reading">(o-tơ-mây-tịd ri-gre-sần test)</span><span class="ipa">/ˈɔːtəmeɪtɪd rɪˈɡreʃn test/</span></td><td class="pos">n phr.</td><td>bài test hồi quy tự động</td></tr>
+            <tr><td><span class="term">REST Assured</span><button class="speak" data-text="REST Assured">🔊</button></td><td><span class="reading">(re-st ợ-siu-rợd)</span><span class="ipa">/rest əˈʃʊəd/</span></td><td class="pos">n phr.</td><td>thư viện test API cho Java</td></tr>
+            <tr><td><span class="term">Postman</span><button class="speak" data-text="Postman">🔊</button></td><td><span class="reading">(pốt-mờn)</span><span class="ipa">/ˈpəʊstmən/</span></td><td class="pos">n</td><td>công cụ gửi/test API phổ biến</td></tr>
+            <tr><td><span class="term">APIRequestContext</span><button class="speak" data-text="A P I Request Context">🔊</button></td><td><span class="reading">(ê-pi-ai ri-quest côn-tếct)</span><span class="ipa">/ˌeɪpiːˈaɪ rɪˈkwest ˈkɒntekst/</span></td><td class="pos">n phr.</td><td>đối tượng ngữ cảnh gọi API của Playwright</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">For each endpoint, I send requests with different inputs, including valid data, invalid data, and edge cases, then verify the status code, the response body against a JSON schema, and important headers like content type.</p>
+        <p class="sen-vi">Với mỗi endpoint, tôi gửi request với nhiều loại dữ liệu đầu vào khác nhau, bao gồm dữ liệu hợp lệ, dữ liệu không hợp lệ, và các trường hợp biên, sau đó kiểm tra mã trạng thái, phần thân phản hồi theo một JSON schema, và các header quan trọng như content type.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">endpoint</span><button class="speak" data-text="endpoint">🔊</button></td><td><span class="reading">(en-poin)</span><span class="ipa">/ˈendpɔɪnt/</span></td><td class="pos">n</td><td>điểm cuối API (đường dẫn gọi API)</td></tr>
+            <tr><td><span class="term">edge case</span><button class="speak" data-text="edge case">🔊</button></td><td><span class="reading">(ét-giơ kêis)</span><span class="ipa">/edʒ keɪs/</span></td><td class="pos">n phr.</td><td>trường hợp biên, hiếm gặp</td></tr>
+            <tr><td><span class="term">status code</span><button class="speak" data-text="status code">🔊</button></td><td><span class="reading">(sờ-tây-tợs cồd)</span><span class="ipa">/ˈsteɪtəs kəʊd/</span></td><td class="pos">n phr.</td><td>mã trạng thái HTTP</td></tr>
+            <tr><td><span class="term">response body</span><button class="speak" data-text="response body">🔊</button></td><td><span class="reading">(ri-spons bo-đi)</span><span class="ipa">/rɪˈspɒns ˈbɒdi/</span></td><td class="pos">n phr.</td><td>phần thân của phản hồi</td></tr>
+            <tr><td><span class="term">JSON schema</span><button class="speak" data-text="JSON schema">🔊</button></td><td><span class="reading">(jây-sơn ski-mơ)</span><span class="ipa">/ˈdʒeɪsɒn ˈskiːmə/</span></td><td class="pos">n phr.</td><td>lược đồ mô tả cấu trúc JSON</td></tr>
+            <tr><td><span class="term">headers</span><button class="speak" data-text="headers">🔊</button></td><td><span class="reading">(hé-đơs)</span><span class="ipa">/ˈhedəz/</span></td><td class="pos">n</td><td>các tiêu đề HTTP</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I also check response time to catch performance regressions, and I make sure error handling returns the correct status code and a clear error message for bad requests, unauthorized access, or missing resources.</p>
+        <p class="sen-vi">Tôi cũng kiểm tra thời gian phản hồi để phát hiện suy giảm hiệu năng, và đảm bảo việc xử lý lỗi trả về đúng mã trạng thái cùng thông báo lỗi rõ ràng cho các request sai, truy cập trái phép, hoặc tài nguyên không tồn tại.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">response time</span><button class="speak" data-text="response time">🔊</button></td><td><span class="reading">(ri-spons tham)</span><span class="ipa">/rɪˈspɒns taɪm/</span></td><td class="pos">n phr.</td><td>thời gian phản hồi</td></tr>
+            <tr><td><span class="term">performance regression</span><button class="speak" data-text="performance regression">🔊</button></td><td><span class="reading">(pơ-fo-mần-xơ ri-gre-sần)</span><span class="ipa">/pəˈfɔːməns rɪˈɡreʃn/</span></td><td class="pos">n phr.</td><td>suy giảm hiệu năng</td></tr>
+            <tr><td><span class="term">error handling</span><button class="speak" data-text="error handling">🔊</button></td><td><span class="reading">(e-rơ hen-đlinh)</span><span class="ipa">/ˈerər ˈhændlɪŋ/</span></td><td class="pos">n phr.</td><td>xử lý lỗi</td></tr>
+            <tr><td><span class="term">unauthorized access</span><button class="speak" data-text="unauthorized access">🔊</button></td><td><span class="reading">(ăn-o-thợ-rai-zơd ác-xex)</span><span class="ipa">/ˌʌnˈɔːθəraɪzd ˈækses/</span></td><td class="pos">n phr.</td><td>truy cập trái phép</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sentpair">
+        <p class="sen-en">I usually chain these API tests into the CI pipeline so they run automatically before every deployment, which catches backend issues early, before they ever reach the UI.</p>
+        <p class="sen-vi">Tôi thường đưa các test API này vào pipeline CI để chúng chạy tự động trước mỗi lần triển khai, giúp phát hiện sớm các vấn đề ở backend trước khi chúng ảnh hưởng tới giao diện người dùng.</p>
+        <table class="vocab-mini">
+          <thead><tr><th>Từ / cụm</th><th>Phiên âm</th><th>Loại</th><th>Nghĩa</th></tr></thead>
+          <tbody>
+            <tr><td><span class="term">chain into</span><button class="speak" data-text="chain into">🔊</button></td><td><span class="reading">(chên in-tu)</span><span class="ipa">/tʃeɪn ˈɪntuː/</span></td><td class="pos">v phr.</td><td>đưa vào, gắn vào (một chuỗi)</td></tr>
+            <tr><td><span class="term">CI pipeline</span><button class="speak" data-text="CI pipeline">🔊</button></td><td><span class="reading">(si-ai pai-lain)</span><span class="ipa">/ˌsiːˈaɪ ˈpaɪplaɪn/</span></td><td class="pos">n phr.</td><td>quy trình tích hợp liên tục</td></tr>
+            <tr><td><span class="term">deployment</span><button class="speak" data-text="deployment">🔊</button></td><td><span class="reading">(đi-plói-mợnt)</span><span class="ipa">/dɪˈplɔɪmənt/</span></td><td class="pos">n</td><td>sự triển khai</td></tr>
+            <tr><td><span class="term">backend issue</span><button class="speak" data-text="backend issue">🔊</button></td><td><span class="reading">(béc-en i-xiu)</span><span class="ipa">/ˈbækend ˈɪʃuː/</span></td><td class="pos">n phr.</td><td>vấn đề ở phía backend</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div class="card">
@@ -501,6 +598,21 @@
     enBq.after(rep);
   })();
 
+  /* 🔁 Lặp TỪNG CÂU: mỗi câu có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('.sentpair').forEach(pair=>{
+      const enP = pair.querySelector('.sen-en');
+      const viP = pair.querySelector('.sen-vi');
+      if(!enP || !viP) return;
+      const enText = enP.textContent.trim();
+      const viText = viP.textContent.trim();
+      const rep = makeRep('🔁 Lặp câu này',
+        'Nghe lặp câu này: tiếng Anh rồi tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs([{en:enText, vi:viText}], rep));
+      pair.appendChild(rep);
+    });
+  })();
+
   /* 🔁 Lặp TỪ VỰNG: từng từ tiếng Anh rồi nghĩa tiếng Việt */
   (function(){
     const table = document.querySelector('table.vocab');
@@ -520,11 +632,29 @@
     if(h2) h2.after(rep); else card.insertBefore(rep, table.parentElement);
   })();
 
-  /* Ratebar: chọn tốc độ + số lần lặp */
+  /* 🔁 Lặp TỪ VỰNG RIÊNG THEO CÂU: mỗi bảng vocab-mini có nút lặp riêng */
+  (function(){
+    document.querySelectorAll('table.vocab-mini').forEach(table=>{
+      const pairs = [];
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const term = tr.querySelector('.term');
+        const vi = tr.querySelector('td:last-child');
+        if(term && vi) pairs.push({en:term.textContent.trim(), vi:vi.textContent.trim()});
+      });
+      if(!pairs.length) return;
+      const rep = makeRep('🔁 Lặp từ vựng câu này',
+        'Nghe lặp từ vựng của câu này: tiếng Anh rồi nghĩa tiếng Việt (nhấn lại để dừng)',
+        ()=>loopPairs(pairs, rep));
+      table.after(rep);
+    });
+  })();
+
+  /* Ratebar: chọn tốc độ + số lần lặp (2 nhóm Chậm/Nhanh, mỗi nhóm tự bật/tắt riêng) */
   document.querySelectorAll('.ratebar button[data-rate]').forEach(b=>{
     b.addEventListener('click', ()=>{
       RATE = parseFloat(b.dataset.rate);
-      document.querySelectorAll('.ratebar button[data-rate]').forEach(x=>x.classList.remove('on'));
+      const group = b.classList.contains('fastgrp') ? '.fastgrp' : 'button[data-rate]:not(.fastgrp)';
+      document.querySelectorAll('.ratebar '+group).forEach(x=>x.classList.remove('on'));
       b.classList.add('on');
     });
   });
